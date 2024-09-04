@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 class Program
 {
-    private static string _path = "/home/ostarup/ITU/BDSA/Chirp/Chirp.CLI/chirp_cli_db.csv";
+    private static string _path = "./chirp_cli_db.csv";
 
     //Regex and date time information found here:
     //https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-7.0#system-text-regularexpressions-regex-ctor(system-string)
