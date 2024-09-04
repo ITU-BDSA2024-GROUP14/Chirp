@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
+using Chirp.CLI;
+
 class Program
 {
     private static string _path = "./chirp_cli_db.csv";
@@ -13,15 +15,7 @@ class Program
         var lines = File.ReadAllLines(_path);
         foreach (var line in lines.Skip(1))
         {
-            var regex = new Regex(@"(?<!"".*),|,(?!.*"")");
-            var items = regex.Split(line);
-            var author = items[0];
-            var message = items[1].Trim('"');
-            var timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(items[2]));
-            //The following lines takes the date time and converts it to local time, and then prints it in the desired format
-            var time = timestamp.DateTime.ToLocalTime();
-            var cheep = author + " @ " + time.ToString("dd/MM/yy HH:mm:ss", new CultureInfo("en-DE")) + ": " + message + "\n";
-            Console.Write(cheep);
+            UserInterface.PrintCheep(line);
         }
     }
 
@@ -42,7 +36,7 @@ class Program
     {
         if (args.Length < 1)
         {
-            Console.WriteLine("Error");
+            UserInterface.PrintError("Must have at least one argument");
             return;
         }
 
@@ -54,7 +48,7 @@ class Program
             case "cheep":
                 if (args.Length < 2)
                 {
-                    Console.WriteLine("Needs more arguments");
+                    UserInterface.PrintError("Needs more arguments");
                     return;
                 }
                 CreateCheep(args[1]);
