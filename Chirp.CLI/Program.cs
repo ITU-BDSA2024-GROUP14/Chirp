@@ -49,27 +49,15 @@ Options:
 
     public static void Main(string[] args)
     {
-        var arguments = new Docopt().Apply(Usage, args);
-        Console.WriteLine(arguments);
-        if (args.Length < 1)
-        {
-            UserInterface.PrintError("Must have at least one argument");
-            return;
-        }
+        var arguments = new Docopt().Apply(Usage, args, exit: true);
+        if (arguments == null) throw new NullReferenceException("CLI argument parsing failed\narguments is null");
 
-        switch (args[0])
+        if (arguments["read"].IsTrue)
         {
-            case "read":
-                PrintCheeps();
-                break;
-            case "cheep":
-                if (args.Length < 2)
-                {
-                    UserInterface.PrintError("Needs more arguments");
-                    return;
-                }
-                CreateCheep(args[1]);
-                break;
+            PrintCheeps();
+        } else if (arguments["cheep"].IsTrue)
+        {
+            CreateCheep(arguments["<message>"].ToString());
         }
     }
 }
