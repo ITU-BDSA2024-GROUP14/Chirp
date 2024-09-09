@@ -5,11 +5,11 @@ namespace Chirp.CLI;
 
 class UserInterface
 {
-    public static void PrintCheep(dynamic cheep)
+    public static void PrintCheep(Program.Cheep cheep)
     {
         var author = cheep.Author;
         var message = cheep.Message;
-        var timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cheep.Timestamp)).UtcDateTime;
+        var timestamp = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).UtcDateTime;
         var outputString = author + " @ " + timestamp.ToString("dd/MM/yy HH:mm:ss", new CultureInfo("en-DE")) + ": " + message + "\n";
         Console.Write(outputString);
     }
