@@ -13,18 +13,18 @@ class Program
     //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
     public static void PrintCheeps()
     {
-        var lines = File.ReadAllLines(DATABASE_PATH);
-        foreach (var line in lines.Skip(1))
+        using (var reader = new StreamReader(DATABASE_PATH))
+        using (var csv = new CsvReader(reader, CULTURE_INFO))
         {
-            var regex = new Regex(@"(?<!"".*),|,(?!.*"")");
-            var items = regex.Split(line);
-            var author = items[0];
-            var message = items[1].Trim('"');
-            var timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(items[2]));
-            //The following lines takes the date time and converts it to local time, and then prints it in the desired format
-            var time = timestamp.DateTime.ToLocalTime();
-            var cheep = author + " @ " + time.ToString("dd/MM/yy HH:mm:ss", CULTURE_INFO)+ ": " + message + "\n";
-            Console.Write(cheep);
+            var records = csv.GetRecords<dynamic>();
+            foreach (var cheep in records)
+            {
+                var author = cheep.Author;
+                var message = cheep.Message;
+                var timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cheep.Timestamp)).UtcDateTime;
+                var printCheep = author + " @ " + timestamp.ToString("dd/MM/yy HH:mm:ss", new CultureInfo("en-DE")) + ": " + message + "\n";
+                Console.Write(printCheep);
+            }
         }
     }
 
@@ -40,6 +40,7 @@ class Program
         using (var csv = new CsvWriter(writer, CULTURE_INFO))
         {
             csv.WriteRecord(cheep);
+            csv.NextRecord();
         }
     }
 
