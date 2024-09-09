@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
-using System.Text.RegularExpressions;
 using CsvHelper;
 
-using Chirp.CLI;
+namespace Chirp.CLI;
 
 class Program
 {
@@ -14,6 +13,18 @@ class Program
     //https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-7.0#system-text-regularexpressions-regex-ctor(system-string)
     //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
 
+    public static void PrintCheeps()
+    {
+        using (var reader = new StreamReader(DATABASE_PATH))
+        using (var csv = new CsvReader(reader, CULTURE_INFO))
+        {
+            var records = csv.GetRecords<dynamic>();
+            foreach (var cheep in records)
+            {
+                UserInterface.PrintCheep(cheep);
+            }
+        }
+    }
 
     private static void CreateCheep(string message)
     {
@@ -42,7 +53,7 @@ class Program
         switch (args[0])
         {
             case "read":
-                UserInterface.PrintCheeps();
+                PrintCheeps();
                 break;
             case "cheep":
                 if (args.Length < 2)
