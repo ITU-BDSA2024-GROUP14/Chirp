@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 using CsvHelper;
 
+using Chirp.CLI;
+
 class Program
 {
     public record Cheep(string Author, string Message, long Timestamp);
@@ -48,7 +50,7 @@ class Program
     {
         if (args.Length < 1)
         {
-            Console.WriteLine("Error");
+            UserInterface.PrintError("Must have at least one argument");
             return;
         }
 
@@ -60,7 +62,7 @@ class Program
             case "cheep":
                 if (args.Length < 2)
                 {
-                    Console.WriteLine("Needs more arguments");
+                    UserInterface.PrintError("Needs more arguments");
                     return;
                 }
                 CreateCheep(args[1]);
