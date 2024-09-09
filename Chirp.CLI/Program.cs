@@ -3,11 +3,26 @@ using CsvHelper;
 
 namespace Chirp.CLI;
 
+using DocoptNet;
+
 class Program
 {
     public record Cheep(string Author, string Message, long Timestamp);
     public static string DATABASE_PATH = "./chirp_cli_db.csv";
     public static CultureInfo CULTURE_INFO = new CultureInfo("en-DE");
+
+    //Using @ to create verbatim string, which means that no escapes are needed
+    //https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/verbatim
+    private const string Usage = @"Chirp.
+
+Usage:
+  chirp read
+  chirp cheep <message>
+  chirp (-h | --help)
+
+Options:
+  -h --help  Show this screen.
+";
 
     //Regex and date time information found here:
     //https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-7.0#system-text-regularexpressions-regex-ctor(system-string)
@@ -15,25 +30,15 @@ class Program
 
     public static void Main(string[] args)
     {
-        if (args.Length < 1)
-        {
-            UserInterface.PrintError("Must have at least one argument");
-            return;
-        }
+        var arguments = new Docopt().Apply(Usage, args, exit: true);
+        if (arguments == null) throw new NullReferenceException("CLI argument parsing failed\narguments is null");
 
-        switch (args[0])
+        if (arguments["read"].IsTrue)
         {
-            case "read":
-                PrintCheeps();
-                break;
-            case "cheep":
-                if (args.Length < 2)
-                {
-                    UserInterface.PrintError("Needs more arguments");
-                    return;
-                }
-                CreateCheep(args[1]);
-                break;
+            PrintCheeps();
+        } else if (arguments["cheep"].IsTrue)
+        {
+            CreateCheep(arguments["<message>"].ToString());
         }
     }
     
