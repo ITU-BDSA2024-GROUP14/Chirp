@@ -1,10 +1,19 @@
 using System.Globalization;
-using System.Text.RegularExpressions;
+
+using SimpleDB;
 
 namespace Chirp.CLI;
 
 class UserInterface
 {
+    public static void PrintCheeps(IEnumerable<Program.Cheep> records)
+    {
+        foreach (var cheep in records)
+        {
+            PrintCheep(cheep);
+        }
+    }
+
     public static void PrintCheep(Program.Cheep cheep)
     {
         var author = cheep.Author;
