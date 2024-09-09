@@ -549,3 +549,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/rider,macos,linux,windows,csharp
 
 .idea/.idea.Chirp/.idea/*.xml
+.idea/indexLayout.xml
