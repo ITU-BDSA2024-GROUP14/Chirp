@@ -7,28 +7,13 @@ using Chirp.CLI;
 class Program
 {
     public record Cheep(string Author, string Message, long Timestamp);
-    private static string DATABASE_PATH = "./chirp_cli_db.csv";
+    public static string DATABASE_PATH = "./chirp_cli_db.csv";
+    public static CultureInfo CULTURE_INFO = new CultureInfo("en-DE");
 
-    private static CultureInfo CULTURE_INFO = new CultureInfo("en-DE");
     //Regex and date time information found here:
     //https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-7.0#system-text-regularexpressions-regex-ctor(system-string)
     //https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.utcnow?view=net-7.0
-    public static void PrintCheeps()
-    {
-        using (var reader = new StreamReader(DATABASE_PATH))
-        using (var csv = new CsvReader(reader, CULTURE_INFO))
-        {
-            var records = csv.GetRecords<dynamic>();
-            foreach (var cheep in records)
-            {
-                var author = cheep.Author;
-                var message = cheep.Message;
-                var timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cheep.Timestamp)).UtcDateTime;
-                var printCheep = author + " @ " + timestamp.ToString("dd/MM/yy HH:mm:ss", new CultureInfo("en-DE")) + ": " + message + "\n";
-                Console.Write(printCheep);
-            }
-        }
-    }
+
 
     private static void CreateCheep(string message)
     {
@@ -57,7 +42,7 @@ class Program
         switch (args[0])
         {
             case "read":
-                PrintCheeps();
+                UserInterface.PrintCheeps();
                 break;
             case "cheep":
                 if (args.Length < 2)
