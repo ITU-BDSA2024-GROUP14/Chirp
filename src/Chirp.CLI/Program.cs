@@ -10,7 +10,7 @@ namespace Chirp.CLI;
 
 internal class Program
 {
-    public static string DATABASE_PATH = "./chirp_cli_db.csv";
+    public static string DATABASE_PATH = "../../data/chirp_cli_db.csv";
 
     //Using @ to create verbatim string, which means that no escapes are needed
     //https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/verbatim
