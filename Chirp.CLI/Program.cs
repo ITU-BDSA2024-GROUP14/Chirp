@@ -10,8 +10,6 @@ namespace Chirp.CLI;
 
 internal class Program
 {
-    public record Cheep(string Author, string Message, long Timestamp);
-
     public static string DATABASE_PATH = "./chirp_cli_db.csv";
 
     //Using @ to create verbatim string, which means that no escapes are needed
