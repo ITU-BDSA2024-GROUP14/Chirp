@@ -10,8 +10,6 @@ namespace Chirp.CLI;
 
 internal class Program
 {
-    public static string DATABASE_PATH = "../../data/chirp_cli_db.csv";
-
     //Using @ to create verbatim string, which means that no escapes are needed
     //https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/verbatim
     private const string Usage = @"Chirp.
@@ -27,7 +25,6 @@ Options:
 
     public static void Main(string[] args)
     {
-        IDatabaseRepository<Cheep> db = new CSVDatabase<Cheep>(DATABASE_PATH);
         IDictionary<string, ValueObject>? arguments = new Docopt().Apply(Usage, args, exit: true);
         if (arguments == null)
         {
@@ -42,11 +39,11 @@ Options:
                 limit = arguments["<limit>"].AsInt;
             }
 
-            UserInterface.PrintCheeps(db.Read(limit));
+            UserInterface.PrintCheeps(CheepDatabase.Instance.Read(limit));
         }
         else if (arguments["cheep"].IsTrue)
         {
-            AddCheep(arguments["<message>"].ToString(), db);
+            AddCheep(arguments["<message>"].ToString(), CheepDatabase.Instance);
         }
     }
 

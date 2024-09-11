@@ -4,14 +4,23 @@ using CsvHelper;
 
 namespace SimpleDB;
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>
+public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    private string DatabasePath;
+    private static CheepDatabase? instance;
+    private static readonly string DatabasePath = "../../data/chirp_cli_db.csv";
     private static readonly CultureInfo CultureInfo = new("en-DE");
 
-    public CSVDatabase(string databasePath)
+    public static CheepDatabase Instance
     {
-        DatabasePath = databasePath;
+        get
+        {
+            if (instance == null)
+            {
+                instance = new CheepDatabase();
+            }
+
+            return instance;
+        }
     }
 
     /// <summary>
@@ -19,15 +28,15 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     /// </summary>
     /// <param name="limit">Optional parameter to specify the maximum number of records to return.</param>
     /// <returns>An enumerable collection of records of type T.</returns>
-    public IEnumerable<T> Read(int? limit = null)
+    public IEnumerable<Cheep> Read(int? limit = null)
     {
         using StreamReader reader = new(DatabasePath);
         using CsvReader csv = new(reader, CultureInfo);
-        IEnumerable<T> records = csv.GetRecords<T>();
+        IEnumerable<Cheep> records = csv.GetRecords<Cheep>();
         return limit.HasValue ? records.TakeLast(limit.Value).ToList() : records.ToList();
     }
 
-    public void Store(T record)
+    public void Store(Cheep record)
     {
         using (FileStream stream = File.Open(DatabasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
