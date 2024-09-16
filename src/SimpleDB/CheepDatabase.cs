@@ -9,7 +9,7 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     private static CheepDatabase? instance;
     private static readonly string DatabasePath = "../../data/chirp_cli_db.csv";
     private static readonly CultureInfo CultureInfo = new("en-DE");
-    private static readonly Lazy<CheepDatabase> lazy = new Lazy<CheepDataBase>(() => new CheepDataBase());
+    private static readonly Lazy<CheepDatabase> lazy = new Lazy<CheepDatabase>(() => new CheepDatabase());
     
     
     public static CheepDatabase Instance
