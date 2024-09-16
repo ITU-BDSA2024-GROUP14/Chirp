@@ -28,10 +28,14 @@ jobs:
       run: dotnet publish --runtime osx-arm64 -p:PublishSingleFile=true --self-contained true
     - name: Zip files
       run: cd bin/Release/net8.0/
-      zip win-x64 --junk-paths win-x64/publish/Chirp.CLI
-      zip linux-x64 --junk-paths linux-x64/publish/Chirp.CLI
-      zip osx-x64 --junk-paths osx-x64/publish/Chirp.CLI
-      zip osx-arm64 --junk-paths osx-arm64/publish/Chirp.CLI
+    - name: zip win-x64
+      run: zip win-x64 --junk-paths win-x64/publish/Chirp.CLI
+    - name: zip linux-x64
+      run: zip linux-x64 --junk-paths linux-x64/publish/Chirp.CLI
+    - name: zip osx-x64
+      run: zip osx-x64 --junk-paths osx-x64/publish/Chirp.CLI
+    - name: zip osx-arm64
+      run: zip osx-arm64 --junk-paths osx-arm64/publish/Chirp.CLI
     - name:
       uses: softprops/action-gh-release@v2
       with: 
