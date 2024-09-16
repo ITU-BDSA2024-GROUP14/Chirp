@@ -6,7 +6,7 @@ namespace SimpleDB;
 
 public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    private static readonly string DatabasePath = "../../data/chirp_cli_db.csv";
+    private static string DatabasePath = "../../data/chirp_cli_db.csv";
     private static readonly CultureInfo CultureInfo = new("en-DE");
     private static readonly Lazy<CheepDatabase> lazy = new Lazy<CheepDatabase>(() => new CheepDatabase());
     
@@ -40,5 +40,10 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
             csv.WriteRecord(record);
             csv.NextRecord();
         }
+    }
+    
+    public void ChangeCsvPath(string path)
+    {
+        DatabasePath = path;
     }
 }
