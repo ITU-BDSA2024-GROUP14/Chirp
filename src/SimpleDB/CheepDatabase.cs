@@ -24,10 +24,10 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     }
 
     /// <summary>
-    /// Reads records from the CSV database, with an optional limit on the number of records returned.
+    /// Reads Cheeps from the CSV database, with an optional limit on the number of Cheeps returned.
     /// </summary>
-    /// <param name="limit">Optional parameter to specify the maximum number of records to return.</param>
-    /// <returns>An enumerable collection of records of type T.</returns>
+    /// <param name="limit">Optional parameter to specify the maximum number of Cheeps to return.</param>
+    /// <returns>An enumerable collection of Cheeps.</returns>
     public IEnumerable<Cheep> Read(int? limit = null)
     {
         using StreamReader reader = new(DatabasePath);
