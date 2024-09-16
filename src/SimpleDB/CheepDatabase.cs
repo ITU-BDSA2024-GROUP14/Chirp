@@ -28,8 +28,8 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     public IEnumerable<Cheep> Read(int? limit = null)
     {
         using StreamReader reader = new(DatabasePath);
-        using CsvReader csv = new(reader, CultureInfo);
-        IEnumerable<Cheep> records = csv.GetRecords<Cheep>();
+        using CsvReader csvReader = new(reader, CultureInfo);
+        IEnumerable<Cheep> records = csvReader.GetRecords<Cheep>();
         return limit.HasValue ? records.TakeLast(limit.Value).ToList() : records.ToList();
     }
 
