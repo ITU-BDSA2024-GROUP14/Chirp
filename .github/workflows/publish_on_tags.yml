@@ -47,7 +47,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Go to Chirp CLI project
-      run: cd ./Chirp.CLI/
+      run: |
+        echo "Current path"
+        pwd
+        cd ./Chirp.CLI/
     - name: Publish for windows x64
       run: dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for linux x64
