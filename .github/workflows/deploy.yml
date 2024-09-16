@@ -7,9 +7,11 @@ on:
 jobs:
   create-executables:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-    - uses: actions/checkout@v3  
+    - uses: actions/checkout@v4  
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -17,13 +19,28 @@ jobs:
     - name: Go to Chirp CLI project
       run: cd ./Chirp.CLI/
     - name: Publish for windows x64
-      run: dotnet publish --runtime win-x64
+      run: dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for linux x64
-      run: dotnet publish --runtime linux-x64
+      run: dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for MacOS x64
-      run: dotnet publish --runtime osx-x64
+      run: dotnet publish --runtime osx-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for MacOS ARM
-      run: dotnet publish --runtime osx-arm64
+      run: dotnet publish --runtime osx-arm64 -p:PublishSingleFile=true --self-contained true
+    - name: Zip files
+      run: cd bin/Release/net8.0/
+      zip win-x64 --junk-paths win-x64/publish/Chirp.CLI
+      zip linux-x64 --junk-paths linux-x64/publish/Chirp.CLI
+      zip osx-x64 --junk-paths osx-x64/publish/Chirp.CLI
+      zip osx-arm64 --junk-paths osx-arm64/publish/Chirp.CLI
+    - name:
+      uses: softprops/action-gh-release@v2
+      with: 
+        files:
+          win-x64.zip
+          linux-x64.zip
+          osx-x64-zip
+          osx-arm64.zip
+
 
 
 
