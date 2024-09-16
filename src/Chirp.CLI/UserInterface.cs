@@ -6,7 +6,7 @@ namespace Chirp.CLI;
 
 class UserInterface
 {
-    public static void PrintCheeps(IEnumerable<Program.Cheep> records)
+    public static void PrintCheeps(IEnumerable<Cheep> records)
     {
         foreach (var cheep in records)
         {
@@ -14,7 +14,7 @@ class UserInterface
         }
     }
 
-    public static void PrintCheep(Program.Cheep cheep)
+    public static void PrintCheep(Cheep cheep)
     {
         var author = cheep.Author;
         var message = cheep.Message;
