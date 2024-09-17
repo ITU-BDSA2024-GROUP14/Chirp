@@ -56,20 +56,28 @@ public class CheepDatabaseTests
         CheepDatabase database = CheepDatabase.Instance;
         string DatabasePath = "./../../../testCSVdatabase.csv";
         CheepDatabase.Instance.ChangeCsvPath(DatabasePath);
-        using StreamReader reader = new(DatabasePath);
-        CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
+        IEnumerable<Cheep> cheeps;
+        int beforeCount;
+        using (StreamReader reader = new(DatabasePath))
+        {
+            using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
+            cheeps = csvReader.GetRecords<Cheep>();
+            beforeCount = cheeps.ToList().Count;
+        }
+
 
         // Act
-        IEnumerable<Cheep> cheeps = csvReader.GetRecords<Cheep>();
-        csvReader.Dispose();
-        
-        int beforeCount = cheeps.ToList().Count;
         Cheep cheep = new Cheep("aubu", "This is a test", 1111111111);
         database.Store(cheep);
-        CsvReader csvReader2 = new(reader, new CultureInfo("en-DE"));
-        cheeps = csvReader2.GetRecords<Cheep>();
 
-        int afterCount = cheeps.ToList().Count;
+        int afterCount;
+        using (StreamReader reader = new(DatabasePath))
+        {
+            using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
+            cheeps = csvReader.GetRecords<Cheep>();
+            afterCount = cheeps.ToList().Count;
+
+        }
 
         // Assert
         Assert.Equal(beforeCount + 1, afterCount);
