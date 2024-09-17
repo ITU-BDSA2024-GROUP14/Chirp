@@ -2,21 +2,79 @@ name: Publish on version tags
 
 on:
   push:
-    branches: 
-      - main
     tags:
       - 'v*.*.*'
 
 jobs:
+  # build-and-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+      #      - uses: actions/checkout@v4
+      #      - uses: ./.github/workflows/build_and_test.yml
   build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/build_and_test.yml
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+
 
   deploy:
-    needs: build-and-test
     runs-on: ubuntu-latest
+    needs: build-and-test
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - uses: actions/checkout@v4
+  #      - uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/deploy.yml
+    - uses: actions/checkout@v4  
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x        
+    - name: Publish for windows x64
+      working-directory: "./src/Chirp.CLI/"
+      run: dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
+    - name: Publish for linux x64
+      working-directory: "./src/Chirp.CLI/"
+      run: dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
+    - name: Publish for MacOS x64
+      working-directory: "./src/Chirp.CLI/"
+      run: dotnet publish --runtime osx-x64 -p:PublishSingleFile=true --self-contained true
+    - name: Publish for MacOS ARM
+      working-directory: "./src/Chirp.CLI/"
+      run: dotnet publish --runtime osx-arm64 -p:PublishSingleFile=true --self-contained true
+    - name: Zip files
+      working-directory: "./src/Chirp.CLI/bin/Release/net8.0/"
+      run: |
+        zip win-x64 --junk-paths win-x64/publish/Chirp.CLI.exe
+        zip linux-x64 --junk-paths linux-x64/publish/Chirp.CLI
+        zip osx-x64 --junk-paths osx-x64/publish/Chirp.CLI
+        zip osx-arm64 --junk-paths osx-arm64/publish/Chirp.CLI
+    - name:
+      uses: softprops/action-gh-release@v2
+      with: 
+        files: |
+          ./src/Chirp.CLI/bin/Release/net8.0/win-x64.zip
+          ./src/Chirp.CLI/bin/Release/net8.0/linux-x64.zip
+          ./src/Chirp.CLI/bin/Release/net8.0/osx-x64.zip
+          ./src/Chirp.CLI/bin/Release/net8.0/osx-arm64.zip
+
+
+
+
+      
+    
+

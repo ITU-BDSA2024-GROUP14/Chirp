@@ -15,7 +15,7 @@ class UserInterface
     }
 
     public static void PrintCheep(Cheep cheep)
-    {
+    {   
         var author = cheep.Author;
         var message = cheep.Message;
         var timestamp = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).UtcDateTime;
