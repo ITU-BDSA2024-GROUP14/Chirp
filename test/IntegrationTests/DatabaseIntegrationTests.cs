@@ -1,10 +1,12 @@
+using System.Globalization;
+using CsvHelper;
 using SimpleDB;
 
 namespace IntegrationTests;
 
 public class DatabaseIntegrationTests
 {
-    private const string TestDbPath = "./tmp_test_data/chirp_cli_db.csv";
+    private const string TestDbPath = "./chirp_cli_db.csv";
 
     [Theory]
     [InlineData("Alice", "Hello, World!", 1625097600)] // Example timestamp: 1st July 2021
@@ -13,9 +15,9 @@ public class DatabaseIntegrationTests
     public void StoreAndReadCheep_ShouldReturnSame(string author, string message, long timestamp)
     {
         // Arrange
-        var database = CheepDatabase.Instance;
         ResetDatabase();
-
+        var database = CheepDatabase.Instance;
+        
         // Act
         database.Store(new Cheep(author, message, timestamp));
         var cheeps = database.Read().ToList();
@@ -63,5 +65,10 @@ public class DatabaseIntegrationTests
         var database = CheepDatabase.Instance;
         database.ChangeCsvPath(TestDbPath);
         File.WriteAllText(TestDbPath, string.Empty);
+        using var stream = File.Open(TestDbPath, FileMode.Append);
+        using StreamWriter writer = new(stream);
+        using CsvWriter csv = new(writer, CultureInfo.InvariantCulture);
+        csv.WriteHeader(typeof(Cheep));
+        csv.NextRecord();
     }
 }
