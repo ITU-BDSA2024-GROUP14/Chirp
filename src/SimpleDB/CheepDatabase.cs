@@ -18,14 +18,16 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     /// <returns>An enumerable collection of Cheeps.</returns>
     public IEnumerable<Cheep> Read(int? limit = null)
     {
+        Console.WriteLine(_databasePath);
         using StreamReader reader = new(_databasePath);
         using CsvReader csvReader = new(reader, CultureInfo);
-        IEnumerable<Cheep> records = csvReader.GetRecords<Cheep>();
+        var records = csvReader.GetRecords<Cheep>();
         return limit.HasValue ? records.TakeLast(limit.Value).ToList() : records.ToList();
     }
 
     public void Store(Cheep record)
     {
+        Console.WriteLine("Storing at: " + _databasePath);
         using (var stream = File.Open(_databasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         using (CsvWriter csv = new(writer, CultureInfo))

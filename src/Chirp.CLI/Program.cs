@@ -12,8 +12,9 @@ internal class Program
     private const string Usage = @"Chirp.
 
 Usage:
-  chirp read [<limit>] [<databasepath>]
-  chirp cheep <message> [<databasepath>]
+  chirp read [-d <databasepath>]
+  chirp read [<limit>] [-d <databasepath>]
+  chirp cheep <message> [-d <databasepath>]
   chirp (-h | --help)
 
 Options:
@@ -30,16 +31,16 @@ Options:
 
         if (arguments["read"].IsTrue)
         {
-            string? databasePath = null;
             int? limit = null;
             if (arguments["<limit>"].IsInt)
             {
                 limit = arguments["<limit>"].AsInt;
             }
 
-            if (arguments["<limit>"].IsString)
+            if (arguments["-d"].IsTrue && !arguments["<databasepath>"].IsNullOrEmpty)
             {
-                databasePath = arguments["<limit>"].ToString();
+                var databasePath = arguments["<databasepath>"].ToString();
+                Console.WriteLine(databasePath);
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
@@ -47,6 +48,13 @@ Options:
         }
         else if (arguments["cheep"].IsTrue)
         {
+            if (arguments["-d"].IsTrue && !arguments["<databasepath>"].IsNullOrEmpty)
+            {
+                var databasePath = arguments["<databasepath>"].ToString();
+                Console.WriteLine(databasePath);
+                CheepDatabase.Instance.ChangeCsvPath(databasePath);
+            }
+
             AddCheep(arguments["<message>"].ToString(), CheepDatabase.Instance);
         }
     }
