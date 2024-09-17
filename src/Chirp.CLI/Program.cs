@@ -1,9 +1,6 @@
 ﻿using System.Globalization;
-
 using CsvHelper;
-
 using DocoptNet;
-
 using SimpleDB;
 
 namespace Chirp.CLI;
@@ -15,8 +12,8 @@ internal class Program
     private const string Usage = @"Chirp.
 
 Usage:
-  chirp read [<limit>]
-  chirp cheep <message>
+  chirp read [<limit>] [<databasepath>]
+  chirp cheep <message> [<databasepath>]
   chirp (-h | --help)
 
 Options:
@@ -25,7 +22,7 @@ Options:
 
     public static void Main(string[] args)
     {
-        IDictionary<string, ValueObject>? arguments = new Docopt().Apply(Usage, args, exit: true);
+        var arguments = new Docopt().Apply(Usage, args, exit: true);
         if (arguments == null)
         {
             throw new NullReferenceException("CLI argument parsing failed\narguments is null");
@@ -33,10 +30,17 @@ Options:
 
         if (arguments["read"].IsTrue)
         {
+            string? databasePath = null;
             int? limit = null;
             if (arguments["<limit>"].IsInt)
             {
                 limit = arguments["<limit>"].AsInt;
+            }
+
+            if (arguments["<limit>"].IsString)
+            {
+                databasePath = arguments["<limit>"].ToString();
+                CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
             UserInterface.PrintCheeps(CheepDatabase.Instance.Read(limit));
@@ -49,8 +53,8 @@ Options:
 
     private static void AddCheep(string message, IDatabaseRepository<Cheep> db)
     {
-        long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        string author = Environment.UserName;
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
         db.Store(cheep);

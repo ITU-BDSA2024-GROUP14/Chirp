@@ -5,7 +5,7 @@ namespace SimpleDB;
 
 public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    private static string DatabasePath = "../../data/chirp_cli_db.csv";
+    private string _databasePath = "../../data/chirp_cli_db.csv";
     private static readonly CultureInfo CultureInfo = new("en-DE");
     private static readonly Lazy<CheepDatabase> lazy = new(() => new CheepDatabase());
 
@@ -18,7 +18,7 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     /// <returns>An enumerable collection of Cheeps.</returns>
     public IEnumerable<Cheep> Read(int? limit = null)
     {
-        using StreamReader reader = new(DatabasePath);
+        using StreamReader reader = new(_databasePath);
         using CsvReader csvReader = new(reader, CultureInfo);
         IEnumerable<Cheep> records = csvReader.GetRecords<Cheep>();
         return limit.HasValue ? records.TakeLast(limit.Value).ToList() : records.ToList();
@@ -26,7 +26,7 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 
     public void Store(Cheep record)
     {
-        using (var stream = File.Open(DatabasePath, FileMode.Append))
+        using (var stream = File.Open(_databasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         using (CsvWriter csv = new(writer, CultureInfo))
         {
@@ -35,9 +35,8 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
         }
     }
 
-
     public void ChangeCsvPath(string path)
     {
-        DatabasePath = path;
+        _databasePath = path;
     }
 }
