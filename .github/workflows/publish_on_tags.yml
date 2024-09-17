@@ -69,7 +69,7 @@ jobs:
         files: |
           ./src/Chirp.CLI/bin/Release/net8.0/win-x64.zip
           ./src/Chirp.CLI/bin/Release/net8.0/linux-x64.zip
-          ./src/Chirp.CLI/bin/Release/net8.0/osx-x64-zip
+          ./src/Chirp.CLI/bin/Release/net8.0/osx-x64.zip
           ./src/Chirp.CLI/bin/Release/net8.0/osx-arm64.zip
 
 
