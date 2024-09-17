@@ -1,0 +1,37 @@
+using SimpleDB;
+
+namespace IntegrationTests;
+
+public class DatabaseIntegrationTests
+{
+    private const string TestDbPath = "./tmp_test_data/chirp_cli_db.csv";
+
+    [Theory]
+    [InlineData("Alice", "Hello, World!", 1625097600)] // Example timestamp: 1st July 2021
+    [InlineData("Bob", "This is a test.", 1625184000)] // Example timestamp: 2nd July 2021
+    [InlineData("Charlie", "Sample message", 1625270400)] // Example timestamp: 3rd July 2021
+    public void StoreAndReadCheep_ShouldReturnSame(string author, string message, long timestamp)
+    {
+        // Arrange
+        var database = CheepDatabase.Instance;
+        ResetDatabase();
+
+        // Act
+        database.Store(new Cheep(author, message, timestamp));
+        var cheeps = database.Read().ToList();
+
+        // Assert
+        Assert.Single(cheeps);
+        var cheep = cheeps.First();
+        Assert.Equal(author, cheep.Author);
+        Assert.Equal(message, cheep.Message);
+        Assert.Equal(timestamp, cheep.Timestamp);
+    }
+
+    private void ResetDatabase()
+    {
+        var database = CheepDatabase.Instance;
+        database.ChangeCsvPath(TestDbPath);
+        File.WriteAllText(TestDbPath, string.Empty);
+    }
+}

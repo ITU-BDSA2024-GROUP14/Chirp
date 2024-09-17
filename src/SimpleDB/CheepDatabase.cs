@@ -1,22 +1,15 @@
 ﻿using System.Globalization;
-
 using CsvHelper;
 
 namespace SimpleDB;
 
 public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    private static readonly string DatabasePath = "../../data/chirp_cli_db.csv";
+    private static string DatabasePath = "../../data/chirp_cli_db.csv";
     private static readonly CultureInfo CultureInfo = new("en-DE");
-    private static readonly Lazy<CheepDatabase> lazy = new Lazy<CheepDatabase>(() => new CheepDatabase());
-    
-    public static CheepDatabase Instance
-    {
-        get
-        {
-            return lazy.Value;
-        }
-    }
+    private static readonly Lazy<CheepDatabase> lazy = new(() => new CheepDatabase());
+
+    public static CheepDatabase Instance => lazy.Value;
 
     /// <summary>
     /// Reads Cheeps from the CSV database, with an optional limit on the number of Cheeps returned.
@@ -33,12 +26,18 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 
     public void Store(Cheep record)
     {
-        using (FileStream stream = File.Open(DatabasePath, FileMode.Append))
+        using (var stream = File.Open(DatabasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         using (CsvWriter csv = new(writer, CultureInfo))
         {
             csv.WriteRecord(record);
             csv.NextRecord();
         }
+    }
+
+
+    public void ChangeCsvPath(string path)
+    {
+        DatabasePath = path;
     }
 }
