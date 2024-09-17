@@ -7,7 +7,7 @@ namespace SimpleDB.Tests;
 public class CheepDatabaseTests
 {
     [Fact]
-    public void testIfInstanceReturnsAnInstance()
+    public void TestIfInstanceReturnsAnInstance()
     {
         // Arrange
 
@@ -19,7 +19,7 @@ public class CheepDatabaseTests
     }
 
     [Fact]
-    public void testIfInstanceReturnsTheSameDatabaseTwice()
+    public void TestIfInstanceReturnsTheSameDatabaseTwice()
     {
         // Arrange
         CheepDatabase database = CheepDatabase.Instance;
@@ -32,7 +32,7 @@ public class CheepDatabaseTests
     }
 
     [Fact]
-    public void testIfCanReadFromDatabase()
+    public void TestIfCanReadFromDatabase()
     {
         // Arrange
         CheepDatabase database = CheepDatabase.Instance;
@@ -49,7 +49,7 @@ public class CheepDatabaseTests
     }
 
     [Fact]
-    public void testIfCanWriteToDatabase()
+    public void TestIfCanWriteToDatabase()
     {
         // Arrange
 
@@ -58,25 +58,22 @@ public class CheepDatabaseTests
         CheepDatabase.Instance.ChangeCsvPath(DatabasePath);
         IEnumerable<Cheep> cheeps;
         int beforeCount;
-        using (StreamReader reader = new(DatabasePath))
-        {
-            using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
-            cheeps = csvReader.GetRecords<Cheep>();
-            beforeCount = cheeps.ToList().Count;
-        }
-
+        int afterCount;
 
         // Act
-        Cheep cheep = new Cheep("aubu", "This is a test", 1111111111);
-        database.Store(cheep);
-
-        int afterCount;
         using (StreamReader reader = new(DatabasePath))
         {
             using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
-            cheeps = csvReader.GetRecords<Cheep>();
-            afterCount = cheeps.ToList().Count;
+            beforeCount = csvReader.GetRecords<Cheep>().ToList().Count;
+        }
 
+        Cheep cheep = new("aubu", "This is a test", 1111111111);
+        database.Store(cheep);
+
+        using (StreamReader reader = new(DatabasePath))
+        {
+            using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
+            afterCount = csvReader.GetRecords<Cheep>().ToList().Count;
         }
 
         // Assert
