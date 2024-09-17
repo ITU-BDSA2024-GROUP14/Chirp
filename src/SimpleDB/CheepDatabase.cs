@@ -27,8 +27,8 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     {
         using StreamReader reader = new(DatabasePath);
         using CsvReader csvReader = new(reader, CultureInfo);
-        IEnumerable<Cheep> records = csvReader.GetRecords<Cheep>();
-        return limit.HasValue ? records.TakeLast(limit.Value).ToList() : records.ToList();
+        IEnumerable<Cheep> cheeps = csvReader.GetRecords<Cheep>();
+        return limit.HasValue ? cheeps.TakeLast(limit.Value).ToList() : cheeps.ToList();
     }
 
     public void Store(Cheep record)
