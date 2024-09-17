@@ -27,7 +27,37 @@ public class DatabaseIntegrationTests
         Assert.Equal(message, cheep.Message);
         Assert.Equal(timestamp, cheep.Timestamp);
     }
+    
+    [Fact]
+    public void StoreMultipleCheeps_ShouldStoreAll()
+    {
+        // Arrange
+        var database = CheepDatabase.Instance;
+        ResetDatabase();
+        var cheepsToStore = new List<Cheep>
+        {
+            new("Alice", "Hello, World!", 1625097600),
+            new("Bob", "This is a test.", 1625184000),
+            new("Charlie", "Sample message", 1625270400)
+        };
 
+        // Act
+        foreach (var cheep in cheepsToStore)
+        {
+            database.Store(cheep);
+        }
+        var cheeps = database.Read().ToList();
+
+        // Assert
+        Assert.Equal(cheepsToStore.Count, cheeps.Count);
+        
+        // Check that all cheeps that we wrote are present in the database
+        foreach (var cheep in cheepsToStore)
+        {
+            Assert.Contains(cheeps, c => c.Author == cheep.Author && c.Message == cheep.Message && c.Timestamp == cheep.Timestamp);
+        }
+    }
+    
     private void ResetDatabase()
     {
         var database = CheepDatabase.Instance;
