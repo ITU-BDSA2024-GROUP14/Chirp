@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using SimpleDB;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -14,6 +15,8 @@ public class EndToEnd
         {
             writer.WriteLine(content);
         }
+
+        CheepDatabase.Instance.ChangeCsvPath(fileName);
     }
 
     private void PullDownTestDataBase(string fileName)
@@ -29,7 +32,7 @@ public class EndToEnd
     [InlineData(",2,5,dsadsad, ss\"")]
     public void TestCheep(string cheepMessage)
     {
-        var filename = "TestCheepEnd2End.txt";
+        var filename = "TestCheepEnd2End.csv";
         SetUpTestDataBase(filename);
         using (var process = new Process())
         {
