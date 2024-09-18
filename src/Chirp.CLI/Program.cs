@@ -1,9 +1,6 @@
 ﻿using System.Globalization;
-
 using CsvHelper;
-
 using DocoptNet;
-
 using SimpleDB;
 
 namespace Chirp.CLI;
@@ -15,8 +12,9 @@ internal class Program
     private const string Usage = @"Chirp.
 
 Usage:
-  chirp read [<limit>]
-  chirp cheep <message>
+  chirp read [-d <databasepath>]
+  chirp read [<limit>] [-d <databasepath>]
+  chirp cheep <message> [-d <databasepath>]
   chirp (-h | --help)
 
 Options:
@@ -25,7 +23,7 @@ Options:
 
     public static void Main(string[] args)
     {
-        IDictionary<string, ValueObject>? arguments = new Docopt().Apply(Usage, args, exit: true);
+        var arguments = new Docopt().Apply(Usage, args, exit: true);
         if (arguments == null)
         {
             throw new NullReferenceException("CLI argument parsing failed\narguments is null");
@@ -39,18 +37,30 @@ Options:
                 limit = arguments["<limit>"].AsInt;
             }
 
+            if (arguments["-d"].IsTrue && !arguments["<databasepath>"].IsNullOrEmpty)
+            {
+                var databasePath = arguments["<databasepath>"].ToString();
+                CheepDatabase.Instance.ChangeCsvPath(databasePath);
+            }
+
             UserInterface.PrintCheeps(CheepDatabase.Instance.Read(limit));
         }
         else if (arguments["cheep"].IsTrue)
         {
+            if (arguments["-d"].IsTrue && !arguments["<databasepath>"].IsNullOrEmpty)
+            {
+                var databasePath = arguments["<databasepath>"].ToString();
+                CheepDatabase.Instance.ChangeCsvPath(databasePath);
+            }
+
             AddCheep(arguments["<message>"].ToString(), CheepDatabase.Instance);
         }
     }
 
     private static void AddCheep(string message, IDatabaseRepository<Cheep> db)
     {
-        long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        string author = Environment.UserName;
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
         db.Store(cheep);

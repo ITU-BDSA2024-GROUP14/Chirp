@@ -43,9 +43,9 @@ public class CheepDatabaseTests
         Cheep cheep = cheeps.First();
 
         // Assert
-        Assert.Equal(cheep.Message, "Hello, BDSA students!");
-        Assert.Equal(cheep.Author, "ropf");
-        Assert.Equal(cheep.Timestamp, 1690891760);
+        Assert.Equal("Hello, BDSA students!", cheep.Message);
+        Assert.Equal("ropf", cheep.Author);
+        Assert.Equal(1690891760, cheep.Timestamp);
     }
 
     [Fact]
@@ -56,7 +56,6 @@ public class CheepDatabaseTests
         CheepDatabase database = CheepDatabase.Instance;
         string DatabasePath = "./../../../testCSVdatabase.csv";
         CheepDatabase.Instance.ChangeCsvPath(DatabasePath);
-        IEnumerable<Cheep> cheeps;
         int beforeCount;
         int afterCount;
 
