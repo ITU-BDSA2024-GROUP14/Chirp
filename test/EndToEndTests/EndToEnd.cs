@@ -61,4 +61,38 @@ public class EndToEnd
 
         PullDownTestDataBase(filePrefix + filename);
     }
+
+    [Theory]
+    [InlineData(1, "adho", "Welcome to the course!", 0)]
+    [InlineData(2, "ropf", "Hello, BDSA students!", 0)]
+    public void TestReadCheeps(int limit, string author, string message, int cheepNumber)
+    {
+        string output;
+        var filePrefix = "../../../../../data/";
+        var filename = "TestReadCheepsEnd2End.csv";
+        SetUpTestDataBase(filePrefix + filename);
+        using (var process = new Process())
+        {
+            process.StartInfo.FileName = "dotnet";
+            process.StartInfo.WorkingDirectory = "../../../../../";
+            process.StartInfo.Arguments = "./src/Chirp.CLI/bin/Debug/net8.0/Chirp.CLI.dll read " + limit +
+                                          " -d ./data/" + filename;
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+
+            process.Start();
+
+            var reader = process.StandardOutput;
+            output = reader.ReadToEnd();
+            process.WaitForExit();
+        }
+
+        var outputStrings = output.Split("\n");
+
+        Assert.StartsWith(author, outputStrings[cheepNumber]);
+        Assert.Contains(message, outputStrings[cheepNumber]);
+
+        PullDownTestDataBase(filePrefix + filename);
+    }
 }
