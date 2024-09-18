@@ -40,7 +40,6 @@ Options:
             if (arguments["-d"].IsTrue && !arguments["<databasepath>"].IsNullOrEmpty)
             {
                 var databasePath = arguments["<databasepath>"].ToString();
-                Console.WriteLine(databasePath);
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
@@ -51,7 +50,6 @@ Options:
             if (arguments["-d"].IsTrue && !arguments["<databasepath>"].IsNullOrEmpty)
             {
                 var databasePath = arguments["<databasepath>"].ToString();
-                Console.WriteLine(databasePath);
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
