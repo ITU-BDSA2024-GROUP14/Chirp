@@ -59,10 +59,10 @@ jobs:
     - name: Zip files
       working-directory: "./src/Chirp.CLI/bin/Release/net8.0/"
       run: |
-        zip win-x64 --junk-paths win-x64/publish/Chirp.CLI.exe
-        zip linux-x64 --junk-paths linux-x64/publish/Chirp.CLI
-        zip osx-x64 --junk-paths osx-x64/publish/Chirp.CLI
-        zip osx-arm64 --junk-paths osx-arm64/publish/Chirp.CLI
+        zip Chirp-${{ github.ref_name }}-win-x64 --junk-paths win-x64/publish/Chirp.CLI.exe
+        zip Chirp-${{ github.ref_name }}-linux-x64 --junk-paths linux-x64/publish/Chirp.CLI
+        zip Chirp-${{ github.ref_name }}-osx-x64 --junk-paths osx-x64/publish/Chirp.CLI
+        zip Chirp-${{ github.ref_name }}-osx-arm64 --junk-paths osx-arm64/publish/Chirp.CLI
     - name:
       uses: softprops/action-gh-release@v2
       with: 
