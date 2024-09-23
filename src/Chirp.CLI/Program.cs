@@ -24,7 +24,7 @@ Options:
   -h --help  Show this screen.
 ";
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var client = new HttpClient();
         var arguments = new Docopt().Apply(Usage, args, exit: true);
@@ -47,7 +47,7 @@ Options:
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
-            UserInterface.PrintCheeps(CheepDatabase.Instance.Read(limit));
+            await readCheeps(client, limit);
         }
         else if (arguments["cheep"].IsTrue)
         {
@@ -61,6 +61,26 @@ Options:
         }
     }
 
+    private static async Task readCheeps(HttpClient client, int? limit = null)
+    {
+        var uri = "http://localhost:5016/cheeps";
+        var response = await client.GetAsync(uri);
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            throw new HttpRequestException("Response unsuccessful");
+        }
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var cheeps = JsonSerializer.Deserialize<List<Cheep>>(jsonResponse, options);
+        if (cheeps == null)
+        {
+            throw new NullReferenceException("Cheeps are null");
+        }
+
+        UserInterface.PrintCheeps(cheeps);
+    }
+
     private static void AddCheep(string message, HttpClient client)
     {
         //curl -X POST http://localhost:5016/cheep \
@@ -70,11 +90,11 @@ Options:
         var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
-        var url = "http://localhost:5016/cheep";
+        var uri = "http://localhost:5016/cheep";
         var jsonCheep = JsonSerializer.Serialize(cheep);
         var header = new MediaTypeHeaderValue("application/json");
         var content = new StringContent(jsonCheep, header);
-        var respone = client.PostAsync(url, content);
+        var respone = client.PostAsync(uri, content);
         if (respone.Result.StatusCode == HttpStatusCode.OK)
         {
             Console.WriteLine("Cheeped message");
