@@ -1,4 +1,7 @@
 ﻿using System.Globalization;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using CsvHelper;
 using DocoptNet;
 using SimpleDB;
@@ -23,6 +26,7 @@ Options:
 
     public static void Main(string[] args)
     {
+        var client = new HttpClient();
         var arguments = new Docopt().Apply(Usage, args, exit: true);
         if (arguments == null)
         {
@@ -53,16 +57,27 @@ Options:
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
-            AddCheep(arguments["<message>"].ToString(), CheepDatabase.Instance);
+            AddCheep(arguments["<message>"].ToString(), client);
         }
     }
 
-    private static void AddCheep(string message, IDatabaseRepository<Cheep> db)
+    private static void AddCheep(string message, HttpClient client)
     {
+        //curl -X POST http://localhost:5016/cheep \
+        // -H "Content-Type: application/json" \
+        // -d '{"author": "havkost", "message": "Hello, world!", "timestamp": 1690891760}'
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
-        db.Store(cheep);
+        var url = "http://localhost:5016/cheep";
+        var jsonCheep = JsonSerializer.Serialize(cheep);
+        var header = new MediaTypeHeaderValue("application/json");
+        var content = new StringContent(jsonCheep, header);
+        var respone = client.PostAsync(url, content);
+        if (respone.Result.StatusCode == HttpStatusCode.OK)
+        {
+            Console.WriteLine("Cheeped message");
+        }
     }
 }
