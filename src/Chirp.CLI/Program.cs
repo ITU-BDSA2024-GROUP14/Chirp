@@ -83,9 +83,6 @@ Options:
 
     private static void AddCheep(string message, HttpClient client)
     {
-        //curl -X POST http://localhost:5016/cheep \
-        // -H "Content-Type: application/json" \
-        // -d '{"author": "havkost", "message": "Hello, world!", "timestamp": 1690891760}'
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var author = Environment.UserName;
 
