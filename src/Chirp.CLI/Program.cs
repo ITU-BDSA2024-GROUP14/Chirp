@@ -1,4 +1,7 @@
 ﻿using System.Globalization;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using CsvHelper;
 using DocoptNet;
 using SimpleDB;
@@ -21,8 +24,9 @@ Options:
   -h --help  Show this screen.
 ";
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
+        var client = new HttpClient();
         var arguments = new Docopt().Apply(Usage, args, exit: true);
         if (arguments == null)
         {
@@ -43,7 +47,7 @@ Options:
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
-            UserInterface.PrintCheeps(CheepDatabase.Instance.Read(limit));
+            await readCheeps(client, limit);
         }
         else if (arguments["cheep"].IsTrue)
         {
@@ -53,16 +57,44 @@ Options:
                 CheepDatabase.Instance.ChangeCsvPath(databasePath);
             }
 
-            AddCheep(arguments["<message>"].ToString(), CheepDatabase.Instance);
+            AddCheep(arguments["<message>"].ToString(), client);
         }
     }
 
-    private static void AddCheep(string message, IDatabaseRepository<Cheep> db)
+    private static async Task readCheeps(HttpClient client, int? limit = null)
+    {
+        var uri = "http://localhost:5016/cheeps";
+        var response = await client.GetAsync(uri);
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            throw new HttpRequestException("Response unsuccessful");
+        }
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var cheeps = JsonSerializer.Deserialize<List<Cheep>>(jsonResponse, options);
+        if (cheeps == null)
+        {
+            throw new NullReferenceException("Cheeps are null");
+        }
+
+        UserInterface.PrintCheeps(cheeps);
+    }
+
+    private static void AddCheep(string message, HttpClient client)
     {
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
-        db.Store(cheep);
+        var uri = "http://localhost:5016/cheep";
+        var jsonCheep = JsonSerializer.Serialize(cheep);
+        var header = new MediaTypeHeaderValue("application/json");
+        var content = new StringContent(jsonCheep, header);
+        var respone = client.PostAsync(uri, content);
+        if (respone.Result.StatusCode == HttpStatusCode.OK)
+        {
+            Console.WriteLine("Cheeped message");
+        }
     }
 }
