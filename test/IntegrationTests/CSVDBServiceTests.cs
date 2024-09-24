@@ -20,7 +20,7 @@ public class CSVDBServiceTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("jonv", "hello world")]
     public async Task StoreValidCheep_ShouldReturnOk(string author, string message)
     {
-        var response = await PostCheep(author, message, 1690891710);
+        var response = await PostCheep(author, message);
 
         Assert.True(response.IsSuccessStatusCode);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -37,7 +37,7 @@ public class CSVDBServiceTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("", "hello world")]
     public async Task StoreInvalidCheep_ShouldFail(string? author, string? message)
     {
-        var response = await PostCheep(author, message, 1690891710);
+        var response = await PostCheep(author, message);
 
         Assert.False(response.IsSuccessStatusCode);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -54,20 +54,18 @@ public class CSVDBServiceTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.NotNull(response);
     }
 
-    private async Task<HttpResponseMessage> PostCheep(string author, string message, long timestamp)
+    private async Task<HttpResponseMessage> PostCheep(string author, string message)
     {
         // call invalid cheep
         using var httpClient = _factory.CreateClient();
         var payload = """
                       {
                           "author": "{author}",
-                          "message": "{message}",
-                          "timestamp": {timestamp}
+                          "message": "{message}"
                       }
                       """;
         payload = payload.Replace("{author}", author);
         payload = payload.Replace("{message}", message);
-        payload = payload.Replace("{timestamp}", timestamp.ToString());
 
         HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
