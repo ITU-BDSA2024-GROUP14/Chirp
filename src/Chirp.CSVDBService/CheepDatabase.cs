@@ -38,5 +38,32 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     public void ChangeCsvPath(string path)
     {
         _databasePath = path;
+        
+        Reset();
+        SeedTestData();
+    }
+
+    public void Reset()
+    {
+        // ensure the parent directory exists
+        Directory.CreateDirectory(Path.GetDirectoryName(_databasePath));
+        
+        // clear the file
+        File.WriteAllText(_databasePath, string.Empty);
+
+        using var stream = File.Open(_databasePath, FileMode.Append);
+        using StreamWriter writer = new(stream);
+        using var csvWriter = new CsvWriter(writer, CultureInfo);
+        {
+            csvWriter.WriteHeader<Cheep>();
+            csvWriter.NextRecord();
+        }
+    }
+    
+    public void SeedTestData()
+    {
+        Store(new Cheep("ropf", "Hello, BDSA students!", 1690891760));
+        Store(new Cheep("jonv", "Hello, BDSA students!", 1690891760));
+        Store(new Cheep("aubu", "Hello, BDSA students!", 1690891760));
     }
 }
