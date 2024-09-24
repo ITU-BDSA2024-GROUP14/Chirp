@@ -1,6 +1,7 @@
 using System.Globalization;
+using Chirp.CSVDBService;
 using CsvHelper;
-using SimpleDB;
+using TestHelpers;
 
 namespace IntegrationTests;
 
@@ -15,9 +16,9 @@ public class DatabaseIntegrationTests
     public void StoreAndReadCheep_ShouldReturnSame(string author, string message, long timestamp)
     {
         // Arrange
-        ResetDatabase();
         var database = CheepDatabase.Instance;
-        
+        TestDbHelper.SetupDatabase(database);
+
         // Act
         database.Store(new Cheep(author, message, timestamp));
         var cheeps = database.Read().ToList();
@@ -29,13 +30,13 @@ public class DatabaseIntegrationTests
         Assert.Equal(message, cheep.Message);
         Assert.Equal(timestamp, cheep.Timestamp);
     }
-    
+
     [Fact]
     public void StoreMultipleCheeps_ShouldStoreAll()
     {
         // Arrange
         var database = CheepDatabase.Instance;
-        ResetDatabase();
+        TestDbHelper.SetupDatabase(database);
         var cheepsToStore = new List<Cheep>
         {
             new("Alice", "Hello, World!", 1625097600),
@@ -48,27 +49,17 @@ public class DatabaseIntegrationTests
         {
             database.Store(cheep);
         }
+
         var cheeps = database.Read().ToList();
 
         // Assert
         Assert.Equal(cheepsToStore.Count, cheeps.Count);
-        
+
         // Check that all cheeps that we wrote are present in the database
         foreach (var cheep in cheepsToStore)
         {
-            Assert.Contains(cheeps, c => c.Author == cheep.Author && c.Message == cheep.Message && c.Timestamp == cheep.Timestamp);
+            Assert.Contains(cheeps,
+                c => c.Author == cheep.Author && c.Message == cheep.Message && c.Timestamp == cheep.Timestamp);
         }
-    }
-    
-    private void ResetDatabase()
-    {
-        var database = CheepDatabase.Instance;
-        database.ChangeCsvPath(TestDbPath);
-        File.WriteAllText(TestDbPath, string.Empty);
-        using var stream = File.Open(TestDbPath, FileMode.Append);
-        using StreamWriter writer = new(stream);
-        using CsvWriter csv = new(writer, CultureInfo.InvariantCulture);
-        csv.WriteHeader(typeof(Cheep));
-        csv.NextRecord();
     }
 }

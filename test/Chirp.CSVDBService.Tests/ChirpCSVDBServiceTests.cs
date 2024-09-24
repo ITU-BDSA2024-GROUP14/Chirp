@@ -1,6 +1,7 @@
 using System.Globalization;
 
 using CsvHelper;
+using TestHelpers;
 
 namespace Chirp.CSVDBService.Tests;
 
@@ -36,7 +37,8 @@ public class ChirpCSVDBServiceTests
     {
         // Arrange
         CheepDatabase database = CheepDatabase.Instance;
-        CheepDatabase.Instance.ChangeCsvPath("./../../../testCSVdatabase.csv");
+        TestDbHelper.SetupDatabase(database);
+        TestDbHelper.SeedTestData(database);
 
         // Act
         IEnumerable<Cheep> cheeps = database.Read();
@@ -54,13 +56,12 @@ public class ChirpCSVDBServiceTests
         // Arrange
 
         CheepDatabase database = CheepDatabase.Instance;
-        string DatabasePath = "./../../../testCSVdatabase.csv";
-        CheepDatabase.Instance.ChangeCsvPath(DatabasePath);
+        TestDbHelper.SetupDatabase(database);
         int beforeCount;
         int afterCount;
 
         // Act
-        using (StreamReader reader = new(DatabasePath))
+        using (StreamReader reader = new(database.DatabasePath))
         {
             using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
             beforeCount = csvReader.GetRecords<Cheep>().ToList().Count;
@@ -69,7 +70,7 @@ public class ChirpCSVDBServiceTests
         Cheep cheep = new("aubu", "This is a test", 1111111111);
         database.Store(cheep);
 
-        using (StreamReader reader = new(DatabasePath))
+        using (StreamReader reader = new(database.DatabasePath))
         {
             using CsvReader csvReader = new(reader, new CultureInfo("en-DE"));
             afterCount = csvReader.GetRecords<Cheep>().ToList().Count;
