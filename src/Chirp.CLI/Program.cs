@@ -98,7 +98,7 @@ Options:
         }
         else
         {
-            Console.WriteLine("Failed got respone: " + respone.Result.StatusCode);
+            Console.WriteLine("Failed got respone: " + respone.Result);
         }
     }
 }
