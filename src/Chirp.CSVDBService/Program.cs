@@ -8,7 +8,7 @@ var database = CheepDatabase.Instance;
 
 if (app.Environment.IsDevelopment())
 {
-    database.ChangeCsvPath("../../data/chirp_cli_dev_db.csv");
+    database.DatabasePath = "../../data/chirp_cli_dev_db.csv";
 }
 
 app.MapPost("/cheep", Results<BadRequest<string>, Ok> (Cheep cheep) =>
