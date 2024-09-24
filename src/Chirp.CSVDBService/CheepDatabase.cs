@@ -5,7 +5,7 @@ namespace Chirp.CSVDBService;
 
 public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    private string _databasePath = "../../data/chirp_cli_db.csv";
+    private string _databasePath = "./data/chirp_cli_db.csv";
     private static readonly CultureInfo CultureInfo = new("en-DE");
     private static readonly Lazy<CheepDatabase> lazy = new(() => new CheepDatabase());
 

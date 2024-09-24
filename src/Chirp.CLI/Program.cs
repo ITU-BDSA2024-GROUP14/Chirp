@@ -63,11 +63,11 @@ Options:
 
     private static async Task readCheeps(HttpClient client, int? limit = null)
     {
-        var uri = "http://localhost:5016/cheeps";
+        var uri = "http://bdsagroup14chirpremotedb2024.azurewebsites.net/cheeps";
         var response = await client.GetAsync(uri);
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            throw new HttpRequestException("Response unsuccessful");
+            throw new HttpRequestException("Response unsuccessful, got: " + response.StatusCode);
         }
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -87,7 +87,7 @@ Options:
         var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
-        var uri = "http://localhost:5016/cheep";
+        var uri = "http://bdsagroup14chirpremotedb2024.azurewebsites.net/cheep";
         var jsonCheep = JsonSerializer.Serialize(cheep);
         var header = new MediaTypeHeaderValue("application/json");
         var content = new StringContent(jsonCheep, header);
