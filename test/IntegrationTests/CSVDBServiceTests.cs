@@ -2,22 +2,23 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authentication;
+using Chirp.CSVDBService;
 
 namespace IntegrationTests;
 
 [Collection("Sequential")] // prevents the tests from running in parallel, preventing port already in use
 public class CSVDBServiceTests
 {
+    private const int Port = 5016;
 
     [Theory]
     [InlineData("jonv", "hello world")]
     public async Task StoreValidCheep_ShouldReturnOk(string author, string message)
     {
-        var response = await CreateProccessAndPostCheep(author, message, 1690891710);
-        
+        var response = await CreateProcessAndPostCheep(author, message, 1690891710);
+
         Assert.True(response.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Theory]
@@ -31,18 +32,26 @@ public class CSVDBServiceTests
     [InlineData("", "hello world")]
     public async Task StoreInvalidCheep_ShouldFail(string? author, string? message)
     {
-        var response = await CreateProccessAndPostCheep(author, message, 1690891710);
+        var response = await CreateProcessAndPostCheep(author, message, 1690891710);
 
         Assert.False(response.IsSuccessStatusCode);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
-    public void ReadCheep_ShouldReturn()
+    public async Task ReadCheep_ShouldReturn()
     {
+        using var process = CreateProcess();
+        using var httpClient = new HttpClient();
+
+        var response = await httpClient.GetFromJsonAsync<List<Cheep>>($"http://localhost:{Port}/cheeps");
+
+        process.Kill();
+
+        Assert.NotNull(response);
     }
 
-    private async Task<HttpResponseMessage> CreateProccessAndPostCheep(string author, string message, long timestamp)
+    private Process CreateProcess()
     {
         using var process = new Process();
         process.StartInfo.FileName = "dotnet";
@@ -59,7 +68,13 @@ public class CSVDBServiceTests
         // var regex = new Regex("(?<=localhost:)[0-9]{4}");
         // var port = regex.Match(output).Value;
         // Assert.NotEmpty(port);
-        var port = 5016;
+
+        return process;
+    }
+
+    private async Task<HttpResponseMessage> CreateProcessAndPostCheep(string author, string message, long timestamp)
+    {
+        using var process = CreateProcess();
 
         // call invalid cheep
         using var httpClient = new HttpClient();
@@ -76,7 +91,7 @@ public class CSVDBServiceTests
 
         HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-        var response = await httpClient.PostAsync($"http://localhost:{port}/cheep", content);
+        var response = await httpClient.PostAsync($"http://localhost:{Port}/cheep", content);
 
         process.Kill();
 
