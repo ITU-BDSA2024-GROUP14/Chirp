@@ -5,7 +5,8 @@ namespace Chirp.CSVDBService;
 
 public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    private string _databasePath = "chirp_cli_db.csv";
+    public string DatabasePath { get; set; } = "../../data/chirp_cli_db.csv";
+    
     private static readonly CultureInfo CultureInfo = new("en-DE");
     private static readonly Lazy<CheepDatabase> lazy = new(() => new CheepDatabase());
 
@@ -18,7 +19,7 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
     /// <returns>An enumerable collection of Cheeps.</returns>
     public IEnumerable<Cheep> Read(int? limit = null)
     {
-        using StreamReader reader = new(_databasePath);
+        using StreamReader reader = new(DatabasePath);
         using CsvReader csvReader = new(reader, CultureInfo);
         var cheeps = csvReader.GetRecords<Cheep>();
         return limit.HasValue ? cheeps.TakeLast(limit.Value).ToList() : cheeps.ToList();
@@ -30,8 +31,8 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
         {
             GenerateDatabase();
         }
-
-        using (var stream = File.Open(_databasePath, FileMode.Append))
+        
+        using (var stream = File.Open(DatabasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         using (CsvWriter csv = new(writer, CultureInfo))
         {
@@ -42,20 +43,32 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 
     private bool CheckIfDataBaseExists()
     {
-        return File.Exists(_databasePath);
+        return File.Exists(DatabasePath);
     }
 
     private void GenerateDatabase()
     {
-        using (var stream = File.Open(_databasePath, FileMode.Append))
+        using (var stream = File.Open(DatabasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         {
             writer.WriteLine("Author,Message,Timestamp");
         }
     }
 
-    public void ChangeCsvPath(string path)
+    public void Reset()
     {
-        _databasePath = path;
+        // ensure the parent directory exists
+        Directory.CreateDirectory(Path.GetDirectoryName(DatabasePath));
+
+        // clear the file
+        File.WriteAllText(DatabasePath, string.Empty);
+
+        using var stream = File.Open(DatabasePath, FileMode.Append);
+        using StreamWriter writer = new(stream);
+        using var csvWriter = new CsvWriter(writer, CultureInfo);
+        {
+            csvWriter.WriteHeader<Cheep>();
+            csvWriter.NextRecord();
+        }
     }
 }
