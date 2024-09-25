@@ -9,7 +9,8 @@ var database = CheepDatabase.Instance;
 
 if (app.Environment.IsDevelopment())
 {
-    database.DatabasePath = "../../data/chirp_cli_dev_db.csv";
+    database.DatabasePath = "./data/chirp_cli_dev_db.csv";
+    database.EnsureCreated();
 }
 
 app.MapPost("/cheep", Results<BadRequest<string>, Ok> (CreateCheepRequestModel request) =>
