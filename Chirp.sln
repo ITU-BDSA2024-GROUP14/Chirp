@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorPage", "src\Chirp.Razor\Chirp.Razor.csproj", "{90CF0C64-A18D-48F6-9463-0B9F7833A3F8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB", "src\SimpleDB\SimpleDB.csproj", "{90CF0C64-A18D-48F6-9463-0B9F7833A3F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "src\Chirp.CLI\Chirp.CLI.csproj", "{C47A928C-CE06-42CB-8180-78EF5C9A5F11}"
@@ -28,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "tests\TestHelpers\TestHelpers.csproj", "{7EB47B10-237D-428A-AA4C-5D3975160D50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core", "src\Chirp.Core\Chirp.Core.csproj", "{4A626C74-3696-4B63-B3AF-8F266CEBAE15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{63773916-8A9E-47D7-ADB4-8376883F1ED4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +78,10 @@ Global
 		{4A626C74-3696-4B63-B3AF-8F266CEBAE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A626C74-3696-4B63-B3AF-8F266CEBAE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A626C74-3696-4B63-B3AF-8F266CEBAE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63773916-8A9E-47D7-ADB4-8376883F1ED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63773916-8A9E-47D7-ADB4-8376883F1ED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63773916-8A9E-47D7-ADB4-8376883F1ED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63773916-8A9E-47D7-ADB4-8376883F1ED4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C47A928C-CE06-42CB-8180-78EF5C9A5F11} = {DEB3C898-56F9-4BD1-B364-9045EC1F4566}
@@ -90,5 +94,6 @@ Global
 		{CEA940AE-59B3-4AE5-8BE2-D4AD8EEC2F35} = {980CB3DD-3A73-4220-9694-EFDCCFD7F3D8}
 		{7EB47B10-237D-428A-AA4C-5D3975160D50} = {980CB3DD-3A73-4220-9694-EFDCCFD7F3D8}
 		{4A626C74-3696-4B63-B3AF-8F266CEBAE15} = {DEB3C898-56F9-4BD1-B364-9045EC1F4566}
+		{63773916-8A9E-47D7-ADB4-8376883F1ED4} = {DEB3C898-56F9-4BD1-B364-9045EC1F4566}
 	EndGlobalSection
 EndGlobal
