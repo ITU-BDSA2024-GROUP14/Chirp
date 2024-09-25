@@ -42,12 +42,39 @@ public class DBFacade(IConfigurationRoot configuration)
                                 pub_date integer
                               );
                               """;
-        
+
         command.ExecuteNonQuery();
     }
-    
-    public void ExecuteQuery(string query)
+
+    public IEnumerable<Cheep> GetCheeps(int? authorId = null, int? limit = 0)
     {
-        
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = """
+                              SELECT user.username, message.text, message.pub_date 
+                              FROM message 
+                              INNER JOIN user ON message.author_id = user.user_id
+                              """;
+        if (authorId != null)
+        {
+            command.CommandText += " WHERE author_id = @AuthorId";
+            command.Parameters.AddWithValue("@AuthorId", authorId);
+        }
+
+        if (limit != null)
+        {
+            command.CommandText += " LIMIT @Limit";
+            command.Parameters.AddWithValue("@Limit", limit);
+        }
+
+        using var reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+            yield return new Cheep(reader.GetString(0), reader.GetString(1),
+                DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2)));
+        }
     }
 }
