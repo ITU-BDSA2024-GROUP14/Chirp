@@ -5,7 +5,7 @@ namespace Chirp.CSVDBService;
 
 public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 {
-    public string DatabasePath { get; set; } = "../../data/chirp_cli_db.csv";
+    public string DatabasePath { get; set; } = "chirp_cli_db.csv";
 
     private static readonly CultureInfo CultureInfo = new("en-DE");
     private static readonly Lazy<CheepDatabase> lazy = new(() => new CheepDatabase());
@@ -27,12 +27,31 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 
     public void Store(Cheep record)
     {
+        if (!CheckIfDataBaseExists())
+        {
+            GenerateDatabase();
+        }
+
         using (var stream = File.Open(DatabasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         using (CsvWriter csv = new(writer, CultureInfo))
         {
             csv.WriteRecord(record);
             csv.NextRecord();
+        }
+    }
+
+    private bool CheckIfDataBaseExists()
+    {
+        return File.Exists(DatabasePath);
+    }
+
+    private void GenerateDatabase()
+    {
+        using (var stream = File.Open(DatabasePath, FileMode.Append))
+        using (StreamWriter writer = new(stream))
+        {
+            writer.WriteLine("Author,Message,Timestamp");
         }
     }
 

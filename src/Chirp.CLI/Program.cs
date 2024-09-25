@@ -61,13 +61,16 @@ Options:
         }
     }
 
+    private static string website =
+        "https://bdsagroup14chirpremotedb2024-h7a5c2ahfqhgcag3.northeurope-01.azurewebsites.net/";
+
     private static async Task readCheeps(HttpClient client, int? limit = null)
     {
-        var uri = "http://localhost:5016/cheeps";
+        var uri = website + "cheeps";
         var response = await client.GetAsync(uri);
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            throw new HttpRequestException("Response unsuccessful");
+            throw new HttpRequestException("Response unsuccessful, got: " + response.StatusCode);
         }
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -87,7 +90,7 @@ Options:
         var author = Environment.UserName;
 
         Cheep cheep = new(author, message, timestamp);
-        var uri = "http://localhost:5016/cheep";
+        var uri = website + "cheep";
         var jsonCheep = JsonSerializer.Serialize(cheep);
         var header = new MediaTypeHeaderValue("application/json");
         var content = new StringContent(jsonCheep, header);
@@ -95,6 +98,10 @@ Options:
         if (respone.Result.StatusCode == HttpStatusCode.OK)
         {
             Console.WriteLine("Cheeped message");
+        }
+        else
+        {
+            Console.WriteLine("Failed got respone: " + respone.Result);
         }
     }
 }
