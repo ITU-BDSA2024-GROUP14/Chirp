@@ -71,4 +71,12 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
             csvWriter.NextRecord();
         }
     }
+    
+    public void EnsureCreated()
+    {
+        if (!File.Exists(DatabasePath))
+        {
+            Reset();
+        }
+    }
 }

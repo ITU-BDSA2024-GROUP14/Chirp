@@ -1,4 +1,5 @@
 using Chirp.CSVDBService;
+using Chirp.CSVDBService.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,20 +7,26 @@ var app = builder.Build();
 
 var database = CheepDatabase.Instance;
 
-
-app.MapPost("/cheep", Results<BadRequest<string>, Ok> (Cheep cheep) =>
+if (app.Environment.IsDevelopment())
 {
-    if (string.IsNullOrWhiteSpace(cheep.Author))
+    database.DatabasePath = "./data/chirp_cli_dev_db.csv";
+    database.EnsureCreated();
+}
+
+app.MapPost("/cheep", Results<BadRequest<string>, Ok> (CreateCheepRequestModel request) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Author))
     {
         return TypedResults.BadRequest("Author is required");
     }
 
-    if (string.IsNullOrWhiteSpace(cheep.Message))
+    if (string.IsNullOrWhiteSpace(request.Message))
     {
         return TypedResults.BadRequest("Message is required");
     }
 
-    database.Store(cheep);
+    var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    database.Store(new Cheep(request.Author, request.Message, timestamp));
 
     return TypedResults.Ok();
 });
