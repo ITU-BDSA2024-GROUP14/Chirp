@@ -17,13 +17,6 @@ public class CheepService : ICheepService
         _dbFacade = dbFacade;
     }
 
-    // These would normally be loaded from a database for example
-    private static readonly List<CheepViewModel> _cheeps = new()
-    {
-        new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-        new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308))
-    };
-
     public List<CheepViewModel> GetCheeps()
     {
         return _dbFacade
