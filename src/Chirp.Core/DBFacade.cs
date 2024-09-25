@@ -46,7 +46,7 @@ public class DBFacade(IConfigurationRoot configuration)
         command.ExecuteNonQuery();
     }
 
-    public IEnumerable<Cheep> GetCheeps(int? authorId = null, int? limit = 0)
+    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null, int? limit = 0)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -57,10 +57,10 @@ public class DBFacade(IConfigurationRoot configuration)
                               FROM message 
                               INNER JOIN user ON message.author_id = user.user_id
                               """;
-        if (authorId != null)
+        if (authorUsername != null)
         {
-            command.CommandText += " WHERE author_id = @AuthorId";
-            command.Parameters.AddWithValue("@AuthorId", authorId);
+            command.CommandText += " WHERE user.username = @Username";
+            command.Parameters.AddWithValue("@Username", authorUsername);
         }
 
         if (limit != null)
@@ -73,8 +73,7 @@ public class DBFacade(IConfigurationRoot configuration)
 
         while (reader.Read())
         {
-            yield return new Cheep(reader.GetString(0), reader.GetString(1),
-                DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2)));
+            yield return new Cheep(reader.GetString(0), reader.GetString(1), reader.GetInt64(2));
         }
     }
 }
