@@ -26,12 +26,31 @@ public sealed class CheepDatabase : IDatabaseRepository<Cheep>
 
     public void Store(Cheep record)
     {
+        if (!CheckIfDataBaseExists())
+        {
+            GenerateDatabase();
+        }
+
         using (var stream = File.Open(_databasePath, FileMode.Append))
         using (StreamWriter writer = new(stream))
         using (CsvWriter csv = new(writer, CultureInfo))
         {
             csv.WriteRecord(record);
             csv.NextRecord();
+        }
+    }
+
+    private bool CheckIfDataBaseExists()
+    {
+        return File.Exists(_databasePath);
+    }
+
+    private void GenerateDatabase()
+    {
+        using (var stream = File.Open(_databasePath, FileMode.Append))
+        using (StreamWriter writer = new(stream))
+        {
+            writer.WriteLine("Author,Message,Timestamp");
         }
     }
 
