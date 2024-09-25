@@ -2,6 +2,6 @@ namespace Chirp.CSVDBService.Models;
 
 public class CreateCheepRequestModel
 {
-    public string Author { get; set; }
-    public string Message { get; set; }
+    public required string Author { get; set; }
+    public required string Message { get; set; }
 }
