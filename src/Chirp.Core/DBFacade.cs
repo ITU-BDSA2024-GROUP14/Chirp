@@ -1,12 +1,18 @@
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
 
 namespace Chirp.Core;
 
-public class DBFacade(IConfigurationRoot configuration)
+public class DBFacade
 {
-    private readonly string _path = configuration["CHIRPDBPATH"] ?? Path.GetTempPath();
+    private readonly string _path = Environment.GetEnvironmentVariable("CHIRPDBPATH") ??
+                                    Path.GetTempPath() + "/chirp.db";
+
     private string ConnectionString => $"Data Source={_path}";
+
+    public DBFacade()
+    {
+        EnsureCreated();
+    }
 
     public void EnsureCreated()
     {
