@@ -52,7 +52,7 @@ public class DBFacade
         command.ExecuteNonQuery();
     }
 
-    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null, int? limit = 0)
+    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null, int? limit = null)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
