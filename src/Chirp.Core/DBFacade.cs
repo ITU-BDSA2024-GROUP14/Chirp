@@ -5,7 +5,7 @@ namespace Chirp.Core;
 public class DBFacade
 {
     private readonly string _path = Environment.GetEnvironmentVariable("CHIRPDBPATH") ??
-                                    Path.GetTempPath() + "/chirp.db";
+                                    Path.GetTempPath() + "chirp.db";
 
     private string ConnectionString => $"Data Source={_path}";
 
