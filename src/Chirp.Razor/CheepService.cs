@@ -6,8 +6,8 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps();
-    public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheeps(int page = 1);
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 1);
 }
 
 public class CheepService : ICheepService
@@ -19,18 +19,18 @@ public class CheepService : ICheepService
         _dbFacade = dbFacade;
     }
 
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetCheeps(int page = 1)
     {
         return _dbFacade
-            .GetCheeps()
+            .GetCheeps(page)
             .Select(x => new CheepViewModel(x.Author, x.Message, UnixTimeStampToDateTimeString(x.Timestamp)))
             .ToList();
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 1)
     {
         // filter by the provided author name
-        return _dbFacade.GetCheeps(author)
+        return _dbFacade.GetCheeps(page, author)
             .Select(x => new CheepViewModel(x.Author, x.Message, UnixTimeStampToDateTimeString(x.Timestamp)))
             .ToList();
     }

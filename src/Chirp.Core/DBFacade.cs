@@ -11,9 +11,8 @@ public class DBFacade
         db = database;
     }
 
-    
 
-    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null)
+    public IEnumerable<Cheep> GetCheeps(int page, string? authorUsername = null)
     {
         using var connection = new SqliteConnection(db.ConnectionString);
         connection.Open();
@@ -29,6 +28,11 @@ public class DBFacade
             command.CommandText += " WHERE user.username = @Username";
             command.Parameters.AddWithValue("@Username", authorUsername);
         }
+
+        var rowsToSkip = (page - 1) * 32;
+
+        command.CommandText += " ORDER BY message.pub_date DESC";
+        command.CommandText += " LIMIT 32 OFFSET " + rowsToSkip;
 
         using var reader = command.ExecuteReader();
 
