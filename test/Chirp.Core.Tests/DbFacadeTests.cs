@@ -12,7 +12,22 @@ public class DbFacadeTests : IClassFixture<DbFacadeFixture>
         _fixture = fixture;
     }
 
-    [Theory]
+    [Fact]
+    public async Task GetCheep_ShouldReturn()
+    {
+        // Arrange
+        var DbFace = _fixture.DbFacade;
+
+        //Act
+        var response = DbFace.GetCheeps();
+
+        //Assert
+        Assert.NotNull(response);
+        Assert.NotEmpty(response);
+    }
+
+    [Theory(Skip = "Not implemented yet")]
+    [InlineData(null, null)]
     public void GetCheeps_ReturnsCheeps(string? author, int? limit)
     {
         // Arrange
@@ -21,7 +36,7 @@ public class DbFacadeTests : IClassFixture<DbFacadeFixture>
 
         using var command = connection.CreateCommand();
         command.CommandText = """
-                              
+
                               """;
 
         // Act
