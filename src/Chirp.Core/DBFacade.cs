@@ -13,7 +13,7 @@ public class DBFacade
 
     
 
-    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null, int? limit = null)
+    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null)
     {
         using var connection = new SqliteConnection(db.ConnectionString);
         connection.Open();
@@ -28,12 +28,6 @@ public class DBFacade
         {
             command.CommandText += " WHERE user.username = @Username";
             command.Parameters.AddWithValue("@Username", authorUsername);
-        }
-
-        if (limit != null)
-        {
-            command.CommandText += " LIMIT @Limit";
-            command.Parameters.AddWithValue("@Limit", limit);
         }
 
         using var reader = command.ExecuteReader();
