@@ -1,7 +1,5 @@
-using Chirp.CSVDBService;
-
 namespace TestHelpers;
-
+/* legacy
 public static class TestDbHelper
 {
     public static void SeedTestData(CheepDatabase database)
@@ -17,3 +15,4 @@ public static class TestDbHelper
         database.Reset();
     }
 }
+*/

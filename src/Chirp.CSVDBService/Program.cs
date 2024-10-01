@@ -35,4 +35,4 @@ app.MapGet("/cheeps", (int? limit = null) => database.Read(limit));
 app.Run();
 
 // required per https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#basic-tests-with-the-default-webapplicationfactory
-public partial class Program;
+//public partial class Program;

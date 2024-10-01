@@ -11,8 +11,13 @@ public class DBFacade
         db = database;
     }
 
-    
 
+    /// <summary>
+    /// Gets cheeps from the database
+    /// </summary>
+    /// <param name="authorUsername">Optional: filter by author username</param>
+    /// <param name="limit">Optional: limit results by N. If left null or below 0, all cheeps will be returned.</param>
+    /// <returns>Collection of Cheeps</returns>
     public IEnumerable<Cheep> GetCheeps(string? authorUsername = null, int? limit = null)
     {
         using var connection = new SqliteConnection(db.ConnectionString);
