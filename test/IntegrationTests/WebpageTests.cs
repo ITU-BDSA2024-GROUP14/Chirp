@@ -21,7 +21,7 @@ public class WebpageTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Chirp &mdash; An ASP.NET Application")]
     public async Task WebpageContainsContent(string expectedContent)
     {
-        var response = await _client.GetAsync("");
+        var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -36,7 +36,7 @@ public class WebpageTests : IClassFixture<WebApplicationFactory<Program>>
     public async void CanSeePrivateTimeline(string author)
     {
         author = author.Replace(" ", "_");
-        var response = await _client.GetAsync($"http://localhost/{author}");
+        var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var responseContent = await response.Content.ReadAsStringAsync();
 
