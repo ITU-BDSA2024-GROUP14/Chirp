@@ -11,9 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Microsoft.Extensions.FileProviders.Embedded">
-            <HintPath>..\..\..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.Extensions.FileProviders.Embedded.dll</HintPath>
-        </Reference>
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.8" />
     </ItemGroup>
 
 </Project>
