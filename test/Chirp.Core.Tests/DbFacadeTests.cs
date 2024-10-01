@@ -29,21 +29,59 @@ public class DbFacadeTests : IClassFixture<DbFacadeFixture>
         Assert.NotEmpty(response);
     }
 
-    [Theory(Skip = "Not implemented yet")]
-    [InlineData(null, null)]
-    public void GetCheeps_ReturnsCheeps(string? author, int? limit)
+    [Theory]
+    [InlineData("Mellie Yost", 7)]
+    [InlineData("Octavio Wagganer", 15)]
+    [InlineData("Helge", 1)]
+    [InlineData("Adrian", 1)]
+    [InlineData("123", 0)]
+    public void GetCheepsWithAuthor_ReturnsOnlyAuthorCheeps(string author, int expectedCount)
     {
         // Arrange
-        using var connection = new SqliteConnection(_fixture.Db.ConnectionString);
-        connection.Open();
-
-        using var command = connection.CreateCommand();
-        command.CommandText = """
-
-                              """;
+        _fixture.Reset();
+        _fixture.SeedTestData();
 
         // Act
+        var cheeps = _fixture.DbFacade.GetCheeps(author).ToList();
 
         // Assert
+        Assert.NotNull(cheeps);
+        Assert.Equal(expectedCount, cheeps.Count);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(10)]
+    public void GetCheepsWithLimit_ReturnsCorrectCount(int limit)
+    {
+        // Arrange
+        _fixture.Reset();
+        _fixture.SeedTestData();
+
+        // Act
+        var cheeps = _fixture.DbFacade.GetCheeps(limit: limit).ToList();
+
+        // Assert
+        Assert.NotNull(cheeps);
+        Assert.Equal(limit, cheeps.Count);
+    }
+
+    [Theory]
+    [InlineData(-10)]
+    [InlineData(-1)]
+    public void GetCheepsWithInvalidLimit_ReturnsAllCheeps(int limit)
+    {
+        // Arrange
+        _fixture.Reset();
+        _fixture.SeedTestData();
+        var expectedCount = _fixture.GetCount();
+
+        // Act
+        var cheeps = _fixture.DbFacade.GetCheeps(limit: limit).ToList();
+
+        // Assert
+        Assert.NotNull(cheeps);
+        Assert.Equal(expectedCount, cheeps.Count);
     }
 }
