@@ -8,7 +8,6 @@ public class DbFacadeFixture : IDisposable
 {
     public IDatabase Db { get; private set; }
     public DBFacade DbFacade { get; private set; }
-
     private SqliteConnection Connection { get; }
 
     public DbFacadeFixture()
@@ -39,6 +38,21 @@ public class DbFacadeFixture : IDisposable
         command.CommandText = query;
 
         command.ExecuteNonQuery();
+    }
+
+    public long GetCount()
+    {
+        using var connection = new SqliteConnection(Db.ConnectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+
+        command.CommandText = """
+                              SELECT COUNT(*) 
+                              FROM message;
+                              """;
+
+        return (long)command.ExecuteScalar()!;
     }
 
     public void Dispose()
