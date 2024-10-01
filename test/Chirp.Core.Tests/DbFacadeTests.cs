@@ -16,10 +16,13 @@ public class DbFacadeTests : IClassFixture<DbFacadeFixture>
     public async Task GetCheep_ShouldReturn()
     {
         // Arrange
-        var DbFace = _fixture.DbFacade;
+        var dbFacade = _fixture.DbFacade;
+        _fixture.Reset();
+        _fixture.SeedTestData();
+
 
         //Act
-        var response = DbFace.GetCheeps();
+        var response = dbFacade.GetCheeps();
 
         //Assert
         Assert.NotNull(response);
