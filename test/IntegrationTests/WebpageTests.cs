@@ -1,4 +1,3 @@
-using Chirp.Razor;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IntegrationTests;
@@ -15,15 +14,33 @@ public class WebpageTests : IClassFixture<WebApplicationFactory<Program>>
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
     }
 
+    //Test based on https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_05/Slides.html
     [Theory]
     [InlineData("Chirp!")]
     [InlineData("Public Timeline")]
-    [InlineData("Chirp — An ASP.NET Application")]
+    [InlineData("Chirp &mdash; An ASP.NET Application")]
     public async Task WebpageContainsContent(string expectedContent)
     {
-        var response = await _client.GetAsync("/");
-    
+        var response = await _client.GetAsync("");
+        response.EnsureSuccessStatusCode();
+
         var responseContent = await response.Content.ReadAsStringAsync();
-        Assert.Contains(responseContent, expectedContent);
+        Assert.Contains(expectedContent, responseContent);
+    }
+
+    //Test copied from https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_05/Slides.html
+    [Theory]
+    [InlineData("Esser")]
+    [InlineData("Roger Histand")]
+    [InlineData("Baron Aslan Glorfindus von Fritz")]
+    public async void CanSeePrivateTimeline(string author)
+    {
+        author = author.Replace(" ", "_");
+        var response = await _client.GetAsync($"http://localhost/{author}");
+        response.EnsureSuccessStatusCode();
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", responseContent);
+        Assert.Contains($"{author}'s Timeline", responseContent);
     }
 }

@@ -33,3 +33,6 @@ app.UseRouting();
 app.MapRazorPages();
 
 app.Run();
+
+// required per https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#basic-tests-with-the-default-webapplicationfactory
+public partial class Program;

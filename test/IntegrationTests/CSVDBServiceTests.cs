@@ -1,11 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
-using Chirp.CSVDBService;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IntegrationTests;
 
+/* legacy
 [Collection("Sequential")] // prevents the tests from running in parallel, preventing port already in use
 public class CSVDBServiceTests : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -74,3 +74,4 @@ public class CSVDBServiceTests : IClassFixture<WebApplicationFactory<Program>>
         return response;
     }
 }
+*/
