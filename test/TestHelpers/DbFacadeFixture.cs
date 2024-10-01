@@ -4,15 +4,19 @@ using Microsoft.Extensions.FileProviders;
 
 namespace TestHelpers;
 
-public class DbFacadeFixture
+public class DbFacadeFixture : IDisposable
 {
     public IDatabase Db { get; private set; }
     public DBFacade DbFacade { get; private set; }
+
+    private SqliteConnection Connection { get; }
 
     public DbFacadeFixture()
     {
         Db = new TestDatabase();
         DbFacade = new DBFacade(Db);
+        Connection = new SqliteConnection(Db.ConnectionString);
+        Connection.Open();
     }
 
     public void Reset()
@@ -35,5 +39,10 @@ public class DbFacadeFixture
         command.CommandText = query;
 
         command.ExecuteNonQuery();
+    }
+
+    public void Dispose()
+    {
+        Connection.Close();
     }
 }

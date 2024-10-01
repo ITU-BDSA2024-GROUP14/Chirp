@@ -5,7 +5,7 @@ namespace TestHelpers;
 
 public class TestDatabase : IDatabase
 {
-    public string ConnectionString => "Data Source=:memory";
+    public string ConnectionString => "Data Source=InMemorySample;Mode=Memory;Cache=Shared";
 
     public void EnsureCreated()
     {
