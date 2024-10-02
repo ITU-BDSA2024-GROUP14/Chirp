@@ -551,3 +551,8 @@ $RECYCLE.BIN/
 
 .idea/.idea.Chirp/.idea/*.xml
 .idea/indexLayout.xml
+
+# Database
+Chirp.db
+Chirp.db-shm
+Chirp.db-wal
