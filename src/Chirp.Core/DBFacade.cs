@@ -1,4 +1,3 @@
-using Chirp.Core.datamodel;
 using Microsoft.Data.Sqlite;
 
 namespace Chirp.Core;
