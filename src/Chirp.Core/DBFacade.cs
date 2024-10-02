@@ -11,14 +11,13 @@ public class DBFacade
         db = database;
     }
 
-
     /// <summary>
     /// Gets cheeps from the database
     /// </summary>
     /// <param name="authorUsername">Optional: filter by author username</param>
     /// <param name="limit">Optional: limit results by N. If left null or below 0, all cheeps will be returned.</param>
     /// <returns>Collection of Cheeps</returns>
-    public IEnumerable<Cheep> GetCheeps(string? authorUsername = null, int? limit = null)
+    public IEnumerable<Cheep> GetCheeps(int page, string? authorUsername = null)
     {
         using var connection = new SqliteConnection(db.ConnectionString);
         connection.Open();
@@ -35,11 +34,10 @@ public class DBFacade
             command.Parameters.AddWithValue("@Username", authorUsername);
         }
 
-        if (limit != null)
-        {
-            command.CommandText += " LIMIT @Limit";
-            command.Parameters.AddWithValue("@Limit", limit);
-        }
+        var rowsToSkip = (page - 1) * 32;
+
+        command.CommandText += " ORDER BY message.pub_date DESC";
+        command.CommandText += " LIMIT 32 OFFSET " + rowsToSkip;
 
         using var reader = command.ExecuteReader();
 
