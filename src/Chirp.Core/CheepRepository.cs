@@ -20,7 +20,6 @@ public class CheepRepository : ICheepRepository
 
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null, string? authorUsername = null)
     {
-        var query = _dbcontext.Cheeps.AsQueryable();
         if (authorUsername != null)
         {
             query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
@@ -30,7 +29,7 @@ public class CheepRepository : ICheepRepository
 
         if (size != null)
         {
-            query = query.Take((int) size);
+            query = query.Take((int)size);
         }
 
         return query.ToList();
