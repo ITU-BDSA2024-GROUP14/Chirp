@@ -20,6 +20,7 @@ public class CheepRepository : ICheepRepository
 
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null, string? authorUsername = null)
     {
+        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
         if (authorUsername != null)
         {
             query = query.Where(Cheep => Cheep.Author.Name == authorUsername);

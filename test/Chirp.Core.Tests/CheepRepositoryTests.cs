@@ -38,6 +38,7 @@ public class CheepRepositoryTests
             var cheep = Cheeps.First();
 
             Assert.Equal(1337, cheep.AuthorId);
+            Assert.Equal("jones", cheep.Author.Name);
             Assert.Equal(1234, cheep.CheepId);
             Assert.Equal("I think therefore i am", cheep.Text);
             Assert.Equal(new DateTime(2024, 07, 10).Date, cheep.TimeStamp);
