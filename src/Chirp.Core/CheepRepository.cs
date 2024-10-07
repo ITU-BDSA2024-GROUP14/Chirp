@@ -1,10 +1,12 @@
+using Chirp.Core.DataModel;
+using Chirp.Core.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Core;
 
 public interface ICheepRepository
 {
-    public IEnumerable<CheepRecord> GetCheeps(int page, string authorUsername);
+    public IEnumerable<Cheep> GetCheeps(int skip, int? size, string? authorUsername = null);
 }
 
 public class CheepRepository : ICheepRepository
@@ -16,17 +18,21 @@ public class CheepRepository : ICheepRepository
         _dbcontext = context;
     }
 
-    public IEnumerable<CheepRecord> GetCheeps(int page, string? authorUsername = null)
+    public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null, string? authorUsername = null)
     {
-        var query = from cheep in _dbcontext.Cheeps
-            select cheep;
+        var query = _dbcontext.Cheeps.AsQueryable();
         if (authorUsername != null)
         {
-            query = from cheep in query
-                where cheep.Author.Name == authorUsername
-                select cheep;
+            query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
         }
 
-        return query.ToListAsync();
+        query = query.Skip(skip);
+
+        if (size != null)
+        {
+            query = query.Take((int) size);
+        }
+
+        return query.ToList();
     }
 }
