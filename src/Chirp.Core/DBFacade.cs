@@ -1,3 +1,4 @@
+using Chirp.Core.DataTransferObjects;
 using Microsoft.Data.Sqlite;
 
 namespace Chirp.Core;
@@ -17,7 +18,7 @@ public class DBFacade
     /// <param name="authorUsername">Optional: filter by author username</param>
     /// <param name="limit">Optional: limit results by N. If left null or below 0, all cheeps will be returned.</param>
     /// <returns>Collection of Cheeps</returns>
-    public IEnumerable<CheepRecord> GetCheeps(int page, string? authorUsername = null)
+    public IEnumerable<CheepDTO> GetCheeps(int page, string? authorUsername = null)
     {
         using var connection = new SqliteConnection(db.ConnectionString);
         connection.Open();
@@ -43,7 +44,11 @@ public class DBFacade
 
         while (reader.Read())
         {
-            yield return new CheepRecord(reader.GetString(0), reader.GetString(1), reader.GetInt64(2));
+            CheepDTO cheep = new CheepDTO();
+            cheep.Author = reader.GetString(0);
+            cheep.Text = reader.GetString(1);
+            cheep.Timestamp = reader.GetInt64(2);
+            yield return cheep;
         }
     }
 }

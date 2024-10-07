@@ -23,7 +23,7 @@ public class CheepService : ICheepService
     {
         return _dbFacade
             .GetCheeps(page)
-            .Select(x => new CheepViewModel(x.Author, x.Message, UnixTimeStampToDateTimeString(x.Timestamp)))
+            .Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
             .ToList();
     }
 
@@ -31,7 +31,7 @@ public class CheepService : ICheepService
     {
         // filter by the provided author name
         return _dbFacade.GetCheeps(page, author)
-            .Select(x => new CheepViewModel(x.Author, x.Message, UnixTimeStampToDateTimeString(x.Timestamp)))
+            .Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
             .ToList();
     }
 
