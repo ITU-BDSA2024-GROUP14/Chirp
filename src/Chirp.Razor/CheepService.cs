@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Chirp.Core.DataTransferObjects;
 
 namespace Chirp.Razor;
 
@@ -6,33 +7,38 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps(int page = 1);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 1);
+    public List<CheepDTO> GetCheeps(int page = 1);
+    public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1);
 }
 
 public class CheepService : ICheepService
 {
-    private readonly DBFacade _dbFacade;
+    private readonly ICheepRepository _database;
+    private readonly int _pageSize = 32;
 
-    public CheepService(DBFacade dbFacade)
+    public CheepService(ICheepRepository database)
     {
-        _dbFacade = dbFacade;
+        _database = database;
     }
 
-    public List<CheepViewModel> GetCheeps(int page = 1)
+    public List<CheepDTO> GetCheeps(int page = 1)
     {
-        return _dbFacade
-            .GetCheeps(page)
-            .Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
+        int skip = _pageSize * (page - 1);
+        int size = _pageSize;
+        return _database
+            .GetCheeps(skip: skip, size: size)
+            //.Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
+            .Select(x => new CheepDTO(x))
             .ToList();
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 1)
+    public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1)
     {
         // filter by the provided author name
-        return _dbFacade.GetCheeps(page, author)
-            .Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
-            .ToList();
+        //return _database.GetCheeps(page, author)
+        //    .Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
+        //    .ToList();
+        throw new NotImplementedException();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)

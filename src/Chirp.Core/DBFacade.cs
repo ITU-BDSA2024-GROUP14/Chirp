@@ -20,6 +20,7 @@ public class DBFacade
     /// <returns>Collection of Cheeps</returns>
     public IEnumerable<CheepDTO> GetCheeps(int page, string? authorUsername = null)
     {
+        throw new Exception("This is depricated");
         using var connection = new SqliteConnection(db.ConnectionString);
         connection.Open();
 
@@ -44,11 +45,11 @@ public class DBFacade
 
         while (reader.Read())
         {
-            CheepDTO cheep = new CheepDTO();
-            cheep.Author = reader.GetString(0);
-            cheep.Text = reader.GetString(1);
-            cheep.Timestamp = reader.GetInt64(2);
-            yield return cheep;
+            //CheepDTO cheep = new CheepDTO();
+            //cheep.Author = reader.GetString(0);
+            //cheep.Text = reader.GetString(1);
+            //cheep.Timestamp = reader.GetInt64(2);
+            //yield return cheep;
         }
     }
 }
