@@ -5,8 +5,8 @@ namespace Chirp.Core;
 
 public class ChirpDBContext : DbContext
 {
-    private DbSet<Cheep> Cheeps { get; set; }
-    private DbSet<Author> Authors { get; set; }
+    internal DbSet<Cheep> Cheeps { get; set; }
+    internal DbSet<Author> Authors { get; set; }
 
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {
