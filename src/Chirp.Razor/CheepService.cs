@@ -27,7 +27,6 @@ public class CheepService : ICheepService
         int size = _pageSize;
         return _database
             .GetCheeps(skip: skip, size: size)
-            //.Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
             .Select(x => new CheepDTO(x))
             .ToList();
     }
@@ -35,10 +34,11 @@ public class CheepService : ICheepService
     public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1)
     {
         // filter by the provided author name
-        //return _database.GetCheeps(page, author)
-        //    .Select(x => new CheepViewModel(x.Author, x.Text, UnixTimeStampToDateTimeString(x.Timestamp)))
-        //    .ToList();
-        throw new NotImplementedException();
+        int skip = _pageSize * (page - 1);
+        return _database
+            .GetCheeps(skip: skip, size: _pageSize, authorUsername: author)
+            .Select(x => new CheepDTO(x))
+            .ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
