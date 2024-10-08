@@ -37,6 +37,9 @@ using (var scope = app.Services.CreateScope())
 
     // Execute the migration from code.
     context.Database.Migrate();
+
+    //Seed database
+    DbInitializer.SeedDatabase(scope.ServiceProvider.GetRequiredService<ChirpDBContext>());
 }
 
 app.UseHttpsRedirection();
