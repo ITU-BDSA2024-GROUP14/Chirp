@@ -16,10 +16,10 @@ jobs:
     if: github.event_name == 'issues' && github.event.action == 'reopened'
     steps:
       - name: Move issue to ${{ env.in_progress }}
-        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
           gh_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          user: project_bot
+          user: oliverst8 
           project_id: 2
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.in_progress }}
