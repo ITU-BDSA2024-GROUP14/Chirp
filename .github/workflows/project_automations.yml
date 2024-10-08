@@ -1,0 +1,26 @@
+#Insipiration from https://github.com/marketplace/actions/project-beta-automations
+name: Project automations
+on:
+  issues:
+    types:
+      - reopened
+
+env:
+  todo: Todo
+  in_progress: In Progress
+
+jobs:
+  issue_reopened:
+    name: issue_reopened
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'reopened'
+    steps:
+      - name: Move issue to ${{ env.in_progress }}
+        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        with:
+          gh_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          user: project_bot
+          project_id: 2
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.in_progress }}
+
