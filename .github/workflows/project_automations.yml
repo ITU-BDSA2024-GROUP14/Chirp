@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'issues' && github.event.action == 'reopened'
     steps:
+      - name: Debug node_id
+        run: echo "Node ID ${{ github.event.issue.node_id }}"
       - name: Move issue to ${{ env.in_progress }}
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
