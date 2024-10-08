@@ -1,5 +1,7 @@
 namespace Chirp.Core.DataModel;
-
+/// <summary>
+/// Represents a user of the system.
+/// </summary>
 public class Author
 {
     public int AuthorId { get; set; }
