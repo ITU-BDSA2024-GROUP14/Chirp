@@ -25,6 +25,8 @@ public class CheepRepository : ICheepRepository
         {
             query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
         }
+        
+        query = query.OrderByDescending(cheep => cheep.TimeStamp);
 
         query = query.Skip(skip);
 
