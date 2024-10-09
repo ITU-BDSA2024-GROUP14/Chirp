@@ -1,6 +1,4 @@
 using Chirp.Core.DataModel;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using TestHelpers;
 
 namespace Chirp.Core.Tests;
@@ -22,7 +20,7 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
         var author = new Author { Name = authorName, AuthorId = authorId, Email = email };
         var date = new DateTime(year, month, day);
 
-        using (var context = _fixture.CdbContext)
+        using (var context = _fixture.CreateContext())
         {
             context.Database.EnsureCreated();
             context.Cheeps.AddRange(
@@ -38,7 +36,7 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
             context.SaveChanges();
         }
 
-        using (var context = _fixture.CdbContext)
+        using (var context = _fixture.CreateContext())
         {
             var service = new CheepRepository(context);
             var Cheeps = service.GetCheeps();
@@ -59,7 +57,7 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
     {
         _fixture.SeedDatabase();
 
-        using (var context = _fixture.CdbContext)
+        using (var context = _fixture.CreateContext())
         {
             context.Database.EnsureCreated();
             var service = new CheepRepository(context);
@@ -70,7 +68,7 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
     [Fact]
     public void DatabaseStartsEmpty()
     {
-        using (var context = _fixture.CdbContext)
+        using (var context = _fixture.CreateContext())
         {
             context.Database.EnsureCreated();
             var service = new CheepRepository(context);

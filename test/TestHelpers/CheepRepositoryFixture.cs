@@ -7,7 +7,7 @@ namespace TestHelpers;
 
 public class CheepRepositoryFixture : IDisposable
 {
-    public ChirpDBContext CdbContext => new(Options);
+    public ChirpDBContext CreateContext() => new(Options);
     private SqliteConnection Connection { get; }
     private DbContextOptions<ChirpDBContext> Options { get; }
 
