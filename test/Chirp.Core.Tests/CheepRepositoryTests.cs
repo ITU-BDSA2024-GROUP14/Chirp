@@ -17,7 +17,23 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
     [Fact]
     public void CheepRepositoryReturns()
     {
-        using (var context = new ChirpDBContext(_fixture.Options))
+        using (var context = _fixture.CdbContext)
+        {
+            context.Database.EnsureCreated();
+            context.Cheeps.AddRange(
+                new Cheep
+                {
+                    Author = new Author { Name = "jones", AuthorId = 1337, Email = "jones@gmail.com" },
+                    AuthorId = 1337,
+                    CheepId = 1234,
+                    Text = "I think therefore i am",
+                    TimeStamp = new DateTime(2024, 07, 10)
+                }
+            );
+            context.SaveChanges();
+        }
+
+        using (var context = _fixture.CdbContext)
         {
             var service = new CheepRepository(context);
             var Cheeps = service.GetCheeps();
