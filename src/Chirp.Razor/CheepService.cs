@@ -11,6 +11,9 @@ public interface ICheepService
     public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1);
 }
 
+/// <summary>
+/// Provides methods for retrieving Cheeps.
+/// </summary>
 public class CheepService : ICheepService
 {
     private readonly ICheepRepository _database;
@@ -21,26 +24,42 @@ public class CheepService : ICheepService
         _database = database;
     }
 
+    /// <summary>
+    /// Method <c>GetCheeps</c> returns a list of CheepDTO's.
+    /// </summary>
+    /// <param name="page"> The page we want to display, if nothing it defaults to 1</param>
+    /// <returns> A List of CheepDTO's</returns>
     public List<CheepDTO> GetCheeps(int page = 1)
     {
-        int skip = _pageSize * (page - 1);
-        int size = _pageSize;
+        var skip = _pageSize * (page - 1);
+        var size = _pageSize;
         return _database
-            .GetCheeps(skip: skip, size: size)
+            .GetCheeps(skip, size)
             .Select(x => new CheepDTO(x))
             .ToList();
     }
 
+    /// <summary>
+    ///  Method <c>GetCheepsFromAuthor</c> returns a list of CheepDTO's from a specific author.
+    /// </summary>
+    /// <param name="author">The name of the Author, whose cheeps we want</param>
+    /// <param name="page"> The page we want to display, if nothing it defaults to 1 </param>
+    /// <returns></returns>
     public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1)
     {
         // filter by the provided author name
-        int skip = _pageSize * (page - 1);
+        var skip = _pageSize * (page - 1);
         return _database
-            .GetCheeps(skip: skip, size: _pageSize, authorUsername: author)
+            .GetCheeps(skip, _pageSize, author)
             .Select(x => new CheepDTO(x))
             .ToList();
     }
 
+    /// <summary>
+    /// Method <c>GetCheepViewModels</c> makes a unixTimeStamp into a string.
+    /// </summary>
+    /// <param name="unixTimeStamp">The unixTimeStamp we want as a string</param>
+    /// <returns></returns>
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch

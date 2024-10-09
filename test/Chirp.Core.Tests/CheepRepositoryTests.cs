@@ -3,7 +3,12 @@ using TestHelpers;
 
 namespace Chirp.Core.Tests;
 
+
+/// <summary>
+/// Tests for the CheepRepository.
+/// </summary>
 public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
+
 {
     private CheepRepositoryFixture _fixture;
 

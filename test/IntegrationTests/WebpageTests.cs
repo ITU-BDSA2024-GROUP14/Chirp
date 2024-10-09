@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IntegrationTests;
 
+/// <summary>
+/// Tests for the Webpage.
+/// </summary>
 public class WebpageTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
