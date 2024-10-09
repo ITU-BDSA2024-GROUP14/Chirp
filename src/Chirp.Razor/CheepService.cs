@@ -40,7 +40,7 @@ public class CheepService : ICheepService
             .Select(x => new CheepDTO(x))
             .ToList();
     }
-
+    
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch

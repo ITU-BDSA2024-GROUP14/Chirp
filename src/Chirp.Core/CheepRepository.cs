@@ -20,12 +20,12 @@ public class CheepRepository : ICheepRepository
         _dbcontext = context;
     }
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="skip"></param>
-    /// <param name="size"></param>
-    /// <param name="authorUsername"></param>
-    /// <returns> The cheeps to be displayed.</returns>
+    /// Method <c>GetCheeps</c> returns a list of Cheeps.
+    /// </summary>  
+    /// <param name="skip">The number of Cheeps to skip.</param>
+    /// <param name="size">The number of Cheeps to return.</param>
+    /// <param name="authorUsername">If there is an author, this is the username of the author of the Cheeps to return.</param>
+    /// <returns>A list of Cheeps.</returns>
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null, string? authorUsername = null)
     {
         var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
