@@ -9,7 +9,7 @@ public class CheepRepositoryFixture : IDisposable
 {
     public ChirpDBContext CdbContext => new(Options);
     private SqliteConnection Connection { get; }
-    public DbContextOptions<ChirpDBContext> Options { get; }
+    private DbContextOptions<ChirpDBContext> Options { get; }
 
     public CheepRepositoryFixture()
     {
@@ -18,7 +18,16 @@ public class CheepRepositoryFixture : IDisposable
         Options = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(Connection).Options;
     }
 
+    public void SeedDatabase()
+    {
+        using (var context = new ChirpDBContext(Options))
+        {
+            DbInitializer.SeedDatabase(context);
+        }
+    }
+
     public void Dispose()
     {
+        Connection.Dispose();
     }
 }
