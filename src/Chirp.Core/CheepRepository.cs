@@ -7,6 +7,7 @@ namespace Chirp.Core;
 public interface ICheepRepository
 {
     public IEnumerable<Cheep> GetCheeps(int skip, int? size, string? authorUsername = null);
+    public void CreateCheep(Author author, string text, DateTime timestamp);
 }
 
 public class CheepRepository : ICheepRepository
@@ -25,7 +26,7 @@ public class CheepRepository : ICheepRepository
         {
             query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
         }
-        
+
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
 
         query = query.Skip(skip);
@@ -36,5 +37,12 @@ public class CheepRepository : ICheepRepository
         }
 
         return query.ToList();
+    }
+
+    public void CreateCheep(Author author, string text, DateTime timestamp)
+    {
+        var cheep = new Cheep { Author = author, Text = text, TimeStamp = timestamp };
+        _dbcontext.Cheeps.Add(cheep);
+        _dbcontext.SaveChanges();
     }
 }
