@@ -1,35 +1,23 @@
 using Chirp.Core.DataModel;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using TestHelpers;
 
 namespace Chirp.Core.Tests;
 
-public class CheepRepositoryTests
+public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
 {
+    private CheepRepositoryFixture _fixture;
+
+    public CheepRepositoryTests(CheepRepositoryFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact]
     public void CheepRepositoryReturns()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-        var options = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection).Options;
-
-        using (var context = new ChirpDBContext(options))
-        {
-            context.Database.EnsureCreated();
-            context.Cheeps.AddRange(
-                new Cheep
-                {
-                    Author = new Author { Name = "jones", AuthorId = 1337, Email = "jones@gmail.com" },
-                    AuthorId = 1337,
-                    CheepId = 1234,
-                    Text = "I think therefore i am",
-                    TimeStamp = new DateTime(2024, 07, 10)
-                }
-            );
-            context.SaveChanges();
-        }
-
-        using (var context = new ChirpDBContext(options))
+        using (var context = new ChirpDBContext(_fixture.Options))
         {
             var service = new CheepRepository(context);
             var Cheeps = service.GetCheeps();
