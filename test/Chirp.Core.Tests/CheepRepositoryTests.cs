@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Core.Tests;
 
+/// <summary>
+/// Tests for the CheepRepository.
+/// </summary>
 public class CheepRepositoryTests
 {
     [Fact]
