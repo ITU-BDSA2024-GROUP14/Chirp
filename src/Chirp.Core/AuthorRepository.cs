@@ -16,6 +16,11 @@ public class AuthorRepository : IAuthorRepository
         _dbcontext = context;
     }
 
+    /// <summary>
+    /// Get an author from the database
+    /// </summary>
+    /// <param name="authorName">The name of the author</param>
+    /// <returns>The requested author</returns>
     public Author GetAuthor(string authorName)
     {
         var query = _dbcontext.Authors.AsQueryable();
