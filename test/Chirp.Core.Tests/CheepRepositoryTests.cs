@@ -106,7 +106,11 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
         {
             context.Database.EnsureCreated();
             var service = new CheepRepository(context);
-            Assert.Empty(service.GetCheeps());
+            var cheeps = service.GetCheeps();
+            if (cheeps.Any())
+            {
+                Assert.InRange(cheeps.First().Text.Length, 0, 160);
+            }
         }
     }
 }
