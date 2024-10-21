@@ -1,5 +1,4 @@
 using Chirp.Core.DataModel;
-using Chirp.Razor.Exceptions;
 
 namespace Chirp.Core;
 
