@@ -4,8 +4,8 @@ namespace Chirp.Core;
 
 public interface IAuthorRepository
 {
-    public Author GetAuthor(string? authorName = null, string? authorEmail = null);
-    public void CreateAuthor(string authorName, string authorEmail);
+    public Author? GetAuthor(string? authorName = null, string? authorEmail = null);
+    public Author CreateAuthor(string authorName, string authorEmail);
 }
 
 public class AuthorRepository : IAuthorRepository
@@ -23,7 +23,7 @@ public class AuthorRepository : IAuthorRepository
     /// <param name="authorName">The name of the author</param>
     /// <param name="authorEmail">The email of the author</param>
     /// <returns>The requested author</returns>
-    public Author GetAuthor(string? authorName = null, string? authorEmail = null)
+    public Author? GetAuthor(string? authorName = null, string? authorEmail = null)
     {
         if (authorName == null && authorEmail == null)
         {
@@ -39,17 +39,19 @@ public class AuthorRepository : IAuthorRepository
         {
             query = query.Where(author => author.Email == authorEmail);
         }
-        return query.ToList().First();
+        var list = query.ToList();
+        return (list.Count == 0) ? null : list.First();
     }
     /// <summary>
     /// Instantiates an Author and adds it to the database.
     /// </summary>
     /// <param name="authorName">The name of the author</param>
     /// <param name="authorEmail">The email of the author</param>
-    public void CreateAuthor(string authorName, string authorEmail)
+    public Author CreateAuthor(string authorName, string authorEmail)
     {
         var author = new Author { Name = authorName, Email = authorEmail };
         _dbcontext.Authors.Add(author);
         _dbcontext.SaveChanges();
+        return author;
     }
 }
