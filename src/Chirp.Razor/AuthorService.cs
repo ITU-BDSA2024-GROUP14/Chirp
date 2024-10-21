@@ -21,5 +21,6 @@ public class AuthorService : IAuthorService
     {
         var author = _database.GetAuthor(authorName: authorName, authorEmail: authorEmail);
         var dto = new AuthorDTO {Name = author.Name, Email = author.Email};
+        return dto;
     }
 }
