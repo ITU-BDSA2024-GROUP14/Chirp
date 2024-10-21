@@ -3,7 +3,6 @@ using TestHelpers;
 
 namespace Chirp.Core.Tests;
 
-
 /// <summary>
 /// Tests for the CheepRepository.
 /// </summary>
@@ -73,6 +72,36 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
     [Fact]
     public void DatabaseStartsEmpty()
     {
+        using (var context = _fixture.CreateContext())
+        {
+            context.Database.EnsureCreated();
+            var service = new CheepRepository(context);
+            Assert.Empty(service.GetCheeps());
+        }
+    }
+
+    [Fact]
+    public void LongCheepsDisallowed()
+    {
+        var author = new Author { Name = "jones", AuthorId = 1234, Email = "jones@mail.com" };
+        var date = new DateTime(2024, 03, 02);
+        using (var context = _fixture.CreateContext())
+        {
+            context.Database.EnsureCreated();
+            context.Cheeps.AddRange(
+                new Cheep
+                {
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    CheepId = 4321,
+                    Text =
+                        "If i were to one day write a cheep, that should be very long, it would certainly have some content. There is no way that I could write a long cheep without actually conveying any information.",
+                    TimeStamp = date
+                }
+            );
+            context.SaveChanges();
+        }
+
         using (var context = _fixture.CreateContext())
         {
             context.Database.EnsureCreated();
