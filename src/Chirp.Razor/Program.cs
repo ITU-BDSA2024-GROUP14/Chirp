@@ -40,7 +40,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 
     //Seed database
-    DbInitializer.SeedDatabase(scope.ServiceProvider.GetRequiredService<ChirpDBContext>());
+    DbInitializer.SeedDatabase(context);
 }
 
 app.UseHttpsRedirection();

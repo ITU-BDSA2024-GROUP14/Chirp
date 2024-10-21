@@ -10,6 +10,9 @@ public interface ICheepRepository
     public Cheep CreateCheep(Author author, string text, DateTime timestamp);
 }
 
+/// <summary>
+/// A repository that accesses Cheeps from the database.
+/// </summary>
 public class CheepRepository : ICheepRepository
 {
     private ChirpDBContext _dbcontext;
@@ -19,6 +22,13 @@ public class CheepRepository : ICheepRepository
         _dbcontext = context;
     }
 
+    /// <summary>
+    /// Method <c>GetCheeps</c> returns specified cheeps from the database.
+    /// </summary>  
+    /// <param name="skip">The number of Cheeps to skip.</param>
+    /// <param name="size">The number of Cheeps to return.</param>
+    /// <param name="authorUsername">If there is an author, this is the username of the author of the Cheeps to return.</param>
+    /// <returns>Specified cheeps from the database.</returns>
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null, string? authorUsername = null)
     {
         var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
