@@ -1,4 +1,4 @@
-﻿using Chirp.Core.DataTransferObjects;
+﻿using Chirp.Infrastructure.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

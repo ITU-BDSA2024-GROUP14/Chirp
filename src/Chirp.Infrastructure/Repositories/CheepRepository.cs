@@ -1,15 +1,9 @@
 using System.Data;
+using Chirp.Core;
 using Chirp.Core.DataModel;
-using Chirp.Core.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Core;
-
-public interface ICheepRepository
-{
-    public IEnumerable<Cheep> GetCheeps(int skip, int? size, string? authorUsername = null);
-    public Cheep CreateCheep(Author author, string text, DateTime timestamp);
-}
+namespace Chirp.Infrastructure.Repositories;
 
 /// <summary>
 /// A repository that accesses Cheeps from the database.

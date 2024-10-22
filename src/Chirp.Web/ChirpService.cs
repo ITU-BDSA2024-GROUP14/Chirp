@@ -1,5 +1,5 @@
-using Chirp.Core;
-using Chirp.Core.DataTransferObjects;
+using Chirp.Infrastructure.DataTransferObjects;
+using Chirp.Infrastructure.Repositories;
 
 namespace Chirp.Razor;
 
