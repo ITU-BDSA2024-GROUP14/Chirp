@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "test\TestHel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core", "src\Chirp.Core\Chirp.Core.csproj", "{4A626C74-3696-4B63-B3AF-8F266CEBAE15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{63773916-8A9E-47D7-ADB4-8376883F1ED4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Web", "src\Chirp.Web\Chirp.Web.csproj", "{63773916-8A9E-47D7-ADB4-8376883F1ED4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core.Tests", "test\Chirp.Core.Tests\Chirp.Core.Tests.csproj", "{09DE6DBB-ABB4-43B4-A53D-B4C7558880B2}"
 EndProject
