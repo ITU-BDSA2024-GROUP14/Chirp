@@ -1,4 +1,5 @@
 using Chirp.Core.DataModel;
+using Chirp.Infrastructure.Repositories;
 using TestHelpers;
 
 namespace Chirp.Core.Tests;

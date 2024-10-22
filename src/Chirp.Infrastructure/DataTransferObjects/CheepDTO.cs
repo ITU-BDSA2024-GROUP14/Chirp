@@ -1,6 +1,6 @@
 using Chirp.Core.DataModel;
 
-namespace Chirp.Core.DataTransferObjects;
+namespace Chirp.Infrastructure.DataTransferObjects;
 
 public class CheepDTO
 {

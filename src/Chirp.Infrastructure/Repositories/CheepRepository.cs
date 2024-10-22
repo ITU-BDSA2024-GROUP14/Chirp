@@ -1,8 +1,8 @@
+using Chirp.Core;
 using Chirp.Core.DataModel;
-using Chirp.Core.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Core;
+namespace Chirp.Infrastructure.Repositories;
 
 /// <summary>
 /// A repository that accesses Cheeps from the database.

@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Chirp.Infrastructure.Repositories;
 using Chirp.Razor;
 using Microsoft.EntityFrameworkCore;
 

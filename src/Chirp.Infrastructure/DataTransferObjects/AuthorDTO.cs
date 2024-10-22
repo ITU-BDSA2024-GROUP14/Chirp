@@ -1,4 +1,4 @@
-namespace Chirp.Core.DataTransferObjects;
+namespace Chirp.Infrastructure.DataTransferObjects;
 
 public class AuthorDTO
 {
