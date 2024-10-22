@@ -88,7 +88,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
         }
     }
 
-    [Fact]
+    [Fact] //Tests that a 190 character long cheep text is handled correctly
     public void LongCheepsDisallowed()
     {
         var author = new Author { Name = "jones", AuthorId = 1234, Email = "jones@mail.com" };
@@ -109,7 +109,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var cheeps = service.GetCheeps();
             if (cheeps.Any())
             {
-                Assert.InRange(cheeps.First().Text.Length, 0, 160);
+                Assert.InRange(cheeps.First().Text.Length, 0, Cheep.MaxLength);
             }
         }
     }
