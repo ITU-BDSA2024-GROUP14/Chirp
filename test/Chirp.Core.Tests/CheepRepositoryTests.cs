@@ -26,6 +26,8 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
         int expectedCount;
         using (var context = _fixture.CreateContext())
         {
+            expectedCount = context.Cheeps.Count() + 1;
+
             var author = new Author { Name = authorName, AuthorId = authorId, Email = email };
             var date = new DateTime(year, month, day);
 
@@ -40,7 +42,6 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
                 }
             );
             context.SaveChanges();
-            expectedCount = context.Cheeps.Count();
         }
 
         // Act
