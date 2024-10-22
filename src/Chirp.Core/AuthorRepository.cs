@@ -25,7 +25,7 @@ public class AuthorRepository : IAuthorRepository
     /// <returns>The requested author</returns>
     public Author? GetAuthorByName(string authorName)
     {
-        return GetAuthor(authorName);
+        return _dbcontext.Authors.FirstOrDefault(a => a.Name == authorName);
     }
 
     /// <summary>
@@ -35,28 +35,7 @@ public class AuthorRepository : IAuthorRepository
     /// <returns>The requested author</returns>
     public Author? GetAuthorByEmail(string authorEmail)
     {
-        return GetAuthor(authorEmail: authorEmail);
-    }
-
-    public Author? GetAuthor(string? authorName = null, string? authorEmail = null)
-    {
-        if (authorName == null && authorEmail == null)
-        {
-            throw new ArgumentException("Please supply at least one argument that isnt null");
-        }
-
-        var query = _dbcontext.Authors.AsQueryable();
-        if (authorName != null)
-        {
-            query = query.Where(a => a.Name == authorName);
-        }
-
-        if (authorEmail != null)
-        {
-            query = query.Where(author => author.Email == authorEmail);
-        }
-
-        return query.FirstOrDefault();
+        return _dbcontext.Authors.FirstOrDefault(a => a.Email == authorEmail);
     }
 
     /// <summary>
