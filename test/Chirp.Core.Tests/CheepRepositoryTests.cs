@@ -17,17 +17,19 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
     }
 
     [Theory]
-    [InlineData("jones", 1337, "jones@gmail.com", 1234, "I think therefore i am", 2024, 07, 10)]
-    public void CheepRepositoryReturns(string authorName, int authorId, string email, int cheepId, string text,
+    [InlineData("ones", 1337, "jones@gmail.com", 1234, "I think therefore i am", 2024, 07, 10)]
+    public void GetCheeps_ReturnsAllCheeps(string authorName, int authorId, string email, int cheepId, string text,
         int year, int month, int day)
     {
-        var author = new Author { Name = authorName, AuthorId = authorId, Email = email };
-        var date = new DateTime(year, month, day);
-
+        // Arrange
+        _fixture.SeedDatabase();
+        int expectedCount;
         using (var context = _fixture.CreateContext())
         {
-            context.Database.EnsureCreated();
-            context.Cheeps.AddRange(
+            var author = new Author { Name = authorName, AuthorId = authorId, Email = email };
+            var date = new DateTime(year, month, day);
+
+            context.Cheeps.Add(
                 new Cheep
                 {
                     Author = author,
@@ -38,22 +40,28 @@ public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
                 }
             );
             context.SaveChanges();
+            expectedCount = context.Cheeps.Count();
         }
 
+        // Act
+        List<Cheep> cheepsReturned;
         using (var context = _fixture.CreateContext())
         {
             var service = new CheepRepository(context);
-            var Cheeps = service.GetCheeps();
-
-            Assert.NotEmpty(Cheeps);
-            var cheep = Cheeps.First();
-
-            Assert.Equal(authorId, cheep.AuthorId);
-            Assert.Equal(authorName, cheep.Author.Name);
-            Assert.Equal(cheepId, cheep.CheepId);
-            Assert.Equal(text, cheep.Text);
-            Assert.Equal(date, cheep.TimeStamp);
+            cheepsReturned = service.GetCheeps().ToList();
         }
+
+        // Assert
+        Assert.NotEmpty(cheepsReturned);
+        Assert.Equal(expectedCount, cheepsReturned.Count);
+        // Check that the added cheep is in the list
+        Assert.Contains(cheepsReturned, c =>
+            c.Text == text &&
+            c.AuthorId == authorId &&
+            c.CheepId == cheepId &&
+            c.TimeStamp.Year == year &&
+            c.TimeStamp.Month == month &&
+            c.TimeStamp.Day == day);
     }
 
     [Fact]
