@@ -26,7 +26,7 @@ public class AuthorRepositoryTests
         using (var context = new ChirpDBContext(options))
         {
             var service = new AuthorRepository(context);
-            var fromDB = service.GetAuthor(author.Name);
+            var fromDB = service.GetAuthorByName(author.Name);
 
             Assert.Equal(author.Name, fromDB.Name);
             Assert.Equal(author.AuthorId, fromDB.AuthorId);
