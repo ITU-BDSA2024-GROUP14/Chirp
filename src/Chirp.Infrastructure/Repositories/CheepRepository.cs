@@ -4,12 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Core;
 
-public interface ICheepRepository
-{
-    public IEnumerable<Cheep> GetCheeps(int skip, int? size, string? authorUsername = null);
-    public Cheep CreateCheep(Author author, string text, DateTime timestamp);
-}
-
 /// <summary>
 /// A repository that accesses Cheeps from the database.
 /// </summary>
