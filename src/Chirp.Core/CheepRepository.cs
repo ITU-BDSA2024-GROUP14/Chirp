@@ -53,7 +53,11 @@ public class CheepRepository : ICheepRepository
     public Cheep CreateCheep(Author author, string text, DateTime timestamp)
     {
         var cheep = new Cheep { Author = author, Text = text, TimeStamp = timestamp };
-        if (cheep.Text.Length > 159) throw new CheepTooLongException(cheep);
+        if (cheep.Text.Length >= 160)
+        {
+            throw new CheepTooLongException(cheep);
+        }
+
         _dbcontext.Cheeps.Add(cheep);
         _dbcontext.SaveChanges();
         return cheep;
