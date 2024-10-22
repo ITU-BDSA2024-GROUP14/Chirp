@@ -95,19 +95,11 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var date = new DateTime(2024, 03, 02);
         using (var context = _fixture.CreateContext())
         {
-            context.Database.EnsureCreated();
-            context.Cheeps.AddRange(
-                new Cheep
-                {
-                    Author = author,
-                    AuthorId = author.AuthorId,
-                    CheepId = 4321,
-                    Text =
-                        "If i were to one day write a cheep, that should be very long, it would certainly have some content. There is no way that I could write a long cheep without actually conveying any information.",
-                    TimeStamp = date
-                }
-            );
-            context.SaveChanges();
+            var repository = new CheepRepository(context);
+            Assert.Throws<CheepTooLongException>(() =>
+                repository.CreateCheep(author,
+                    "If i were to one day write a cheep, that should be very long, it would certainly have some content. There is no way that I could write a long cheep without actually conveying any information.",
+                    date));
         }
 
         using (var context = _fixture.CreateContext())
