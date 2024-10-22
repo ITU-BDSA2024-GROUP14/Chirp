@@ -6,14 +6,14 @@ namespace Chirp.Core.Tests;
 /// <summary>
 /// Tests for the CheepRepository.
 /// </summary>
-public class CheepRepositoryTests : IClassFixture<CheepRepositoryFixture>
-
+public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
 {
-    private CheepRepositoryFixture _fixture;
+    private ChirpDbContextFixture _fixture;
 
-    public CheepRepositoryTests(CheepRepositoryFixture fixture)
+    public CheepRepositoryTests(ChirpDbContextFixture fixture)
     {
         _fixture = fixture;
+        _fixture.Reset();
     }
 
     [Theory]
