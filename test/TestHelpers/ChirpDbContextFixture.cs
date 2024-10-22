@@ -1,29 +1,39 @@
 using Chirp.Core;
-using Chirp.Core.DataModel;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestHelpers;
 
-public class CheepRepositoryFixture : IDisposable
+public class ChirpDbContextFixture : IDisposable
 {
-    public ChirpDBContext CreateContext() => new(Options);
+    public ChirpDBContext CreateContext()
+    {
+        var context = new ChirpDBContext(Options);
+        return context;
+    }
+
     private SqliteConnection Connection { get; }
     private DbContextOptions<ChirpDBContext> Options { get; }
 
-    public CheepRepositoryFixture()
+    public ChirpDbContextFixture()
     {
         Connection = new SqliteConnection("DataSource=:memory:");
         Connection.Open();
         Options = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(Connection).Options;
     }
 
+    public void Reset()
+    {
+        using var context = CreateContext();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+    }
+
     public void SeedDatabase()
     {
-        using (var context = new ChirpDBContext(Options))
-        {
-            DbInitializer.SeedDatabase(context);
-        }
+        using var context = CreateContext();
+        context.Database.EnsureCreated();
+        DbInitializer.SeedDatabase(context);
     }
 
     public void Dispose()

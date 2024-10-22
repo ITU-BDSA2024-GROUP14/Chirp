@@ -29,6 +29,7 @@ public class AuthorRepositoryTests
             var service = new AuthorRepository(context);
             var fromDB = service.GetAuthorByName(author.Name);
 
+            Assert.NotNull(fromDB);
             Assert.Equal(author.Name, fromDB.Name);
             Assert.Equal(author.AuthorId, fromDB.AuthorId);
             Assert.Equal(author.Email, fromDB.Email);
