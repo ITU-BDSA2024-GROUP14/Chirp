@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using Chirp.Core.DataModel;
+using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Core;
+namespace Chirp.Infrastructure.Data;
 /// <summary>
 /// Represents the database context for the Chirp application.
 /// </summary>
