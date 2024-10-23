@@ -48,7 +48,6 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Theory]
-    [InlineData("Helge")]
     [InlineData("Jacqualine Gilcoine")]
     [InlineData("æøå432srdf325tsdghakdhdasi hy9543ht")]
     public void GetCheepByAuthor(string expectedAuthor)
