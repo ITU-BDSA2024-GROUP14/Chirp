@@ -29,4 +29,19 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         var first = service.GetCheeps(page).First();
         Assert.Equal(expectedCheepText, first.Text);
     }
+
+    [Fact]
+    public void GetCheepCorrectPageSize(){
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        //Act
+        var actual = service.GetCheeps(1).Count;
+        //Assert
+        Assert.Equal(ChirpService.PageSize, actual);
+    }
 }
