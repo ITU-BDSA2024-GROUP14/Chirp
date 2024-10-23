@@ -1,6 +1,7 @@
 using Chirp.Core;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore.Storage;
 using TestHelpers;
 
 namespace Chirp.Infrastructure.Tests;
@@ -64,5 +65,38 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         Assert.All(cheeps, cheep => Assert.Equal(expectedAuthor, cheep.Author));
     }
 
-    
+    [Fact]
+    public void GetAuthorByNameNotNull()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var expected = "Helge";
+        //Act
+        var actual = service.GetAuthorByName("Helge");
+        //Assert
+        Assert.NotNull(actual);
+        Assert.Equal(expected, actual.Name);
+    }
+
+    [Fact]
+    public void GetAuthorByNameExpectsNull()
+    {
+
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        //Act
+        var actual = service.GetAuthorByName("Belge");
+        //Assert
+        Assert.Null(actual);
+    }
 }
