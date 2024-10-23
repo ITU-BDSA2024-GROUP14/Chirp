@@ -116,4 +116,31 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
             }
         }
     }
+
+    [Fact]
+    public void OrderedCheeps()
+    {
+        // Arrange
+        var author = new Author { Name = "jones", AuthorId = 1234, Email = "jones@mail.com" };
+
+        using (var context = _fixture.CreateContext())
+        {
+            var repository = new CheepRepository(context);
+            repository.CreateCheep(author, "short cheep", new DateTime(2024, 03, 02));
+            repository.CreateCheep(author, "short cheep", new DateTime(2024, 03, 01));
+            repository.CreateCheep(author, "short cheep", new DateTime(2024, 03, 03));
+        }
+
+        // Act
+        using (var context = _fixture.CreateContext())
+        {
+            var repository = new CheepRepository(context);
+            var cheeps = repository.GetCheeps().ToList();
+            // Assert
+            Assert.Equal(3, cheeps.Count);
+            Assert.Equal(new DateTime(2024, 03, 03), cheeps[0].TimeStamp);
+            Assert.Equal(new DateTime(2024, 03, 02), cheeps[1].TimeStamp);
+            Assert.Equal(new DateTime(2024, 03, 01), cheeps[2].TimeStamp);
+        }
+    }
 }
