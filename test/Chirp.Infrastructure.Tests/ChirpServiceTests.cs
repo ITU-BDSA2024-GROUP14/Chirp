@@ -61,16 +61,6 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Act
         var cheeps = service.GetCheepsFromAuthor(expectedAuthor);
         //Assert
-        var containsCheepFromOtherAuthor = false;
-        foreach (var cheep in cheeps)
-        {
-            if (cheep.Author != expectedAuthor)
-            {
-                containsCheepFromOtherAuthor = true;
-                break;
-            }
-        }
-
         Assert.All(cheeps, cheep => Assert.Equal(expectedAuthor, cheep.Author));
     }
 
