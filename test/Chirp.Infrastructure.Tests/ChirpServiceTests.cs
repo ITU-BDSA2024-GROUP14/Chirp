@@ -44,4 +44,35 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Assert
         Assert.Equal(ChirpService.PageSize, actual);
     }
+
+    [Theory]
+    [InlineData("Helge")]
+    [InlineData("Jacqualine Gilcoine")]
+    [InlineData("æøå432srdf325tsdghakdhdasi hy9543ht")]
+    public void GetCheepByAuthor(string expectedAuthor)
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        //Act
+        var cheeps = service.GetCheepsFromAuthor(expectedAuthor);
+        //Assert
+        var containsCheepFromOtherAuthor = false;
+        foreach (var cheep in cheeps)
+        {
+            if (cheep.Author != expectedAuthor)
+            {
+                containsCheepFromOtherAuthor = true;
+                break;
+            }
+        }
+
+        Assert.All(cheeps, cheep => Assert.Equal(expectedAuthor, cheep.Author));
+    }
+
+    
 }
