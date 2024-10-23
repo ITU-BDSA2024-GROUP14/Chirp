@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Chirp.Razor;
@@ -14,6 +15,10 @@ builder.Services.AddScoped<IChirpService, ChirpService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+
+builder.Services.AddDefaultIdentity<Author>(options =>
+        options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ChirpDBContext>();
 
 builder.Host.UseDefaultServiceProvider(o =>
 {
