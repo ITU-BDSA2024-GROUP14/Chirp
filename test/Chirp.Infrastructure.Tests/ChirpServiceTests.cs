@@ -99,4 +99,20 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Assert
         Assert.Null(actual);
     }
+
+
+    [Fact]
+    public void CreateAuthor()
+    {
+        //Arrange
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        //Act
+        service.CreateAuthor("John Doe", "John@doe.com");
+        //Assert
+        Assert.Equal("John Doe", context.Authors.First().Name);
+    }
 }
