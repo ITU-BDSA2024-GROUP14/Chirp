@@ -7,11 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories\" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
+        <Folder Include="Repositories\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj"/>
     </ItemGroup>
 
 </Project>
