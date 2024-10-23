@@ -45,32 +45,32 @@ jobs:
       with:
         dotnet-version: 8.0.x        
     - name: Publish for windows x64
-      working-directory: "./src/Chirp.Razor/"
+      working-directory: "./src/Chirp.Web/"
       run: dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for linux x64
-      working-directory: "./src/Chirp.Razor/"
+      working-directory: "./src/Chirp.Web/"
       run: dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for MacOS x64
-      working-directory: "./src/Chirp.Razor/"
+      working-directory: "./src/Chirp.Web/"
       run: dotnet publish --runtime osx-x64 -p:PublishSingleFile=true --self-contained true
     - name: Publish for MacOS ARM
-      working-directory: "./src/Chirp.Razor/"
+      working-directory: "./src/Chirp.Web/"
       run: dotnet publish --runtime osx-arm64 -p:PublishSingleFile=true --self-contained true
     - name: Zip files
-      working-directory: "./src/Chirp.Razor/bin/Release/net8.0/"
+      working-directory: "./src/Chirp.Web/bin/Release/net8.0/"
       run: |
-        zip Chirp-${{ github.ref_name }}-win-x64.zip --junk-paths win-x64/publish/Chirp.Razor.exe
-        zip Chirp-${{ github.ref_name }}-linux-x64.zip --junk-paths linux-x64/publish/Chirp.Razor
-        zip Chirp-${{ github.ref_name }}-osx-x64.zip --junk-paths osx-x64/publish/Chirp.Razor
-        zip Chirp-${{ github.ref_name }}-osx-arm64.zip --junk-paths osx-arm64/publish/Chirp.Razor
+        zip Chirp-${{ github.ref_name }}-win-x64.zip --junk-paths win-x64/publish/Chirp.Web.exe
+        zip Chirp-${{ github.ref_name }}-linux-x64.zip --junk-paths linux-x64/publish/Chirp.Web
+        zip Chirp-${{ github.ref_name }}-osx-x64.zip --junk-paths osx-x64/publish/Chirp.Web
+        zip Chirp-${{ github.ref_name }}-osx-arm64.zip --junk-paths osx-arm64/publish/Chirp.Web
     - name:
       uses: softprops/action-gh-release@v2
       with: 
         files: |
-          ./src/Chirp.Razor/bin/Release/net8.0/Chirp-${{ github.ref_name }}-win-x64.zip
-          ./src/Chirp.Razor/bin/Release/net8.0/Chirp-${{ github.ref_name }}-linux-x64.zip
-          ./src/Chirp.Razor/bin/Release/net8.0/Chirp-${{ github.ref_name }}-osx-x64.zip
-          ./src/Chirp.Razor/bin/Release/net8.0/Chirp-${{ github.ref_name }}-osx-arm64.zip
+          ./src/Chirp.Web/bin/Release/net8.0/Chirp-${{ github.ref_name }}-win-x64.zip
+          ./src/Chirp.Web/bin/Release/net8.0/Chirp-${{ github.ref_name }}-linux-x64.zip
+          ./src/Chirp.Web/bin/Release/net8.0/Chirp-${{ github.ref_name }}-osx-x64.zip
+          ./src/Chirp.Web/bin/Release/net8.0/Chirp-${{ github.ref_name }}-osx-arm64.zip
 
 
 
