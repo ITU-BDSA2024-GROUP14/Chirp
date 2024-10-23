@@ -32,4 +32,20 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         Assert.NotNull(author);
         Assert.Equal(name, author.Name);
     }
+
+    [Fact]
+    public void GetAuthorByEmailTest()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var authorrepo = new AuthorRepository(context);
+        var name = "Helge";
+        //Act
+        var author = authorrepo.GetAuthorByEmail("ropf@itu.dk");
+        //Assert
+        Assert.NotNull(author);
+        Assert.Equal(name, author.Name);
+    }
 }
