@@ -143,10 +143,28 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         context.Database.EnsureCreated();
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var service = new ChirpService(cheeprepo, authorrepo);
         //Act
         service.CreateAuthor("John Doe", "John@doe.com");
         //Assert
         Assert.Equal("John Doe", context.Authors.First().Name);
+    }
+
+    [Fact]
+    public void CreateCheep()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        //Act
+        service.CreateCheep("Helge", text: "This is good test CHEEP", authorEmail: "rpof@itu.dk",
+            timestamp: DateTime.Now);
+        //Assert
+        var cheep = context.Cheeps.First(cheep => cheep.Text == "This is good test CHEEP");
+        Assert.Equal("Helge", cheep.Author.Name);
     }
 }
