@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Chirp.Razor;
