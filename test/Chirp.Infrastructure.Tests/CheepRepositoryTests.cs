@@ -1,8 +1,9 @@
+using Chirp.Core;
 using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Repositories;
 using TestHelpers;
 
-namespace Chirp.Core.Tests;
+namespace Chirp.Infrastructure.Tests;
 
 /// <summary>
 /// Tests for the CheepRepository.
