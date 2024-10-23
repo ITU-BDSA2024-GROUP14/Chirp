@@ -26,20 +26,21 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         context.Database.EnsureCreated();
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var service = new ChirpService(cheeprepo, authorrepo);
         var first = service.GetCheeps(page).First();
         Assert.Equal(expectedCheepText, first.Text);
     }
 
     [Fact]
-    public void GetCheepCorrectPageSize(){
+    public void GetCheepCorrectPageSize()
+    {
         //Arrange
         _fixture.SeedDatabase();
         using var context = _fixture.CreateContext();
         context.Database.EnsureCreated();
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var service = new ChirpService(cheeprepo, authorrepo);
         //Act
         var actual = service.GetCheeps(1).Count;
         //Assert
@@ -58,7 +59,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         context.Database.EnsureCreated();
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var service = new ChirpService(cheeprepo, authorrepo);
         //Act
         var cheeps = service.GetCheepsFromAuthor(expectedAuthor);
         //Assert
@@ -74,7 +75,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         context.Database.EnsureCreated();
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var service = new ChirpService(cheeprepo, authorrepo);
         var expected = "Helge";
         //Act
         var actual = service.GetAuthorByName("Helge");
@@ -86,16 +87,49 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     [Fact]
     public void GetAuthorByNameExpectsNull()
     {
-
         //Arrange
         _fixture.SeedDatabase();
         using var context = _fixture.CreateContext();
         context.Database.EnsureCreated();
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheepRepository: cheeprepo, authorRepository: authorrepo);
+        var service = new ChirpService(cheeprepo, authorrepo);
         //Act
         var actual = service.GetAuthorByName("Belge");
+        //Assert
+        Assert.Null(actual);
+    }
+
+    [Fact]
+    public void GetAuthorByEmailNotNull()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        var expected = "Helge";
+        //Act
+        var actual = service.GetAuthorByEmail("ropf@itu.dk");
+        //Assert
+        Assert.NotNull(actual);
+        Assert.Equal(expected, actual.Name);
+    }
+
+    [Fact]
+    public void GetAuthorByEmailExpectsNull()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        //Act
+        var actual = service.GetAuthorByEmail("Belge");
         //Assert
         Assert.Null(actual);
     }
