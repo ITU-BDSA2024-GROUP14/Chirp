@@ -16,4 +16,20 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         _fixture = fixture;
         _fixture.Reset();
     }
+
+    [Fact]
+    public void GetAuthorByNameTest()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var authorrepo = new AuthorRepository(context);
+        var name = "Helge";
+        //Act
+        var author = authorrepo.GetAuthorByName(name);
+        //Assert
+        Assert.NotNull(author);
+        Assert.Equal(name, author.Name);
+    }
 }
