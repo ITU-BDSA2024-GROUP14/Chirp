@@ -10,8 +10,8 @@ namespace Chirp.Infrastructure.Tests;
 /// </summary>
 public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
 {
-    private ChirpDbContextFixture _fixture;
 
+    private ChirpDbContextFixture _fixture;
     public CheepRepositoryTests(ChirpDbContextFixture fixture)
     {
         _fixture = fixture;

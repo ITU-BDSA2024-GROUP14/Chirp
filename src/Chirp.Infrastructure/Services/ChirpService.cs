@@ -6,9 +6,9 @@ namespace Chirp.Infrastructure.Services;
 public class ChirpService : IChirpService
 {
     private readonly ICheepRepository _cheepRepository;
-    private readonly int _pageSize = 32;
     private readonly IAuthorRepository _authorRepository;
-
+    public const int PageSize = 32;
+    
     public ChirpService(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         _cheepRepository = cheepRepository;
@@ -17,8 +17,8 @@ public class ChirpService : IChirpService
 
     public List<CheepDTO> GetCheeps(int page = 1)
     {
-        var skip = _pageSize * (page - 1);
-        var size = _pageSize;
+        var skip = PageSize * (page - 1);
+        var size = PageSize;
         return _cheepRepository
             .GetCheeps(skip, size)
             .Select(x => new CheepDTO(x))
@@ -28,9 +28,9 @@ public class ChirpService : IChirpService
     public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1)
     {
         // filter by the provided author name
-        var skip = _pageSize * (page - 1);
+        var skip = PageSize * (page - 1);
         return _cheepRepository
-            .GetCheeps(skip, _pageSize, author)
+            .GetCheeps(skip, PageSize, author)
             .Select(x => new CheepDTO(x))
             .ToList();
     }
@@ -45,7 +45,7 @@ public class ChirpService : IChirpService
 
     /*private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
-        // Unix timestamp is seconds past epoch
+        // Unix timestamp //is seconds past epoch
         var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
