@@ -25,16 +25,26 @@ public class CheepRepository : ICheepRepository
     /// <param name="size">The number of Cheeps to return.</param>
     /// <param name="authorUsername">If there is an author, this is the username of the author of the Cheeps to return.</param>
     /// <returns>Specified cheeps from the database.</returns>
-    public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null, string? authorUsername = null)
+    public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null)
     {
         var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        if (authorUsername != null)
-        {
-            query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
-        }
-
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
 
+        query = query.Skip(skip);
+
+        if (size != null)
+        {
+            query = query.Take((int)size);
+        }
+
+        return query.ToList();
+    }
+
+    public IEnumerable<Cheep> GetCheepsByAuthor(string authorUsername, int skip = 0, int? size = null)
+    {
+        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
+        query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
+        query = query.OrderByDescending(cheep => cheep.TimeStamp);
         query = query.Skip(skip);
 
         if (size != null)
