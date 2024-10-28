@@ -8,7 +8,7 @@ public class ChirpService : IChirpService
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
     public const int PageSize = 32;
-    
+
     public ChirpService(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         _cheepRepository = cheepRepository;
@@ -18,9 +18,8 @@ public class ChirpService : IChirpService
     public List<CheepDTO> GetCheeps(int page = 1)
     {
         var skip = PageSize * (page - 1);
-        var size = PageSize;
         return _cheepRepository
-            .GetCheeps(skip, size)
+            .GetCheeps(skip, PageSize)
             .Select(x => new CheepDTO(x))
             .ToList();
     }
@@ -30,7 +29,7 @@ public class ChirpService : IChirpService
         // filter by the provided author name
         var skip = PageSize * (page - 1);
         return _cheepRepository
-            .GetCheeps(skip, PageSize, author)
+            .GetCheepsByAuthor(skip: skip, size: PageSize, author: author)
             .Select(x => new CheepDTO(x))
             .ToList();
     }
