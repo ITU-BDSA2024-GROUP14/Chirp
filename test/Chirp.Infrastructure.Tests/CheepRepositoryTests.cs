@@ -1,16 +1,17 @@
+using Chirp.Core;
 using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Repositories;
 using TestHelpers;
 
-namespace Chirp.Core.Tests;
+namespace Chirp.Infrastructure.Tests;
 
 /// <summary>
 /// Tests for the CheepRepository.
 /// </summary>
 public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
 {
-    private ChirpDbContextFixture _fixture;
 
+    private ChirpDbContextFixture _fixture;
     public CheepRepositoryTests(ChirpDbContextFixture fixture)
     {
         _fixture = fixture;
