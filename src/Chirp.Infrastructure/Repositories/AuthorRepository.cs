@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Core.DataModel;
+using Chirp.Infrastructure.Data;
 
 namespace Chirp.Infrastructure.Repositories;
 

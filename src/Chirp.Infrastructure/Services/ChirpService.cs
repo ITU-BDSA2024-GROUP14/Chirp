@@ -1,4 +1,4 @@
-using Chirp.Infrastructure.DataTransferObjects;
+using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Repositories;
 
 namespace Chirp.Infrastructure.Services;
