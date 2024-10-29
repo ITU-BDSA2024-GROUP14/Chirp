@@ -5,12 +5,12 @@ namespace IntegrationTests;
 /// <summary>
 /// Tests for the Webpage.
 /// </summary>
-public class WebpageTests : IClassFixture<WebApplicationFactory<Program>>
+public class WebpageTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public WebpageTests(WebApplicationFactory<Program> fixture)
+    public WebpageTests(CustomWebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
         _client = _fixture.CreateClient(

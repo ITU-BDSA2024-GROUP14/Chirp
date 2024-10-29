@@ -1,0 +1,16 @@
+@if (User.Identity is { IsAuthenticated: true })
+{
+    <div>
+        <a href="/@(User.Identity.Name)">my timeline</a> |
+        <a href="/">public timeline</a> |
+        <a ...>logout [@(User.Identity.Name)]</a>
+    </div>
+}
+else
+{
+    <div>
+        <a href="/">public timeline</a> |
+        <a asp-area="Identity" asp-page="/Account/Register">register</a> |
+        <a asp-area="Identity" asp-page="/Account/Login">login</a>
+    </div>
+}
