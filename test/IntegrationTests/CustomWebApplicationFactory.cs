@@ -1,5 +1,4 @@
 using System.Data.Common;
-using Chirp.Core;
 using Chirp.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -20,10 +19,13 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 d => d.ServiceType ==
                      typeof(DbContextOptions<ChirpDBContext>));
 
-            services.Remove(dbContextDescriptor);
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
 
             // Create open SqliteConnection so EF won't automatically close it.
-            services.AddSingleton<DbConnection>(container =>
+            services.AddSingleton<DbConnection>(_ =>
             {
                 var connection = new SqliteConnection("DataSource=:memory:");
                 connection.Open();
