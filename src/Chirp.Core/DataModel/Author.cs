@@ -14,7 +14,8 @@ public class Author : IdentityUser<int>
         get => Id;
         set => Id = value;
     }
-
+    
+    [PersonalData]
     public string? Name { get; set; }
     public List<Cheep>? Cheeps { get; set; }
 }
