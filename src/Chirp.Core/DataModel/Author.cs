@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Core.DataModel;
@@ -7,12 +8,13 @@ namespace Chirp.Core.DataModel;
 /// </summary>
 public class Author : IdentityUser<int>
 {
+    [NotMapped]
     public int AuthorId
     {
         get => Id;
         set => Id = value;
     }
 
-    public required string Name { get; set; }
+    public string? Name { get; set; }
     public List<Cheep>? Cheeps { get; set; }
 }
