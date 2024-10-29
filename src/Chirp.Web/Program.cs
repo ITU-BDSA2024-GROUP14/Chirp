@@ -20,15 +20,16 @@ builder.Services.AddDefaultIdentity<Author>(options =>
         options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
-builder.Services.Configure<AuthenticationBuilder>(b =>
-{
-    b.AddCookie().AddGitHub(o =>
+builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
     {
-        o.ClientId = builder.Configuration["authentication:github:clientId"] ?? throw new InvalidOperationException();
-        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] ?? throw new InvalidOperationException();
+        o.Scope.Add("user:email");
+        o.Scope.Add("read:user");
+        o.ClientId = builder.Configuration["authentication:github:clientId"] 
+                     ?? throw new InvalidOperationException("github:clientId secret not found");
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] 
+                         ?? throw new InvalidOperationException("github:clientSecret secret not found");
         o.CallbackPath = "/signin-github";
-    })
-});
+    });
 
 builder.Host.UseDefaultServiceProvider(o =>
 {
