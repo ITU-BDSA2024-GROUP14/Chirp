@@ -2,6 +2,7 @@ using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,9 +45,12 @@ using (var scope = app.Services.CreateScope())
 
     // Execute the migration from code.
     context.Database.Migrate();
+    
+    // Get the DbInitializer instance from the DI container
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Author>>();
 
     //Seed database
-    DbInitializer.SeedDatabase(context);
+    DbInitializer.SeedDatabase(context, userManager);
 }
 
 app.UseHttpsRedirection();
