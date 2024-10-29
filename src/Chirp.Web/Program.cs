@@ -2,6 +2,7 @@ using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,16 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 builder.Services.AddDefaultIdentity<Author>(options =>
         options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
+
+builder.Services.Configure<AuthenticationBuilder>(b =>
+{
+    b.AddCookie().AddGitHub(o =>
+    {
+        o.ClientId = builder.Configuration["authentication:github:clientId"] ?? throw new InvalidOperationException();
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] ?? throw new InvalidOperationException();
+        o.CallbackPath = "/signin-github";
+    })
+});
 
 builder.Host.UseDefaultServiceProvider(o =>
 {
