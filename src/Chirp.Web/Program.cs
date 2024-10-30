@@ -2,8 +2,8 @@ using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,19 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 builder.Services.AddDefaultIdentity<Author>(options =>
         options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
+
+builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
+    {
+        o.Scope.Add("user:email");
+        o.Scope.Add("read:user");
+        o.ClientId = builder.Configuration["authentication:github:clientId"]
+                     ?? Environment.GetEnvironmentVariable("authentication__github__clientId")
+                     ?? throw new InvalidOperationException("github:clientId secret not found");
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
+                         ?? Environment.GetEnvironmentVariable("authentication__github__clientSecret")
+                         ?? throw new InvalidOperationException("github:clientSecret secret not found");
+        o.CallbackPath = "/signin-github";
+    });
 
 builder.Host.UseDefaultServiceProvider(o =>
 {
@@ -45,7 +58,7 @@ using (var scope = app.Services.CreateScope())
 
     // Execute the migration from code.
     context.Database.Migrate();
-    
+
     // Get the DbInitializer instance from the DI container
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Author>>();
 
@@ -58,6 +71,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

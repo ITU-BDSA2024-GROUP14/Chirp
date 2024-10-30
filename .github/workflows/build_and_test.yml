@@ -23,5 +23,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --no-incremental /WarnAsError
     - name: Test
+      env:
+        authentication__github__clientId: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTID }}
+        authentication__github__clientSecret: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTSECRET }}
       run: dotnet test --no-build --verbosity normal
 
