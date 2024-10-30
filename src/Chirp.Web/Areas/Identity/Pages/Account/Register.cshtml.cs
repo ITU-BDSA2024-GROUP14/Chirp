@@ -110,10 +110,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = CreateUser(Input.UserName, Input.Email);
                 
-                user.Name = Input.UserName;
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -154,11 +152,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private Author CreateUser()
+        private Author CreateUser(string name, string email)
         {
             try
             {
-                return Activator.CreateInstance<Author>();
+                return new Author
+                {
+                    Name = name,
+                    Email = email
+                };
             }
             catch
             {

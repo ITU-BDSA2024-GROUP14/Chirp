@@ -25,9 +25,9 @@ builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
     {
         o.Scope.Add("user:email");
         o.Scope.Add("read:user");
-        o.ClientId = builder.Configuration["authentication:github:clientId"] 
+        o.ClientId = builder.Configuration["authentication:github:clientId"]
                      ?? throw new InvalidOperationException("github:clientId secret not found");
-        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] 
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
                          ?? throw new InvalidOperationException("github:clientSecret secret not found");
         o.CallbackPath = "/signin-github";
     });
@@ -58,8 +58,11 @@ using (var scope = app.Services.CreateScope())
     // Execute the migration from code.
     context.Database.Migrate();
 
+    // Get the DbInitializer instance from the DI container
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Author>>();
+
     //Seed database
-    DbInitializer.SeedDatabase(context);
+    DbInitializer.SeedDatabase(context, userManager);
 }
 
 app.UseHttpsRedirection();

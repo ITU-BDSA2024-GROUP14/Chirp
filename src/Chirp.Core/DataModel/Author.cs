@@ -16,6 +16,8 @@ public class Author : IdentityUser<int>
     }
     
     [PersonalData]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
+    
+    public new required string Email { get; set; }
     public List<Cheep>? Cheeps { get; set; }
 }
