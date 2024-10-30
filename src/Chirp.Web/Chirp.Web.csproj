@@ -4,8 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-      <UserSecretsId>bebacd45-49c0-479b-b05f-4b045c98fe7d</UserSecretsId>
-  </PropertyGroup>
+        <UserSecretsId>bebacd45-49c0-479b-b05f-4b045c98fe7d</UserSecretsId>
+    </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
