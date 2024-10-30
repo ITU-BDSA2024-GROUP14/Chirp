@@ -25,8 +25,10 @@ builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
         o.Scope.Add("user:email");
         o.Scope.Add("read:user");
         o.ClientId = builder.Configuration["authentication:github:clientId"]
+                     ?? Environment.GetEnvironmentVariable("authentication__github__clientId")
                      ?? throw new InvalidOperationException("github:clientId secret not found");
         o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
+                         ?? Environment.GetEnvironmentVariable("authentication__github__clientSecret")
                          ?? throw new InvalidOperationException("github:clientSecret secret not found");
         o.CallbackPath = "/signin-github";
     });
