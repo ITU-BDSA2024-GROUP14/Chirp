@@ -10,14 +10,34 @@ public class UserTimelineModel : PageModel
     private readonly IChirpService _service;
     public List<CheepDTO> Cheeps { get; set; } = [];
 
+    [BindProperty] public string Message { get; set; }
+
     public UserTimelineModel(IChirpService service)
     {
         _service = service;
     }
 
-    public ActionResult OnGet(string author, [FromQuery] int page = 1)
+    public ActionResult OnGet(string authorName, [FromQuery] int page = 1)
     {
-        Cheeps = _service.GetCheepsFromAuthor(author, page);
+        Cheeps = _service.GetCheepsFromAuthor(authorName, page);
         return Page();
+    }
+
+    public ActionResult OnPost()
+    {
+        var authorName = User.Identity?.Name;
+        if (authorName == null)
+        {
+            return RedirectToPage("./PublicTimeline");
+        }
+
+        var author = _service.GetAuthorByName(authorName);
+        if (author == null)
+        {
+            return RedirectToPage("./PublicTimeline");
+        }
+
+        _service.CreateCheep(author.Name, author.Email, Message, DateTime.Now);
+        return RedirectToPage("./UserTimeline", new { authorName });
     }
 }
