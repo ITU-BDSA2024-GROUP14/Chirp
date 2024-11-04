@@ -18,6 +18,7 @@ public class PublicModel : PageModel
     public PublicModel(IChirpService service)
     {
         _service = service;
+        Message = "";
     }
 
     public ActionResult OnGet([FromQuery] int page = 1)
