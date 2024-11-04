@@ -1,4 +1,3 @@
-using Chirp.Core;
 using Chirp.Infrastructure.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +33,9 @@ public class ChirpDbContextFixture : IDisposable
     {
         using var context = CreateContext();
         context.Database.EnsureCreated();
-        TestData.SeedDatabase(context);
+
+        var TestData = new TestData();
+        TestData.SimpleSeedDatabase(context);
     }
 
     public void Dispose()

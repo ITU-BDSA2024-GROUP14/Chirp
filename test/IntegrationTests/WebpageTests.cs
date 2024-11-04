@@ -1,4 +1,3 @@
-using Chirp.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -51,19 +50,16 @@ public class WebpageTests : IClassFixture<CustomWebApplicationFactory<Program>>
     [Theory]
     [InlineData("Jacqualine Gilcoine", "Starbuck now is what we hear the worst.")]
     [InlineData("Quintin Sitts", "On reaching the end of either, there came a sound so deep an influence over her?")]
+    [InlineData("Esser", "This cheep only exists in test data, (not production)")]
     public async void PrivateTimelineHasContent(string author, string expectedContent)
     {
         using var scope = _fixture.Services.CreateScope();
         {
             //Arrange
-            
-            //var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-            //TestData.SeedDatabase(context);
-
-            var response = await _client.GetAsync($"/{author}");
-            response.EnsureSuccessStatusCode();
 
             //Act
+            var response = await _client.GetAsync($"/{author}");
+            response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
 
             //Assert

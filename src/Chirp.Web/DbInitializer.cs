@@ -1,10 +1,11 @@
 using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Data;
+using Chirp.Web;
 using Microsoft.AspNetCore.Identity;
 
-public class DbInitializer
+public class DbInitializer : IDbInitializer
 {
-    public static void SeedDatabase(ChirpDBContext chirpContext, UserManager<Author> userManager)
+    public void SeedDatabase(ChirpDBContext chirpContext, UserManager<Author> userManager)
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
         {
