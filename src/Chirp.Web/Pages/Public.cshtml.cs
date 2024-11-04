@@ -11,13 +11,18 @@ public class PublicModel : PageModel
 {
     private readonly IChirpService _service;
 
-    [BindProperty] public string Message { get; set; }
+    [BindProperty]
+    [Required]
+    [StringLength(Cheep.MaxLength, ErrorMessage = "Maximum length is {1}")]
+    [Display(Name = "Cheep Text")]
+    public string Message { get; set; }
 
     public List<CheepDTO> Cheeps { get; set; } = [];
 
     public PublicModel(IChirpService service)
     {
         _service = service;
+        Message = "";
     }
 
     public ActionResult OnGet([FromQuery] int page = 1)
@@ -28,6 +33,11 @@ public class PublicModel : PageModel
 
     public ActionResult OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
         var authorName = User.Identity?.Name;
         if (authorName == null)
         {

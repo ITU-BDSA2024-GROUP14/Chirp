@@ -12,11 +12,16 @@ public class UserTimelineModel : PageModel
     private readonly IChirpService _service;
     public List<CheepDTO> Cheeps { get; set; } = [];
 
-    [BindProperty] public string Message { get; set; }
+    [BindProperty]
+    [Required]
+    [StringLength(Cheep.MaxLength, ErrorMessage = "Maximum length is {1}")]
+    [Display(Name = "Cheep Text")]
+    public string Message { get; set; }
 
     public UserTimelineModel(IChirpService service)
     {
         _service = service;
+        Message = "";
     }
 
     public ActionResult OnGet(string authorName, [FromQuery] int page = 1)
@@ -27,6 +32,11 @@ public class UserTimelineModel : PageModel
 
     public ActionResult OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
         var authorName = User.Identity?.Name;
         if (authorName == null)
         {
