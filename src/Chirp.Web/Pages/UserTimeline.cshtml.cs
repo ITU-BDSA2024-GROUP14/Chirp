@@ -19,6 +19,7 @@ public class UserTimelineModel : PageModel
     public UserTimelineModel(IChirpService service)
     {
         _service = service;
+        Message = "";
     }
 
     public ActionResult OnGet(string authorName, [FromQuery] int page = 1)
