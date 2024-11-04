@@ -1,4 +1,6 @@
-﻿using Chirp.Infrastructure.Data.DataTransferObjects;
+﻿using System.ComponentModel.DataAnnotations;
+using Chirp.Core.DataModel;
+using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,7 +12,9 @@ public class UserTimelineModel : PageModel
     private readonly IChirpService _service;
     public List<CheepDTO> Cheeps { get; set; } = [];
 
-    [BindProperty] public string Message { get; set; }
+    [BindProperty]
+    [StringLength(Cheep.MaxLength, ErrorMessage = "Maximum length is {1}")]
+    public string Message { get; set; }
 
     public UserTimelineModel(IChirpService service)
     {
@@ -25,6 +29,11 @@ public class UserTimelineModel : PageModel
 
     public ActionResult OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Page(); // Show page with previously entered data and error markers
+        }
+
         var authorName = User.Identity?.Name;
         if (authorName == null)
         {
