@@ -40,7 +40,6 @@ public class WebpageTests : IClassFixture<CustomWebApplicationFactory<Program>>
     [InlineData("Baron Aslan Glorfindus von Fritz")]
     public async void CanSeePrivateTimeline(string author)
     {
-        author = author.Replace(" ", "_");
         var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -57,10 +56,10 @@ public class WebpageTests : IClassFixture<CustomWebApplicationFactory<Program>>
         using var scope = _fixture.Services.CreateScope();
         {
             //Arrange
-            var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-            TestData.SeedDatabase(context);
             
-            author = author.Replace(" ", "_");
+            //var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
+            //TestData.SeedDatabase(context);
+
             var response = await _client.GetAsync($"/{author}");
             response.EnsureSuccessStatusCode();
 
