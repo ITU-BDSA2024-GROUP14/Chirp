@@ -242,4 +242,39 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Assert
         Assert.Empty(cheeps1.Intersect(cheeps2));
     }
+
+    [Fact]
+    public void GetAuthorThatByNameDosentExistExpectsNull()
+    {
+         //Arrange
+         _fixture.SeedDatabase();
+         using var context = _fixture.CreateContext();
+         context.Database.EnsureCreated();
+         var cheeprepo = new CheepRepository(context);
+         var authorrepo = new AuthorRepository(context);
+         var service = new ChirpService(cheeprepo, authorrepo);
+         var author = "1298Socrates";
+         //Act
+         var actual = service.GetAuthorByName(author);
+         //Assert
+         Assert.Null(actual);
+    }
+
+
+    [Fact]
+    public void GetAuthorThatDosentByEmailExistExpectsNull()
+    {
+         //Arrange
+         _fixture.SeedDatabase();
+         using var context = _fixture.CreateContext();
+         context.Database.EnsureCreated();
+         var cheeprepo = new CheepRepository(context);
+         var authorrepo = new AuthorRepository(context);
+         var service = new ChirpService(cheeprepo, authorrepo);
+         var author = "34656789@Socrates.dk";
+         //Act
+         var actual = service.GetAuthorByEmail(author);
+         //Assert
+         Assert.Null(actual);
+    }
 }
