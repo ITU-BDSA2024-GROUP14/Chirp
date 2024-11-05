@@ -187,4 +187,26 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         Assert.Equal(authorName, cheep.Author.Name);
         Assert.NotNull(author);
     }
+
+    [Theory]
+    [InlineData("Helge", 1)]
+    [InlineData("4567698097657", 0)]
+    [InlineData("Jacqualine Gilcoine", 32)]
+    public void GetCorrectAmountOfCheeps(string author, int amount)
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        //Act
+        var cheeps = service.GetCheepsFromAuthor(author);
+        //Assert
+        Assert.Equal(amount, cheeps.Count);
+    }
+
+    
+
 }
