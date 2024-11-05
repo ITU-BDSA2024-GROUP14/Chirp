@@ -57,7 +57,6 @@ using (var scope = app.Services.CreateScope())
     using var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
 
     // Execute the migration from code.
-    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
 
     // Get the DbInitializer instance from the DI container
