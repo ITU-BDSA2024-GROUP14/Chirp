@@ -213,15 +213,33 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     public void GetCorrectAmountOfCheepsPage2(string author, int amount)
     {
         //Arrange
-                _fixture.SeedDatabase();
-                using var context = _fixture.CreateContext();
-                context.Database.EnsureCreated();
-                var cheeprepo = new CheepRepository(context);
-                var authorrepo = new AuthorRepository(context);
-                var service = new ChirpService(cheeprepo, authorrepo);
-                //Act
-                var cheeps = service.GetCheepsFromAuthor(author,2);
-                //Assert
-                Assert.Equal(amount, cheeps.Count);
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        //Act
+        var cheeps = service.GetCheepsFromAuthor(author,2);
+        //Assert
+        Assert.Equal(amount, cheeps.Count);
+    }
+
+    [Fact]
+    public void NoDupilicateCheepsOnDifferentPages()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        var author = "Jacqualine Gilcoine";
+        //Act
+        var cheeps1 = service.GetCheepsFromAuthor(author, 1);
+        var cheeps2 = service.GetCheepsFromAuthor(author,2);
+        //Assert
+        Assert.Empty(cheeps1.Intersect(cheeps2));
     }
 }
