@@ -262,7 +262,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
 
 
     [Fact]
-    public void GetAuthorThatDosentByEmailExistExpectsNull()
+    public void GetAuthorByEmailThatDosentExistExpectsNull()
     {
          //Arrange
          _fixture.SeedDatabase();
