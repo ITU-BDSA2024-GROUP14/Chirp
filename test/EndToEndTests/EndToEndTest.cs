@@ -1,10 +1,6 @@
 using Microsoft.Playwright;
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using TestHelpers;
 using Microsoft.Playwright.NUnit;
-using Microsoft.Playwright;
 
 namespace EndToEndTests;
 
@@ -12,28 +8,19 @@ namespace EndToEndTests;
 [TestFixture]
 public class EndToEndTest : PageTest
 {
-    private WebApplicationFactory<Program> _fixture;
+    private string _serverAddress;
 
-    private HttpClient _client;
-
-
-    [OneTimeTearDown]
-    public void Cleanup()
+    [OneTimeSetUp]
+    public void Setup()
     {
-        _client.Dispose();
-    }
-
-    public EndToEndTest(CustomWebApplicationFactory<Program> fixture)
-    {
-        _fixture = fixture;
-        _client = _fixture.CreateClient(
-            new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+        var fixture = new CustomWebApplicationFactory<Program>();
+        _serverAddress = fixture.ServerAddress;
     }
 
     [Test]
     public async Task TestLoginViaUserName()
     {
-        await Page.GotoAsync("http://localhost:5273/");
+        await Page.GotoAsync(_serverAddress);
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("ropf@itu.dk");
