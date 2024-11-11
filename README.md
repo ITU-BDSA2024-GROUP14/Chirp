@@ -28,4 +28,8 @@
 
 ### Migration
 
-`dotnet ef migrations add InitialDBSchema --project .\Chirp.Core\ --startup-project .\Chirp.Web\ `
+```bash
+cd src
+dotnet ef migrations add BeakDBSchema --project Chirp.Infrastructure --startup-project Chirp.Web
+```
+
