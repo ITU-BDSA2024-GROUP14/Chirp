@@ -37,7 +37,7 @@ public class UserTimelineModel : PageModel
             return Page();
         }
 
-        var authorName = User.Identity?.Name;
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
         if (authorName == null)
         {
             return RedirectToPage("./PublicTimeline");
