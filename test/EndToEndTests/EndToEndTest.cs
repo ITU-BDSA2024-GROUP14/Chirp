@@ -20,11 +20,17 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task TestLoginViaUserName()
     {
+        //Arrange  
+        using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync();
+        var page = await browser.NewPageAsync();
+
+        //Act
         await Page.GotoAsync(_serverAddress);
+        //await Page.GotoAsync("http://localhost:5273");
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("ropf@itu.dk");
-        await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
         await Page.GetByPlaceholder("password").PressAsync("Enter");
