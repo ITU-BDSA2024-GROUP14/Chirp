@@ -20,7 +20,7 @@ public class AuthorRepository : IAuthorRepository
     /// <returns>The requested author</returns>
     public Author? GetAuthorByName(string authorName)
     {
-        return _dbcontext.Authors.FirstOrDefault(a => a.Name == authorName);
+        return _dbcontext.Authors.FirstOrDefault(a => a.Beak == authorName);
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class AuthorRepository : IAuthorRepository
     /// <param name="authorEmail">The email of the author</param>
     public Author CreateAuthor(string authorName, string authorEmail)
     {
-        var author = new Author { Name = authorName, Email = authorEmail };
+        var author = new Author { Beak = authorName, Email = authorEmail };
         _dbcontext.Authors.Add(author);
         _dbcontext.SaveChanges();
         return author;

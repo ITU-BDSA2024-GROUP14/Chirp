@@ -50,7 +50,7 @@ public class ChirpService : IChirpService
             return null;
         }
 
-        var dto = new AuthorDTO { Name = author.Name, Email = author.Email };
+        var dto = new AuthorDTO { Name = author.Beak, Email = author.Email };
         return dto;
     }
 
@@ -62,7 +62,7 @@ public class ChirpService : IChirpService
             return null;
         }
 
-        var dto = new AuthorDTO { Name = author.Name, Email = author.Email };
+        var dto = new AuthorDTO { Name = author.Beak, Email = author.Email };
         return dto;
     }
 

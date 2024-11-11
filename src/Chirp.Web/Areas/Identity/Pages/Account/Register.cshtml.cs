@@ -158,7 +158,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 return new Author
                 {
-                    Name = name,
+                    Beak = name,
                     Email = email
                 };
             }
