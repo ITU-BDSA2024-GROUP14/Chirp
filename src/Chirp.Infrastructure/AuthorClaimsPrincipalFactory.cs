@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Chirp.Infrastructure;
 
+//Class adapted from https://korzh.com/blog/aspnet-identity-store-user-data-in-claims/
 public class AuthorClaimsPrincipalFactory : UserClaimsPrincipalFactory<Author, IdentityRole<int>>
 {
     public AuthorClaimsPrincipalFactory(UserManager<Author> userManager,
@@ -13,4 +14,10 @@ public class AuthorClaimsPrincipalFactory : UserClaimsPrincipalFactory<Author, I
     {
     }
 
+    protected override async Task<ClaimsIdentity> GenerateClaimsAsync(Author user)
+    {
+       var identity = await base.GenerateClaimsAsync(user);
+       identity.AddClaim(new Claim("Beak", user.Beak));
+       return identity;
+    }
 }
