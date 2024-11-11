@@ -94,7 +94,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             
             [Required]
             [Display(Name = "User Name")]
-            public string UserName { get; set; }
+            public string Beak { get; set; }
         }
 
 
@@ -110,9 +110,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser(Input.UserName, Input.Email);
+                var user = CreateUser(Input.Beak, Input.Email);
                 
-                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -158,7 +158,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 return new Author
                 {
-                    Name = name,
+                    Beak = name,
                     Email = email
                 };
             }

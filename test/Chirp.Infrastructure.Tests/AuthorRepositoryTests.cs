@@ -31,7 +31,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var author = authorrepo.GetAuthorByName(name);
         //Assert
         Assert.NotNull(author);
-        Assert.Equal(name, author.Name);
+        Assert.Equal(name, author.Beak);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var author = authorrepo.GetAuthorByEmail("ropf@itu.dk");
         //Assert
         Assert.NotNull(author);
-        Assert.Equal(name, author.Name);
+        Assert.Equal(name, author.Beak);
     }
 
     [Fact]
@@ -56,13 +56,13 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         var options = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection).Options;
-        var author = new Author { Name = "Anna", Email = "test@test.com" };
+        var author = new Author { Beak = "Anna", Email = "test@test.com" };
         using (var context = new ChirpDBContext(options))
         {
             context.Database.EnsureCreated();
             context.Authors.AddRange(
-                new Author { Name = "Bob", Email = "john@doe.com" },
-                new Author { Name = "Chalie", Email = "this@isbad.com" },
+                new Author { Beak = "Bob", Email = "john@doe.com" },
+                new Author { Beak = "Chalie", Email = "this@isbad.com" },
                 author);
             context.SaveChanges();
         }
@@ -70,10 +70,10 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         using (var context = new ChirpDBContext(options))
         {
             var service = new AuthorRepository(context);
-            var fromDB = service.GetAuthorByName(author.Name);
+            var fromDB = service.GetAuthorByName(author.Beak);
 
             Assert.NotNull(fromDB);
-            Assert.Equal(author.Name, fromDB.Name);
+            Assert.Equal(author.Beak, fromDB.Beak);
             Assert.Equal(author.Email, fromDB.Email);
             Assert.Equal(author.Cheeps, fromDB.Cheeps);
         }
