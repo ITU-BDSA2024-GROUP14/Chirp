@@ -20,7 +20,7 @@ public class Tests : SelfHostedPageTest<Program>
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await Expect(Page.GetByText("What's on your mind ropf@itu.dk? Share")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("What's on your mind Helge? Share")).ToBeVisibleAsync();
     }
     
     [Test]
@@ -37,7 +37,7 @@ public class Tests : SelfHostedPageTest<Program>
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         await Page.GotoAsync(serverAddress + "Helge");
-        await Expect(Page.GetByText("What's on your mind ropf@itu.dk? Share")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("What's on your mind Helge? Share")).ToBeVisibleAsync();
     }
     
     [Test]

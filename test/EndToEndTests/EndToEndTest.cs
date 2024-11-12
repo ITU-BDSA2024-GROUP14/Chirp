@@ -24,7 +24,7 @@ public class EndToEndTest : SelfHostedPageTest<Program>
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
         await Page.GetByPlaceholder("password").PressAsync("Enter");
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "my timeline" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [ropf@itu.dk]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [Helge]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Click here to Logout" }).ClickAsync();
     }
     
@@ -43,7 +43,7 @@ public class EndToEndTest : SelfHostedPageTest<Program>
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
         await Page.GetByPlaceholder("password").PressAsync("Enter");
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "my timeline" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [ropf@itu.dk]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [Helge]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Click here to Logout" }).ClickAsync();
     }
 }
