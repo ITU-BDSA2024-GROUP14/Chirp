@@ -111,7 +111,7 @@ public class PlaywrightWebApplicationFactory<TProgram> : WebApplicationFactory<T
                 services.Remove(dbInitializerDescriptor);
             }
             
-            services.AddSingleton<IDbInitializer, TestDbInitializer>();
+            services.AddScoped<IDbInitializer, TestDbInitializer>();
         });
 
         builder.UseEnvironment("Development");

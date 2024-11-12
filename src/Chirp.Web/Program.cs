@@ -15,7 +15,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IChirpService, ChirpService>();
-builder.Services.AddSingleton<IDbInitializer, ProductionDbInitializer>();
+builder.Services.AddScoped<IDbInitializer, ProductionDbInitializer>();
 builder.Services.AddTransient<IClaimsTransformation, AuthorClaimsTransformation>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

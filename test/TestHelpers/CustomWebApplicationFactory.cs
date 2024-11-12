@@ -38,6 +38,16 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
+            
+            var dbInitializerDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IDbInitializer));
+
+            if (dbInitializerDescriptor != null)
+            {
+                services.Remove(dbInitializerDescriptor);
+            }
+            
+            services.AddScoped<IDbInitializer, TestDbInitializer>();
         });
 
         builder.UseEnvironment("Development");
