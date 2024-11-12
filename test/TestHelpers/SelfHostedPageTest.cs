@@ -1,7 +1,6 @@
 using Microsoft.Playwright.NUnit;
-using TestHelpers;
 
-namespace EndToEndTests;
+namespace TestHelpers;
 
 public abstract class SelfHostedPageTest<TEntryPoint> : PageTest where TEntryPoint : class
 {
