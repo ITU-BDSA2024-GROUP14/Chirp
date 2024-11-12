@@ -22,6 +22,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore --no-incremental /WarnAsError
+    - name: Ensure browsers are installed
+      run: pwsh test/EndToEndTests/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
       env:
         authentication__github__clientId: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTID }}

@@ -42,7 +42,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             });
 
             services.RemoveAll<IDbInitializer>();
-            services.AddScoped<IDbInitializer, TestData>();
+            services.AddScoped<IDbInitializer, TestDbInitializer>();
         });
 
         builder.UseEnvironment("Development");

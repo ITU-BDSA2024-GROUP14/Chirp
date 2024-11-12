@@ -15,7 +15,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IChirpService, ChirpService>();
-builder.Services.AddSingleton<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<IDbInitializer, ProductionDbInitializer>();
 builder.Services.AddTransient<IClaimsTransformation, AuthorClaimsTransformation>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -63,13 +63,15 @@ using (var scope = app.Services.CreateScope())
 
     // Execute the migration from code.
     context.Database.Migrate();
-
-    // Get the DbInitializer instance from the DI container
+    
+    // Get the UserManager instance from the DI container
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Author>>();
 
-    //Seed database
+    // Get the DbInitializer instance from the DI container
     var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-    dbInitializer.SeedDatabase(context, userManager);
+
+    //Seed database
+    dbInitializer.Seed(userManager);
 }
 
 app.UseHttpsRedirection();

@@ -33,9 +33,8 @@ public class ChirpDbContextFixture : IDisposable
     {
         using var context = CreateContext();
         context.Database.EnsureCreated();
-
-        var TestData = new TestData();
-        TestData.SimpleSeedDatabase(context);
+        var dbInitializer = new TestDbInitializer(context);
+        dbInitializer.Seed();
     }
 
     public void Dispose()
