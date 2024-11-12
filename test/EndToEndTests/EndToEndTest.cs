@@ -74,7 +74,7 @@ public class EndToEndTest : SelfHostedPageTest<Program>
     }
 
     [Test]
-    public async Task MyTest()
+    public async Task TestThatOtherUserCanOnlySeeCheepOnPublicTimeline()
     {
         await Page.GotoAsync(serverAddress);
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
@@ -104,4 +104,16 @@ public class EndToEndTest : SelfHostedPageTest<Program>
         await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("Helge Hello, this is my test cheep —");
     }
 
+    [Test]
+    public async Task TestThatYouCantLoginWithWrongInformation()
+    {
+        await Page.GotoAsync(serverAddress);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Test@test");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Test");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Invalid login attempt.");
+    }
 }
