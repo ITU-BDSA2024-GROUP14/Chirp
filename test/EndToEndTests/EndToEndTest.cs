@@ -6,28 +6,17 @@ namespace EndToEndTests;
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class EndToEndTest : PageTest
+public class EndToEndTest : SelfHostedPageTest<Program>
 {
-    private string _serverAddress;
-
-    [OneTimeSetUp]
-    public void Setup()
-    {
-        var fixture = new PlaywrightWebApplicationFactory<Program>();
-        _serverAddress = fixture.ServerAddress;
-    }
 
     [Test]
     public async Task TestLoginViaUserName()
     {
-        //Arrange  
-        using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync();
-        var page = await browser.NewPageAsync();
-
+        // Arrange
+        var serverAddress = GetServerAddress();
+        
         //Act
-        await Page.GotoAsync(_serverAddress);
-        //await Page.GotoAsync("http://localhost:5273");
+        await Page.GotoAsync(serverAddress);
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("ropf@itu.dk");
@@ -42,7 +31,10 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task TestLoginViaUserName2()
     {
-        await Page.GotoAsync(_serverAddress);
+        // Arrange
+        var serverAddress = GetServerAddress();
+        
+        await Page.GotoAsync(serverAddress);
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("ropf@itu.dk");
