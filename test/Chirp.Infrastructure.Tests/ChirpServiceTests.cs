@@ -146,7 +146,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Act
         service.CreateAuthor("John Doe", "John@doe.com");
         //Assert
-        Assert.Equal("John Doe", context.Authors.First().Name);
+        Assert.Equal("John Doe", context.Authors.First().Beak);
     }
 
     [Fact]
@@ -164,7 +164,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
             timestamp: DateTime.Now);
         //Assert
         var cheep = context.Cheeps.First(cheep => cheep.Text == "This is good test CHEEP");
-        Assert.Equal("Helge", cheep.Author.Name);
+        Assert.Equal("Helge", cheep.Author.Beak);
     }
 
     [Fact]
@@ -183,8 +183,98 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
             timestamp: DateTime.Now);
         //Assert
         var cheep = context.Cheeps.First(cheep => cheep.Text == "This is good test CHEEP");
-        var author = context.Authors.First(author => author.Name == authorName);
-        Assert.Equal(authorName, cheep.Author.Name);
+        var author = context.Authors.First(author => author.Beak == authorName);
+        Assert.Equal(authorName, cheep.Author.Beak);
         Assert.NotNull(author);
+    }
+
+    [Theory]
+    [InlineData("Helge", 1)]
+    [InlineData("4567698097657", 0)]
+    [InlineData("Jacqualine Gilcoine", 32)]
+    public void GetCorrectAmountOfCheeps(string author, int amount)
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        //Act
+        var cheeps = service.GetCheepsFromAuthor(author);
+        //Assert
+        Assert.Equal(amount, cheeps.Count);
+    }
+
+    [Theory]
+    [InlineData("Jacqualine Gilcoine", 32)]
+    [InlineData("Helge", 0)]
+    public void GetCorrectAmountOfCheepsPage2(string author, int amount)
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        //Act
+        var cheeps = service.GetCheepsFromAuthor(author,2);
+        //Assert
+        Assert.Equal(amount, cheeps.Count);
+    }
+
+    [Fact]
+    public void NoDupilicateCheepsOnDifferentPages()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        var author = "Jacqualine Gilcoine";
+        //Act
+        var cheeps1 = service.GetCheepsFromAuthor(author, 1);
+        var cheeps2 = service.GetCheepsFromAuthor(author,2);
+        //Assert
+        Assert.Empty(cheeps1.Intersect(cheeps2));
+    }
+
+    [Fact]
+    public void GetAuthorByNameThatDosentExistExpectsNull()
+    {
+         //Arrange
+         _fixture.SeedDatabase();
+         using var context = _fixture.CreateContext();
+         context.Database.EnsureCreated();
+         var cheeprepo = new CheepRepository(context);
+         var authorrepo = new AuthorRepository(context);
+         var service = new ChirpService(cheeprepo, authorrepo);
+         var author = "1298Socrates";
+         //Act
+         var actual = service.GetAuthorByName(author);
+         //Assert
+         Assert.Null(actual);
+    }
+
+
+    [Fact]
+    public void GetAuthorByEmailThatDosentExistExpectsNull()
+    {
+         //Arrange
+         _fixture.SeedDatabase();
+         using var context = _fixture.CreateContext();
+         context.Database.EnsureCreated();
+         var cheeprepo = new CheepRepository(context);
+         var authorrepo = new AuthorRepository(context);
+         var service = new ChirpService(cheeprepo, authorrepo);
+         var author = "34656789@Socrates.dk";
+         //Act
+         var actual = service.GetAuthorByEmail(author);
+         //Assert
+         Assert.Null(actual);
     }
 }

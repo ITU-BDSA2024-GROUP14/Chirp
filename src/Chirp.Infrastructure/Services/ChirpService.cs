@@ -42,14 +42,6 @@ public class ChirpService : IChirpService
         _cheepRepository.CreateCheep(author, text, timestamp);
     }
 
-    /*private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
-    {
-        // Unix timestamp //is seconds past epoch
-        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
-    }*/
-
     public AuthorDTO? GetAuthorByName(string authorName)
     {
         var author = _authorRepository.GetAuthorByName(authorName);
@@ -58,7 +50,7 @@ public class ChirpService : IChirpService
             return null;
         }
 
-        var dto = new AuthorDTO { Name = author.Name, Email = author.Email };
+        var dto = new AuthorDTO { Name = author.Beak, Email = author.Email };
         return dto;
     }
 
@@ -70,7 +62,7 @@ public class ChirpService : IChirpService
             return null;
         }
 
-        var dto = new AuthorDTO { Name = author.Name, Email = author.Email };
+        var dto = new AuthorDTO { Name = author.Beak, Email = author.Email };
         return dto;
     }
 
