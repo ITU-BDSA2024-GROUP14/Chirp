@@ -73,5 +73,35 @@ public class EndToEndTest : SelfHostedPageTest<Program>
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "login" })).ToBeVisibleAsync();
     }
 
+    [Test]
+    public async Task MyTest()
+    {
+        await Page.GotoAsync(serverAddress);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("ropf@itu.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.Locator("#Message").ClickAsync();
+        await Page.Locator("#Message").FillAsync("Hello, this is my test cheep");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Helge Hello, this is my test cheep —");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Helge]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Helge Hello, this is my test cheep —");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Helge]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Helge Hello, this is my test cheep —");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("Helge Hello, this is my test cheep —");
+    }
 
 }
