@@ -102,6 +102,16 @@ public class PlaywrightWebApplicationFactory<TProgram> : WebApplicationFactory<T
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
+            
+            var dbInitializerDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IDbInitializer));
+
+            if (dbInitializerDescriptor != null)
+            {
+                services.Remove(dbInitializerDescriptor);
+            }
+            
+            services.AddSingleton<IDbInitializer, TestDbInitializer>();
         });
 
         builder.UseEnvironment("Development");
