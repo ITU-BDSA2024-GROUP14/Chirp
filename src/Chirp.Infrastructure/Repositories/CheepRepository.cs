@@ -43,7 +43,7 @@ public class CheepRepository : ICheepRepository
     public IEnumerable<Cheep> GetCheepsByAuthor(string authorUsername, int skip = 0, int? size = null)
     {
         var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        query = query.Where(Cheep => Cheep.Author.Name == authorUsername);
+        query = query.Where(Cheep => Cheep.Author.Beak == authorUsername);
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
         query = query.Skip(skip);
 
@@ -58,7 +58,7 @@ public class CheepRepository : ICheepRepository
     public Cheep CreateCheep(Author author, string text, DateTime timestamp)
     {
         var cheep = new Cheep { Author = author, Text = text, TimeStamp = timestamp };
-        if (cheep.Text.Length >= Cheep.MaxLength)
+        if (cheep.Text.Length > Cheep.MaxLength)
         {
             throw new CheepTooLongException(cheep);
         }

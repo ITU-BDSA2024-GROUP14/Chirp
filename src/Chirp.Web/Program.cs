@@ -1,8 +1,10 @@
 using Chirp.Core.DataModel;
+using Chirp.Infrastructure;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Chirp.Web;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,6 +16,7 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IChirpService, ChirpService>();
 builder.Services.AddSingleton<IDbInitializer, DbInitializer>();
+builder.Services.AddTransient<IClaimsTransformation, AuthorClaimsTransformation>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));

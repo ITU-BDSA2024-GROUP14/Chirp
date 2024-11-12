@@ -89,7 +89,7 @@ public class ExternalLoginModel : PageModel
 
         [DisplayName]
         [Display(Name = "Username")]
-        public string DisplayName { get; set; }
+        public string Beak { get; set; }
     }
 
     public IActionResult OnGet()
@@ -148,7 +148,7 @@ public class ExternalLoginModel : PageModel
 
             if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
             {
-                Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                Input.Beak = info.Principal.FindFirstValue(ClaimTypes.Name);
             }
 
             return Page();
@@ -169,7 +169,7 @@ public class ExternalLoginModel : PageModel
         if (ModelState.IsValid)
         {
             var user = CreateUser();
-            user.Name = Input.DisplayName ?? throw new MissingFieldException();
+            user.Beak = Input.Beak ?? throw new MissingFieldException();
             user.Email = Input.Email ?? throw new MissingFieldException();
             await _userStore.SetUserNameAsync(user, Input.DisplayName, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
