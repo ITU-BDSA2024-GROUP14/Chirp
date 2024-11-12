@@ -20,10 +20,6 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task TestLoginViaUserName()
     {
-        //Arrange  
-        using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync();
-        var page = await browser.NewPageAsync();
 
         //Act
         await Page.GotoAsync(_serverAddress);
