@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IntegrationTests;
+namespace TestHelpers;
 
 //Class based on code from .net documentation https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
@@ -38,6 +38,16 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
+            
+            var dbInitializerDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IDbInitializer));
+
+            if (dbInitializerDescriptor != null)
+            {
+                services.Remove(dbInitializerDescriptor);
+            }
+            
+            services.AddScoped<IDbInitializer, TestDbInitializer>();
         });
 
         builder.UseEnvironment("Development");
