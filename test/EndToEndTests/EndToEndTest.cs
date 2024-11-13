@@ -19,8 +19,6 @@ public class EndToEndTest : SelfHostedPageTest<Program>
     [Test]
     public async Task TestLoginViaUserName()
     {
-        
-        
         //Act
         await Page.GotoAsync(serverAddress);
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
