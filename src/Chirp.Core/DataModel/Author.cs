@@ -20,4 +20,6 @@ public class Author : IdentityUser<int>
     
     public new required string Email { get; set; }
     public List<Cheep>? Cheeps { get; set; }
+
+    public HashSet<Author> Following { get; set; } = [];
 }
