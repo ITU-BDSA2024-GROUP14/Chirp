@@ -22,8 +22,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore --no-incremental /WarnAsError
-    - name: Ensure browsers are installed
+    - name: Ensure browsers are installed in EndToEndTests
       run: pwsh test/EndToEndTests/bin/Debug/net8.0/playwright.ps1 install --with-deps
+    - name: Ensure browsers are installed in UITests
       run: pwsh test/UITests/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
       env:
