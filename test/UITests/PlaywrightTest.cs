@@ -5,7 +5,7 @@ namespace UITests;
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class PostCheepBoxTests : SelfHostedPageTest<Program>
+public class PlaywrightTests : SelfHostedPageTest<Program>
 {
     [Test]
     public async Task CheepBoxIsVisiblePublic()
