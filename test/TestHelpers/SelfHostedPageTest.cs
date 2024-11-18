@@ -1,18 +1,19 @@
 using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 
 namespace TestHelpers;
 
-public abstract class SelfHostedPageTest<TEntryPoint> : PageTest where TEntryPoint : class
+public abstract class SelfHostedPageTest : PageTest
 {
-    private readonly PlaywrightWebApplicationFactory<TEntryPoint> _webApplicationFactory;
+    public static PlaywrightWebApplicationFactory<Program>? WebApplicationFactory;
 
     public SelfHostedPageTest()
     {
-        _webApplicationFactory = new PlaywrightWebApplicationFactory<TEntryPoint>();
+        WebApplicationFactory ??= new PlaywrightWebApplicationFactory<Program>();
     }
 
     protected string GetServerAddress()
     {
-        return _webApplicationFactory.ServerAddress;
+        return WebApplicationFactory!.ServerAddress;
     }
 }
