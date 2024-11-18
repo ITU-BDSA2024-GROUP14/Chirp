@@ -22,4 +22,4 @@ public class Author : IdentityUser<int>
     public List<Cheep>? Cheeps { get; set; }
 
     public List<int> Following { get; set; } = [];
-}Following
+}
