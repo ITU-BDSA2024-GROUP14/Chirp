@@ -137,7 +137,6 @@ public class ExternalLoginModel : PageModel
         else
         {
             // If the user does not have an account, then ask the user to create an account.
-            ReturnUrl = returnUrl;
             ProviderDisplayName = info.ProviderDisplayName;
             Input = new InputModel();
             if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
@@ -151,7 +150,7 @@ public class ExternalLoginModel : PageModel
                 Input.Beak = info.Principal.FindFirstValue(ClaimTypes.Name);
             }
 
-            return await OnPostConfirmationAsync();
+            return await OnPostConfirmationAsync(returnUrl);
         }
     }
 
