@@ -26,6 +26,18 @@
             @foreach (var cheep in Model.Cheeps)
             {
                 <li>
+                    @if (User.Identity is { IsAuthenticated: true })
+                    {
+                        @if (!Model.CheckIfFollowing(cheep.Author))
+                        {
+                            <div class="follow">
+                                <form method="post" asp-page-handler="Follow">
+                                    <input type="hidden" name="toFollowAuthorName" value="@cheep.Author"/>
+                                    <button type="submit">Follow</button>
+                                </form>
+                            </div>
+                        }
+                    }
                     <p>
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>

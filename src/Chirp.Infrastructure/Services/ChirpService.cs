@@ -1,3 +1,4 @@
+using System.Data;
 using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Repositories;
 
@@ -69,5 +70,34 @@ public class ChirpService : IChirpService
     public void CreateAuthor(string authorName, string authorEmail)
     {
         _authorRepository.CreateAuthor(authorName, authorEmail);
+    }
+
+    public void FollowUser(string userName, string toFollowAuthorName)
+    {
+        var user = _authorRepository.GetAuthorByName(userName);
+        if (user == null)
+        {
+            throw new NoNullAllowedException("Logged in user does not exist.");
+        }
+
+        var toFollow = _authorRepository.GetAuthorByName(toFollowAuthorName);
+        if (toFollow == null)
+        {
+            throw new NoNullAllowedException("User to be followed does not exist.");
+        }
+
+        _authorRepository.FollowUser(user, toFollow);
+    }
+
+    public bool CheckIfFollowing(string authorName, string followingAuthorName)
+    {
+        var following = _authorRepository.GetFollowing(authorName);
+        var author = _authorRepository.GetAuthorByName(followingAuthorName);
+        if (author is null)
+        {
+            throw new NullReferenceException("User does not exist.");
+        }
+
+        return following.Contains(author.AuthorId);
     }
 }

@@ -45,4 +45,22 @@ public class AuthorRepository : IAuthorRepository
         _dbcontext.SaveChanges();
         return author;
     }
+
+    public void FollowUser(Author user, Author toFollowAuthor)
+    {
+        if (user.Following.Contains(toFollowAuthor.AuthorId))
+        {
+            return;
+        }
+
+        _dbcontext.Authors.Update(user);
+        user.Following.Add(toFollowAuthor.AuthorId);
+        _dbcontext.SaveChanges();
+    }
+
+    public List<int> GetFollowing(string authorName)
+    {
+        var author = _dbcontext.Authors.First(author => author.Beak == authorName);
+        return author.Following;
+    }
 }

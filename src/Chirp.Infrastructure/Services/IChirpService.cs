@@ -10,4 +10,6 @@ public interface IChirpService
     public AuthorDTO? GetAuthorByName(string authorName);
     public AuthorDTO? GetAuthorByEmail(string authorEmail);
     public void CreateAuthor(string authorName, string authorEmail);
+    public void FollowUser(string authorName, string toFollowAuthorName);
+    bool CheckIfFollowing(string authorName, string followingAuthorName);
 }

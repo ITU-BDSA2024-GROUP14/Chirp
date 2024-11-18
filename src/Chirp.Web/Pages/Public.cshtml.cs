@@ -4,6 +4,7 @@ using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Chirp.Web.Pages;
 
@@ -23,6 +24,30 @@ public class PublicModel : PageModel
     {
         _service = service;
         Message = "";
+    }
+
+    public IActionResult OnPostFollow(string toFollowAuthorName)
+    {
+        //await FollowUserAsync(toFollowAuthorName);
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        if (authorName == null)
+        {
+            throw new NullReferenceException("Can't follow user since the logged in user does not exist.");
+        }
+
+        _service.FollowUser(authorName, toFollowAuthorName);
+        return RedirectToPage();
+    }
+
+    public bool CheckIfFollowing(string followingAuthorName)
+    {
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        if (authorName == null)
+        {
+            throw new NullReferenceException("Can't follow user since the logged in user does not exist.");
+        }
+
+        return _service.CheckIfFollowing(authorName, followingAuthorName);
     }
 
     public ActionResult OnGet([FromQuery] int page = 1)
