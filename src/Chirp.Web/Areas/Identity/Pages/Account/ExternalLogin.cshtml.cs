@@ -171,7 +171,7 @@ public class ExternalLoginModel : PageModel
             var user = CreateUser();
             user.Beak = Input.Beak ?? throw new MissingFieldException();
             user.Email = Input.Email ?? throw new MissingFieldException();
-            await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+            await _userStore.SetUserNameAsync(user, Input.Beak, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
             var result = await _userManager.CreateAsync(user);
