@@ -151,7 +151,7 @@ public class ExternalLoginModel : PageModel
                 Input.Beak = info.Principal.FindFirstValue(ClaimTypes.Name);
             }
 
-            return Page();
+            return await OnPostConfirmationAsync();
         }
     }
 
