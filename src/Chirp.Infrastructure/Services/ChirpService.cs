@@ -35,6 +35,16 @@ public class ChirpService : IChirpService
             .ToList();
     }
 
+    public List<CheepDTO> GetCheepsFromAuthor(int authorId, int page = 1)
+    {
+        // filter by the provided author name
+        var skip = PageSize * (page - 1);
+        return _cheepRepository
+            .GetCheepsByAuthor(skip: skip, size: PageSize, authorId: authorId)
+            .Select(x => new CheepDTO(x))
+            .ToList();
+    }
+
     public void CreateCheep(string authorName, string authorEmail, string text, DateTime timestamp)
     {
         var author = _authorRepository.GetAuthorByName(authorName) ??
@@ -105,6 +115,13 @@ public class ChirpService : IChirpService
 
         _authorRepository.UnFollowUser(user, toUnFollow);
     }
+
+    public List<int> GetFollowing(string loggedInBeak)
+    {
+        return _authorRepository.GetFollowing(loggedInBeak);
+    }
+
+
 
     public bool CheckIfFollowing(string authorName, string followingAuthorName)
     {
