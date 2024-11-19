@@ -57,7 +57,7 @@ public class PublicModel : PageModel
         var userBeak = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
         if (userBeak == null)
         {
-            throw new NullReferenceException("Can't follow user since the logged in user does not exist.");
+            throw new NullReferenceException("Can't get logged in user name, since there is no user logged in");
         }
 
         return userBeak;

@@ -27,6 +27,22 @@ public class UserTimelineModel : PageModel
     public ActionResult OnGet(string authorName, [FromQuery] int page = 1)
     {
         Cheeps = _service.GetCheepsFromAuthor(authorName, page);
+        if (User.Identity is not { IsAuthenticated: true })
+        {
+            return Page();
+        }
+        var loggedInBeak = GetLoggedInBeak();
+
+        if (loggedInBeak != authorName)
+        {
+            return Page();
+        }
+
+        var followList = _service.GetFollowing(loggedInBeak);
+        foreach (var authorId in followList)
+        {
+            Cheeps.AddRange(_service.GetCheepsFromAuthor(authorId));
+        }
         return Page();
     }
 
@@ -51,5 +67,16 @@ public class UserTimelineModel : PageModel
 
         _service.CreateCheep(author.Name, author.Email, Message, DateTime.Now);
         return RedirectToPage("./UserTimeline", new { authorName });
+    }
+
+    private string GetLoggedInBeak()
+    {
+        var userBeak = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        if (userBeak == null)
+        {
+            throw new NullReferenceException("Can't get logged in user name, since there is no user logged in");
+        }
+
+        return userBeak;
     }
 }
