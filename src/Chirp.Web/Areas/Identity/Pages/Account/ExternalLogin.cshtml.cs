@@ -137,7 +137,6 @@ public class ExternalLoginModel : PageModel
         else
         {
             // If the user does not have an account, then ask the user to create an account.
-            ReturnUrl = returnUrl;
             ProviderDisplayName = info.ProviderDisplayName;
             Input = new InputModel();
             if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
@@ -151,7 +150,7 @@ public class ExternalLoginModel : PageModel
                 Input.Beak = info.Principal.FindFirstValue(ClaimTypes.Name);
             }
 
-            return Page();
+            return await OnPostConfirmationAsync(returnUrl);
         }
     }
 
@@ -171,7 +170,7 @@ public class ExternalLoginModel : PageModel
             var user = CreateUser();
             user.Beak = Input.Beak ?? throw new MissingFieldException();
             user.Email = Input.Email ?? throw new MissingFieldException();
-            await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+            await _userStore.SetUserNameAsync(user, Input.Beak, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
             var result = await _userManager.CreateAsync(user);

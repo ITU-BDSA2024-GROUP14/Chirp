@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 namespace TestHelpers;
@@ -103,16 +104,12 @@ public class PlaywrightWebApplicationFactory<TProgram> : WebApplicationFactory<T
                 options.UseSqlite(connection);
             });
             
-            var dbInitializerDescriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(IDbInitializer));
-
-            if (dbInitializerDescriptor != null)
-            {
-                services.Remove(dbInitializerDescriptor);
-            }
-            
+            services.RemoveAll<IDbInitializer>();
             services.AddScoped<IDbInitializer, TestDbInitializer>();
+            
         });
+        
+        
 
         builder.UseEnvironment("Development");
     }

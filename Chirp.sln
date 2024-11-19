@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Infrastructure.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Infrastructure", "src\Chirp.Infrastructure\Chirp.Infrastructure.csproj", "{B1207B10-20E5-4644-A838-B8E98FF27156}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndToEndTests", "test\EndToEndTests\EndToEndTests.csproj", "{85A569B2-65E6-4752-98C6-CC1E86ECC3E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITests", "test\UITests\UITests.csproj", "{85A569B2-65E6-4752-98C6-CC1E86ECC3E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
