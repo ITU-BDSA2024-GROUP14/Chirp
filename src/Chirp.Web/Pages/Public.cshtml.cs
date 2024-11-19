@@ -29,14 +29,38 @@ public class PublicModel : PageModel
     public IActionResult OnPostFollow(string toFollowAuthorName)
     {
         //await FollowUserAsync(toFollowAuthorName);
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
-        if (authorName == null)
+        if (!CheckIfFollowing(toFollowAuthorName))
+        {
+            FollowUser(toFollowAuthorName);
+        }
+        else
+        {
+            UnFollowUser(toFollowAuthorName);
+        }
+        return RedirectToPage();
+    }
+
+    private void FollowUser(string toFollowAuthorName)
+    {
+        var authorName = GetLoggedInBeak();
+        _service.FollowUser(authorName, toFollowAuthorName);
+    }
+
+    private void UnFollowUser(string toUnFollowAuthorName)
+    {
+        var authorName = GetLoggedInBeak();
+        _service.UnFollowUser(authorName, toUnFollowAuthorName);
+    }
+
+    private string GetLoggedInBeak()
+    {
+        var userBeak = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        if (userBeak == null)
         {
             throw new NullReferenceException("Can't follow user since the logged in user does not exist.");
         }
 
-        _service.FollowUser(authorName, toFollowAuthorName);
-        return RedirectToPage();
+        return userBeak;
     }
 
     public bool CheckIfFollowing(string followingAuthorName)

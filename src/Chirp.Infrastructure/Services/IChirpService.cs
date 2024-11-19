@@ -12,4 +12,5 @@ public interface IChirpService
     public void CreateAuthor(string authorName, string authorEmail);
     public void FollowUser(string authorName, string toFollowAuthorName);
     bool CheckIfFollowing(string authorName, string followingAuthorName);
+    void UnFollowUser(string authorName, string toUnFollowAuthorName);
 }

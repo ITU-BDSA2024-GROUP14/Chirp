@@ -89,6 +89,23 @@ public class ChirpService : IChirpService
         _authorRepository.FollowUser(user, toFollow);
     }
 
+    public void UnFollowUser(string authorName, string toUnFollowAuthorName)
+    {
+        var user = _authorRepository.GetAuthorByName(authorName);
+        if (user == null)
+        {
+            throw new NoNullAllowedException("Logged in user does not exist.");
+        }
+
+        var toUnFollow = _authorRepository.GetAuthorByName(toUnFollowAuthorName);
+        if (toUnFollow == null)
+        {
+            throw new NoNullAllowedException("User to be followed does not exist.");
+        }
+
+        _authorRepository.UnFollowUser(user, toUnFollow);
+    }
+
     public bool CheckIfFollowing(string authorName, string followingAuthorName)
     {
         var following = _authorRepository.GetFollowing(authorName);
@@ -100,4 +117,5 @@ public class ChirpService : IChirpService
 
         return following.Contains(author.AuthorId);
     }
+
 }
