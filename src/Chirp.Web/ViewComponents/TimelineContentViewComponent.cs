@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.ViewComponents;
 
-public class CheepTimelineViewComponent : ViewComponent
+public class TimelineContentViewComponent : ViewComponent
 {
     public IViewComponentResult Invoke(TimelineModel model)
     {
-        return View("CheepTimeline");
+        return View("TimelineContent");
     }
 }
