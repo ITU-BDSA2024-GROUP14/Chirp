@@ -26,9 +26,9 @@ public class UserTimelineModel : PageModel
 
     public ActionResult OnGet(string authorName, [FromQuery] int page = 1)
     {
-        Cheeps = _service.GetCheepsFromAuthor(authorName, page);
         if (User.Identity is not { IsAuthenticated: true })
         {
+            Cheeps = _service.GetCheepsFromAuthor(authorName, page);
             return Page();
         }
         var loggedInBeak = GetLoggedInBeak();
@@ -37,12 +37,9 @@ public class UserTimelineModel : PageModel
         {
             return Page();
         }
-
         var followList = _service.GetFollowing(loggedInBeak);
-        foreach (var authorBeak in followList)
-        {
-            Cheeps.AddRange(_service.GetCheepsFromAuthor(authorBeak));
-        }
+        followList.Add(authorName);
+        Cheeps = _service.GetCheepsFromMultipleAuthors(followList);
         return Page();
     }
 

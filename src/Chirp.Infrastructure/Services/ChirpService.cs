@@ -27,10 +27,16 @@ public class ChirpService : IChirpService
 
     public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1)
     {
+        List<string> tempList = [author];
+        return GetCheepsFromMultipleAuthors(tempList, page);
+    }
+
+    public List<CheepDTO> GetCheepsFromMultipleAuthors(List<string> authorList, int page = 1)
+    {
         // filter by the provided author name
         var skip = PageSize * (page - 1);
         return _cheepRepository
-            .GetCheepsByAuthor(skip: skip, size: PageSize, author: author)
+            .GetCheepsByAuthor(skip: skip, size: PageSize, authorUsernameList: authorList)
             .Select(x => new CheepDTO(x))
             .ToList();
     }

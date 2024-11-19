@@ -52,7 +52,7 @@ public class PublicModel : PageModel
         _service.UnFollowUser(authorName, toUnFollowAuthorName);
     }
 
-    private string GetLoggedInBeak()
+    public string GetLoggedInBeak()
     {
         var userBeak = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
         if (userBeak == null)
