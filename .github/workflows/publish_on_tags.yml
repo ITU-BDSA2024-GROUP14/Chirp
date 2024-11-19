@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
@@ -27,6 +27,9 @@ jobs:
     - name: Ensure browsers are installed
       run: pwsh test/UITests/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
+      env:
+        authentication__github__clientId: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTID }}
+        authentication__github__clientSecret: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTSECRET }}
       run: dotnet test --no-build --verbosity normal
 
 
@@ -43,7 +46,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4  
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x        
     - name: Publish for windows x64
