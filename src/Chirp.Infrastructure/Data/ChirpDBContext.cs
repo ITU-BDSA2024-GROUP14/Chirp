@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Data;
+
 /// <summary>
 /// Represents the database context for the Chirp application.
 /// </summary>
@@ -22,7 +23,9 @@ public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
         modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
         modelBuilder.Entity<Author>().Ignore(a => a.AuthorId);
         modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(Cheep.MaxLength);
-        
+
+        modelBuilder.Entity<Author>().HasMany(a => a.Following).WithMany().UsingEntity(j => j.ToTable("Follows"));
+
         base.OnModelCreating(modelBuilder);
     }
 }
