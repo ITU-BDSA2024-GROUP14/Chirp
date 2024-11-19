@@ -27,6 +27,9 @@ jobs:
     - name: Ensure browsers are installed
       run: pwsh test/UITests/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
+      env:
+        authentication__github__clientId: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTID }}
+        authentication__github__clientSecret: ${{ secrets.AUTHENTICATION__GITHUB__CLIENTSECRET }}
       run: dotnet test --no-build --verbosity normal
 
 
