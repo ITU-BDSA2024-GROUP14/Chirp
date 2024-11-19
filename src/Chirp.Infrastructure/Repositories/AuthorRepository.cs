@@ -45,4 +45,41 @@ public class AuthorRepository : IAuthorRepository
         _dbcontext.SaveChanges();
         return author;
     }
+
+    public void FollowUser(Author user, Author toFollowAuthor)
+    {
+        if (IsFollowing(user, toFollowAuthor))
+        {
+            return;
+        }
+
+        _dbcontext.Authors.Update(user);
+        user.Following.Add(toFollowAuthor.Beak);
+        _dbcontext.SaveChanges();
+    }
+
+    public void UnFollowUser(Author user, Author toUnFollow)
+    {
+        if (!IsFollowing(user, toUnFollow))
+        {
+            return;
+        }
+
+        _dbcontext.Authors.Update(user);
+        user.Following.Remove(toUnFollow.Beak);
+        _dbcontext.SaveChanges();
+    }
+
+    private static bool IsFollowing(Author user, Author author)
+    {
+        return user.Following.Contains(author.Beak);
+    }
+
+    public List<string> GetFollowing(string authorName)
+    {
+        var author = _dbcontext.Authors.First(author => author.Beak == authorName);
+        return author.Following;
+    }
+
+
 }

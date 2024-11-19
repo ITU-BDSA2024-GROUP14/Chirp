@@ -3,6 +3,7 @@ using System;
 using Chirp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241113143149_FollowingToAuthor")]
+    partial class FollowingToAuthor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -24,6 +27,9 @@ namespace Chirp.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AuthorId1")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Beak")
@@ -41,10 +47,6 @@ namespace Chirp.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Following")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -80,6 +82,8 @@ namespace Chirp.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId1");
 
                     b.HasIndex("Beak")
                         .IsUnique();
@@ -251,6 +255,13 @@ namespace Chirp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Chirp.Core.DataModel.Author", b =>
+                {
+                    b.HasOne("Chirp.Core.DataModel.Author", null)
+                        .WithMany("Following")
+                        .HasForeignKey("AuthorId1");
+                });
+
             modelBuilder.Entity("Chirp.Core.DataModel.Cheep", b =>
                 {
                     b.HasOne("Chirp.Core.DataModel.Author", "Author")
@@ -316,6 +327,8 @@ namespace Chirp.Infrastructure.Migrations
             modelBuilder.Entity("Chirp.Core.DataModel.Author", b =>
                 {
                     b.Navigation("Cheeps");
+
+                    b.Navigation("Following");
                 });
 #pragma warning restore 612, 618
         }
