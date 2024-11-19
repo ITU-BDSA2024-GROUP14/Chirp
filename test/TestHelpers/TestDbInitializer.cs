@@ -27,7 +27,7 @@ public class TestDbInitializer : IDbInitializer
             var a10 = new Author { AuthorId = 10, Beak = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
             
             var a11 = new Author { AuthorId = 11, Beak = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), UserName = "ropf@itu.dk", EmailConfirmed = true, };
-            a11.Following.Add(a1.AuthorId);
+            a11.Following.Add(a1.Beak);
             var a12 = new Author { AuthorId = 12, Beak = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>(), UserName = "adho@itu.dk", EmailConfirmed = true};
 
             var authors = new List<Author> { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 };
