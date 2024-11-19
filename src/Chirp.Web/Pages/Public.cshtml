@@ -10,36 +10,5 @@
 
     @await Component.InvokeAsync("CheepBox", new {model = this.Model})
 
-    @if (Model.Cheeps.Any())
-    {
-        <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
-                <li>
-                    @if (User.Identity is { IsAuthenticated: true } && cheep.Author != Model.GetLoggedInBeak())
-                    {
-                        {
-                            <div class="flipFollow">
-                                <form method="post" asp-page-handler="FlipFollow">
-                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                    <button type="submit">@(Model.CheckIfFollowing(cheep.Author) ? "Unfollow" : "Follow")</button>
-                                </form>
-                            </div>
-                        }
-                    }
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.Timestamp</small>
-                    </p>
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <em>There are no cheeps so far.</em>
-    }
+    @await Component.InvokeAsync("CheepTimeline", new {model = this.Model})
 </div>

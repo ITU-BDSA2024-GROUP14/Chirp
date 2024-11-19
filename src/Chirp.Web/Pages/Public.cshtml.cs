@@ -11,51 +11,8 @@ namespace Chirp.Web.Pages;
 
 public class PublicModel : TimelineModel
 {
-    private readonly IChirpService _service;
-
-    public List<CheepDTO> Cheeps { get; set; } = [];
-
-    public PublicModel(IChirpService service)
+    public PublicModel(IChirpService service) : base(service)
     {
-        _service = service;
-        Message = "";
-    }
-
-    public IActionResult OnPostFlipFollow(string authorName)
-    {
-        //await FollowUserAsync(toFollowAuthorName);
-        if (!CheckIfFollowing(authorName))
-        {
-            FollowUser(authorName);
-        }
-        else
-        {
-            UnFollowUser(authorName);
-        }
-        return RedirectToPage();
-    }
-
-    private void FollowUser(string toFollowAuthorName)
-    {
-        var authorName = GetLoggedInBeak();
-        _service.FollowUser(authorName, toFollowAuthorName);
-    }
-
-    private void UnFollowUser(string toUnFollowAuthorName)
-    {
-        var authorName = GetLoggedInBeak();
-        _service.UnFollowUser(authorName, toUnFollowAuthorName);
-    }
-
-    public bool CheckIfFollowing(string followingAuthorName)
-    {
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
-        if (authorName == null)
-        {
-            throw new NullReferenceException("Can't follow user since the logged in user does not exist.");
-        }
-
-        return _service.CheckIfFollowing(authorName, followingAuthorName);
     }
 
     public ActionResult OnGet([FromQuery] int page = 1)
