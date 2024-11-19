@@ -30,9 +30,9 @@
                     {
                         //@if (!Model.CheckIfFollowing(cheep.Author))
                         {
-                            <div class="follow">
-                                <form method="post" asp-page-handler="Follow">
-                                    <input type="hidden" name="toFollowAuthorName" value="@cheep.Author"/>
+                            <div class="flipFollow">
+                                <form method="post" asp-page-handler="FlipFollow">
+                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
                                     <button type="submit">@(Model.CheckIfFollowing(cheep.Author) ? "Unfollow" : "Follow")</button>
                                 </form>
                             </div>

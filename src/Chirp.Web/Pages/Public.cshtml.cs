@@ -26,16 +26,16 @@ public class PublicModel : PageModel
         Message = "";
     }
 
-    public IActionResult OnPostFollow(string toFollowAuthorName)
+    public IActionResult OnPostFlipFollow(string authorName)
     {
         //await FollowUserAsync(toFollowAuthorName);
-        if (!CheckIfFollowing(toFollowAuthorName))
+        if (!CheckIfFollowing(authorName))
         {
-            FollowUser(toFollowAuthorName);
+            FollowUser(authorName);
         }
         else
         {
-            UnFollowUser(toFollowAuthorName);
+            UnFollowUser(authorName);
         }
         return RedirectToPage();
     }
