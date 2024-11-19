@@ -6,9 +6,5 @@
 }
 
 <div>
-    <h2> Public Timeline </h2>
-
-    @await Component.InvokeAsync("CheepBox", new {model = this.Model})
-
-    @await Component.InvokeAsync("TimelineContent", new {model = this.Model})
+    @await Component.InvokeAsync("Timeline", new {model = this.Model, timelineOwner = "Public"})
 </div>

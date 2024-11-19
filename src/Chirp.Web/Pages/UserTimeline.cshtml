@@ -7,9 +7,5 @@
 }
 
 <div>
-    <h2> @routeName's Timeline </h2>
-
-    @await Component.InvokeAsync("CheepBox", new {model = this.Model})
-
-    @await Component.InvokeAsync("TimelineContent", new {model = this.Model})
+    @await Component.InvokeAsync("Timeline", new {model = this.Model, timelineOwner = @routeName + "'s"})
 </div>
