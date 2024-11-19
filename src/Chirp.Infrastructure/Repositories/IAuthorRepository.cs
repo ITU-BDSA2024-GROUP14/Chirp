@@ -8,6 +8,6 @@ public interface IAuthorRepository
     public Author? GetAuthorByEmail(string authorEmail);
     public Author CreateAuthor(string authorName, string authorEmail);
     public void FollowUser(Author user, Author toFollowAuthor);
-    public List<int> GetFollowing(string authorName);
+    public List<string> GetFollowing(string authorName);
     void UnFollowUser(Author user, Author toUnFollow);
 }

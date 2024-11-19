@@ -21,5 +21,5 @@ public class Author : IdentityUser<int>
     public new required string Email { get; set; }
     public List<Cheep>? Cheeps { get; set; }
 
-    public List<int> Following { get; set; } = [];
+    public List<string> Following { get; set; } = [];
 }

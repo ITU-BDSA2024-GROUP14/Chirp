@@ -55,21 +55,6 @@ public class CheepRepository : ICheepRepository
         return query.ToList();
     }
 
-    public IEnumerable<Cheep> GetCheepsByAuthor(int authorId, int skip = 0, int? size = null)
-    {
-        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        query = query.Where(Cheep => Cheep.Author.Id == authorId);
-        query = query.OrderByDescending(cheep => cheep.TimeStamp);
-        query = query.Skip(skip);
-
-        if (size != null)
-        {
-            query = query.Take((int)size);
-        }
-
-        return query.ToList();
-    }
-
     public Cheep CreateCheep(Author author, string text, DateTime timestamp)
     {
         var cheep = new Cheep { Author = author, Text = text, TimeStamp = timestamp };

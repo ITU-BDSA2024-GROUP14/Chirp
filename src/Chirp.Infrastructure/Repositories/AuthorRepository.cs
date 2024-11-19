@@ -54,7 +54,7 @@ public class AuthorRepository : IAuthorRepository
         }
 
         _dbcontext.Authors.Update(user);
-        user.Following.Add(toFollowAuthor.AuthorId);
+        user.Following.Add(toFollowAuthor.Beak);
         _dbcontext.SaveChanges();
     }
 
@@ -66,16 +66,16 @@ public class AuthorRepository : IAuthorRepository
         }
 
         _dbcontext.Authors.Update(user);
-        user.Following.Remove(toUnFollow.AuthorId);
+        user.Following.Remove(toUnFollow.Beak);
         _dbcontext.SaveChanges();
     }
 
     private static bool IsFollowing(Author user, Author author)
     {
-        return user.Following.Contains(author.AuthorId);
+        return user.Following.Contains(author.Beak);
     }
 
-    public List<int> GetFollowing(string authorName)
+    public List<string> GetFollowing(string authorName)
     {
         var author = _dbcontext.Authors.First(author => author.Beak == authorName);
         return author.Following;

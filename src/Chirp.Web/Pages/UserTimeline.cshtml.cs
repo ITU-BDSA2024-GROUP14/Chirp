@@ -39,9 +39,9 @@ public class UserTimelineModel : PageModel
         }
 
         var followList = _service.GetFollowing(loggedInBeak);
-        foreach (var authorId in followList)
+        foreach (var authorBeak in followList)
         {
-            Cheeps.AddRange(_service.GetCheepsFromAuthor(authorId));
+            Cheeps.AddRange(_service.GetCheepsFromAuthor(authorBeak));
         }
         return Page();
     }
