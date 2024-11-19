@@ -28,7 +28,7 @@ public class TestDbInitializer : IDbInitializer
             var a9 = new Author { AuthorId = 9, Beak = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
             var a10 = new Author { AuthorId = 10, Beak = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
             
-            var a11 = new Author { AuthorId = 11, Beak = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), UserName = "ropf@itu.dk", EmailConfirmed = true};
+            var a11 = new Author { AuthorId = 11, Beak = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), UserName = "ropf@itu.dk", EmailConfirmed = true, };
             var a12 = new Author { AuthorId = 12, Beak = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>(), UserName = "adho@itu.dk", EmailConfirmed = true};
             var a13 = new Author() { AuthorId = 13, Beak = "Esser", Email = "jones@itu.dk", Cheeps = new List<Cheep>() };
 
@@ -47,7 +47,8 @@ public class TestDbInitializer : IDbInitializer
                 authors.Add(a12);
             }
             
-            
+            a11.Following.Add(a1);
+
             var c0 = new Cheep() { CheepId = 658, AuthorId = a13.AuthorId, Author = a13, Text = "This cheep only exists in test data, (not production)", TimeStamp = DateTime.Parse("1812-11-04 12:11:12") };
 
             var c1 = new Cheep() { CheepId = 1, AuthorId = a10.AuthorId, Author = a10, Text = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };

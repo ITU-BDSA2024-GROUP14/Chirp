@@ -1,3 +1,4 @@
+using System.Data;
 using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Repositories;
 
@@ -26,10 +27,16 @@ public class ChirpService : IChirpService
 
     public List<CheepDTO> GetCheepsFromAuthor(string author, int page = 1)
     {
+        List<string> tempList = [author];
+        return GetCheepsFromMultipleAuthors(tempList, page);
+    }
+
+    public List<CheepDTO> GetCheepsFromMultipleAuthors(List<string> authorList, int page = 1)
+    {
         // filter by the provided author name
         var skip = PageSize * (page - 1);
         return _cheepRepository
-            .GetCheepsByAuthor(skip: skip, size: PageSize, author: author)
+            .GetCheepsByAuthor(skip: skip, size: PageSize, authorUsernameList: authorList)
             .Select(x => new CheepDTO(x))
             .ToList();
     }
@@ -70,4 +77,58 @@ public class ChirpService : IChirpService
     {
         _authorRepository.CreateAuthor(authorName, authorEmail);
     }
+
+    public void FollowUser(string userName, string toFollowAuthorName)
+    {
+        var user = _authorRepository.GetAuthorByName(userName);
+        if (user == null)
+        {
+            throw new NoNullAllowedException("Logged in user does not exist.");
+        }
+
+        var toFollow = _authorRepository.GetAuthorByName(toFollowAuthorName);
+        if (toFollow == null)
+        {
+            throw new NoNullAllowedException("User to be followed does not exist.");
+        }
+
+        _authorRepository.FollowUser(user, toFollow);
+    }
+
+    public void UnFollowUser(string authorName, string toUnFollowAuthorName)
+    {
+        var user = _authorRepository.GetAuthorByName(authorName);
+        if (user == null)
+        {
+            throw new NoNullAllowedException("Logged in user does not exist.");
+        }
+
+        var toUnFollow = _authorRepository.GetAuthorByName(toUnFollowAuthorName);
+        if (toUnFollow == null)
+        {
+            throw new NoNullAllowedException("User to be followed does not exist.");
+        }
+
+        _authorRepository.UnFollowUser(user, toUnFollow);
+    }
+
+    public List<string> GetFollowing(string loggedInBeak)
+    {
+        return _authorRepository.GetFollowing(loggedInBeak);
+    }
+
+
+
+    public bool CheckIfFollowing(string authorName, string followingAuthorName)
+    {
+        var following = _authorRepository.GetFollowing(authorName);
+        var author = _authorRepository.GetAuthorByName(followingAuthorName);
+        if (author is null)
+        {
+            throw new NullReferenceException("User does not exist.");
+        }
+
+        return following.Contains(author.Beak);
+    }
+
 }

@@ -1,6 +1,7 @@
 using Chirp.Core;
 using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Repositories;
 
@@ -44,5 +45,40 @@ public class AuthorRepository : IAuthorRepository
         _dbcontext.Authors.Add(author);
         _dbcontext.SaveChanges();
         return author;
+    }
+
+    public void FollowUser(Author user, Author toFollowAuthor)
+    {
+        if (IsFollowing(user, toFollowAuthor))
+        {
+            return;
+        }
+
+        _dbcontext.Authors.Update(user);
+        user.Following.Add(toFollowAuthor);
+        _dbcontext.SaveChanges();
+    }
+
+    public void UnFollowUser(Author user, Author toUnFollow)
+    {
+        if (!IsFollowing(user, toUnFollow))
+        {
+            return;
+        }
+
+        _dbcontext.Authors.Update(user);
+        user.Following.Remove(toUnFollow);
+        _dbcontext.SaveChanges();
+    }
+
+    private static bool IsFollowing(Author user, Author author)
+    {
+        return user.Following.Contains(author);
+    }
+
+    public List<string> GetFollowing(string authorName)
+    {
+        var author = _dbcontext.Authors.Include(author => author.Following).First(author => author.Beak == authorName);
+        return author.Following.Select(a => a.Beak).ToList();
     }
 }

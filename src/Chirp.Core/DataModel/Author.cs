@@ -14,10 +14,11 @@ public class Author : IdentityUser<int>
         get => Id;
         set => Id = value;
     }
-    
-    [PersonalData]
-    public required string Beak { get; set; }
-    
+
+    [PersonalData] public required string Beak { get; set; }
+
     public new required string Email { get; set; }
     public List<Cheep>? Cheeps { get; set; }
+
+    public List<Author> Following { get; set; } = [];
 }
