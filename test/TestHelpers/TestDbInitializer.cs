@@ -29,7 +29,6 @@ public class TestDbInitializer : IDbInitializer
             var a10 = new Author { AuthorId = 10, Beak = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
             
             var a11 = new Author { AuthorId = 11, Beak = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), UserName = "ropf@itu.dk", EmailConfirmed = true, };
-            a11.Following.Add(a1.Beak);
             var a12 = new Author { AuthorId = 12, Beak = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>(), UserName = "adho@itu.dk", EmailConfirmed = true};
             var a13 = new Author() { AuthorId = 13, Beak = "Esser", Email = "jones@itu.dk", Cheeps = new List<Cheep>() };
 
@@ -47,7 +46,8 @@ public class TestDbInitializer : IDbInitializer
                 authors.Add(a11);
                 authors.Add(a12);
             }
-
+            
+            a11.Following.Add(a1);
 
             var c0 = new Cheep() { CheepId = 658, AuthorId = a13.AuthorId, Author = a13, Text = "This cheep only exists in test data, (not production)", TimeStamp = DateTime.Parse("1812-11-04 12:11:12") };
 
