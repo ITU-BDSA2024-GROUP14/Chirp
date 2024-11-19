@@ -101,4 +101,41 @@ public class PlaywrightTest : SelfHostedPageTest
             .ToBeVisibleAsync();
         await Expect(Page.Locator("h3")).ToContainTextAsync("What's on your mind Coolguy123?");
     }
+    
+    [Test]
+    public async Task XSSAttackResiliancy()
+    {
+        bool dialogAppeared = false;
+        //Act
+        await Page.GotoAsync(serverAddress);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.Locator("#Message").ClickAsync();
+        await Page.Locator("#Message").FillAsync("\"><script>alert('XSS Test');</script>");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        
+        Page.Dialog += (_, _) =>
+        {
+            dialogAppeared = true;
+        };
+        
+        
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Adrian \"><script>alert('XSS Test');</script>");
+        Assert.That(dialogAppeared, Is.False);
+    }
+    
+    /*
+    [Test]
+    public async Task SQLInjectionResiliancy()
+    {
+        
+    }
+    
+    */
+    
+
 }
