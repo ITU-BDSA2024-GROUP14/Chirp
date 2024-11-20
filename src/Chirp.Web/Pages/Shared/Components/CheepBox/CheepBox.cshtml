@@ -1,0 +1,13 @@
+@model Chirp.Web.Pages.Shared.Models.TimelineModel
+
+@if (User.Identity is { IsAuthenticated: true })
+{
+    <div class="cheepbox">
+        <h3>What's on your mind @Model.GetLoggedInBeak()?</h3>
+        <form method="post">
+            <input style="float: left" type="text" asp-for="Message">
+            <input type="submit" value="Share">
+            <span asp-validation-for="Message"></span>
+        </form>
+    </div>
+}
