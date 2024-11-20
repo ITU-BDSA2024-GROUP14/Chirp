@@ -95,12 +95,12 @@ public class RegisterModel : PageModel
         public string ConfirmPassword { get; set; }
 
         [Required]
-        [RegularExpression("^[a-zA-Z0-9](?:[a-zA-Z0-9 _-]*[a-zA-Z0-9])?$",
+        [RegularExpression("^[a-zA-Z0-9æøåÆØÅ](?:[a-zA-Z0-9 _\\-æøåÆØÅ]*[a-zA-Z0-9æøåÆØÅ])?$",
             ErrorMessage =
                 "Your beak cannot start or end with special characters, and cannot contain any other special characters except \"-\" and \"_\".")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = 1)]
-        [Display(Name = "User Name")]
+        [Display(Name = "Beak")]
         public string Beak { get; set; }
     }
 
