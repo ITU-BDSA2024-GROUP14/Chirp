@@ -45,7 +45,7 @@ public class WebpageTests : IClassFixture<CustomWebApplicationFactory<Program>>
         var responseContent = await response.Content.ReadAsStringAsync();
 
         Assert.Contains("Chirp!", responseContent);
-        Assert.Contains($"{author}'s Timeline", responseContent);
+        Assert.Contains($"{author}&#x27;s Timeline", responseContent);
     }
 
     [Theory]
