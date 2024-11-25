@@ -277,4 +277,28 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
          //Assert
          Assert.Null(actual);
     }
+
+    [Fact]
+    public void FollowUser()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        
+        
+        //Act
+        service.FollowUser("Roger Histand", "Luanna Muro");
+        var author1 = authorrepo.GetAuthorByName("Roger Histand");
+        var author2 = authorrepo.GetAuthorByName("Luanna Muro");
+        
+        //Assert
+        Assert.NotNull(author1);
+        Assert.NotNull(author2);
+        Assert.Contains(author1.Following, author => author==author2);
+    }
+    
 }
