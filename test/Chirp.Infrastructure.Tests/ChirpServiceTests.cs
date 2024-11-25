@@ -311,11 +311,11 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
         var service = new ChirpService(cheeprepo, authorrepo);
-        service.FollowUser("Roger Histand", "Luanna Muro");
         var author1 = authorrepo.GetAuthorByName("Roger Histand");
         var author2 = authorrepo.GetAuthorByName("Luanna Muro");
         Assert.NotNull(author1);
         Assert.NotNull(author2);
+        authorrepo.FollowUser(author1, author2);
         Assert.Contains(author1.Following, author => author==author2);
         
         //Act
