@@ -26,10 +26,15 @@
 
 ## Commands
 
+### Playwright
+
+```
+pwsh bin/Debug/net8.0/playwright.ps1 codegen http://localhost:5273/
+```
+
 ### Migration
 
 ```bash
 cd src
 dotnet ef migrations add BeakDBSchema --project Chirp.Infrastructure --startup-project Chirp.Web
 ```
-
