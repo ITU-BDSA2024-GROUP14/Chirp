@@ -14,10 +14,19 @@ public class AuthorDTO
     {
         Name = author.Beak;
         Email = author.Email;
+        Cheeps = [];
         if (author.Cheeps != null)
         {
-            Cheeps = (List<CheepDTO>)author.Cheeps.Select(cheep => new CheepDTO(cheep));
+            foreach (var cheep in author.Cheeps)
+            {
+                Cheeps.Add(new CheepDTO(cheep));
+            }
         }
-        Following = (List<string>)author.Following.Select(a => a.Beak);
+
+        Following = [];
+        foreach (var a in author.Following)
+        {
+            Following.Add(a.Beak);
+        }
     }
 }
