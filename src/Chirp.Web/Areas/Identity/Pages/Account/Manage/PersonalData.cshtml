@@ -12,6 +12,22 @@
     <div class="col-md-6">
         <p>Your account contains personal data that you have given us. This page allows you to view or delete that
             data.</p>
+        <h3>Your DisplayName:</h3>
+        <p>@Model.Author.Name</p>
+        <h3>Your Email:</h3>
+        <p>@Model.Author.Email</p>
+        <h3>You are Following:</h3>
+        <ul id="messagelist" class="cheeps">
+            @foreach (var name in Model.Author.Following)
+            {
+                <li>
+                    <a href="/@name">
+                        @name
+                    </a>
+                </li>
+            }
+        </ul>
+        <h3>Your Cheeps:</h3>
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Author.Cheeps)
             {
