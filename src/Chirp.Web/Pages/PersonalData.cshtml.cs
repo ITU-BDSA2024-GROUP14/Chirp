@@ -16,16 +16,19 @@ namespace Chirp.Web.Areas.Identity.Pages;
 public class PersonalDataModel : PageModel
 {
     private readonly UserManager<Author> _userManager;
+    private readonly SignInManager<Author> _signInManager;
     private readonly ILogger<PersonalDataModel> _logger;
     private readonly IChirpService _service;
     public AuthorDTO? Author;
 
     public PersonalDataModel(
         UserManager<Author> userManager,
+        SignInManager<Author> signInManager,
         ILogger<PersonalDataModel> logger,
         IChirpService service)
     {
         _userManager = userManager;
+        _signInManager = signInManager;
         _logger = logger;
         _service = service;
     }
@@ -46,5 +49,24 @@ public class PersonalDataModel : PageModel
             Author.Following = _service.GetFollowing(authorName);
         }
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostForgetUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        }
+
+        var result = await _userManager.DeleteAsync(user);
+        var userId = await _userManager.GetUserIdAsync(user);
+        if (!result.Succeeded)
+        {
+            throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+        }
+
+        await _signInManager.SignOutAsync();
+        return Redirect("~/");
     }
 }
