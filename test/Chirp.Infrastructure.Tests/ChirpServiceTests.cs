@@ -64,6 +64,31 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Assert
         Assert.All(cheeps, cheep => Assert.Equal(expectedAuthor, cheep.Author));
     }
+    
+    [Fact]
+    public void GetCheepsFromMultipleAuthors()
+    {
+        //Arrange
+        List<String> expectedAuthors = ["Jacqualine Gilcoine", "Mellie Yost"];
+        
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        Assert.NotEmpty(service.GetCheepsFromAuthor("Jacqualine Gilcoine"));
+        Assert.NotEmpty(service.GetCheepsFromAuthor("Mellie Yost"));
+        Assert.NotEmpty(service.GetCheepsFromAuthor("Quintin Sitts"));
+        
+        //Act
+        var cheeps = service.GetCheepsFromMultipleAuthors(expectedAuthors);
+        //Assert
+        Assert.All(cheeps, cheep => Assert.Contains(expectedAuthors, author => author == cheep.Author));
+        Assert.DoesNotContain(cheeps, cheep => cheep.Author == "Quintin Sitts");
+    }
+    
+    
 
     [Fact]
     public void GetAuthorByNameNotNull()
