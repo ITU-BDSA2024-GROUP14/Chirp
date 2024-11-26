@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Core.DataModel;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Repositories;
 using TestHelpers;
 
