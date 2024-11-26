@@ -81,6 +81,10 @@ public class ChirpService : IChirpService
 
     public void FollowUser(string userName, string toFollowAuthorName)
     {
+        if (userName.Equals((toFollowAuthorName)))
+        {
+            throw new ArgumentException("User cannot follow themself.");
+        }
         var user = _authorRepository.GetAuthorByName(userName);
         if (user == null)
         {
