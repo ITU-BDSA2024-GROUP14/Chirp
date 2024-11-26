@@ -51,6 +51,7 @@ public class PersonalDataModel : PageModel
         return Page();
     }
 
+    //Method inspired by PersonalDataModel in the Identity scaffolded pages
     public async Task<IActionResult> OnPostForgetUser()
     {
         var user = await _userManager.GetUserAsync(User);
