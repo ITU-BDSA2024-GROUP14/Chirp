@@ -18,7 +18,7 @@ public class PersonalDataModel : PageModel
     private readonly UserManager<Author> _userManager;
     private readonly ILogger<PersonalDataModel> _logger;
     private readonly IChirpService _service;
-    public AuthorDTO Author;
+    public AuthorDTO? Author;
 
     public PersonalDataModel(
         UserManager<Author> userManager,
