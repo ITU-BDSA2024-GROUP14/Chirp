@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Core.DataModel;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,16 @@ public class AuthorRepository : IAuthorRepository
 
     public void FollowUser(Author user, Author toFollowAuthor)
     {
+        if (!Exists(user))
+        {
+            throw new AuthorMissingException(user.Beak);
+        }
+        
+        if (!Exists(toFollowAuthor))
+        {
+            throw new AuthorMissingException(user.Beak);
+        }
+        
         if (IsFollowing(user, toFollowAuthor))
         {
             return;
@@ -61,6 +72,16 @@ public class AuthorRepository : IAuthorRepository
 
     public void UnFollowUser(Author user, Author toUnFollow)
     {
+        if (!Exists(user))
+        {
+            throw new AuthorMissingException(user.Beak);
+        }
+        
+        if (!Exists(toUnFollow))
+        {
+            throw new AuthorMissingException(user.Beak);
+        }
+        
         if (!IsFollowing(user, toUnFollow))
         {
             return;
