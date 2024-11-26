@@ -45,8 +45,9 @@ public class ChirpService : IChirpService
     {
         var author = _authorRepository.GetAuthorByName(authorName) ??
                      _authorRepository.CreateAuthor(authorName, authorEmail);
-
-        _cheepRepository.CreateCheep(author, text, timestamp);
+        
+        var cheep = _cheepRepository.CreateCheep(author, text, timestamp);
+        _authorRepository.AddCheep(author, cheep);
     }
 
     public AuthorDTO? GetAuthorByName(string authorName)
@@ -57,7 +58,7 @@ public class ChirpService : IChirpService
             return null;
         }
 
-        var dto = new AuthorDTO { Name = author.Beak, Email = author.Email };
+        var dto = new AuthorDTO(author);
         return dto;
     }
 
@@ -69,7 +70,7 @@ public class ChirpService : IChirpService
             return null;
         }
 
-        var dto = new AuthorDTO { Name = author.Beak, Email = author.Email };
+        var dto = new AuthorDTO(author);
         return dto;
     }
 
@@ -118,7 +119,6 @@ public class ChirpService : IChirpService
     }
 
 
-
     public bool CheckIfFollowing(string authorName, string followingAuthorName)
     {
         var following = _authorRepository.GetFollowing(authorName);
@@ -130,5 +130,4 @@ public class ChirpService : IChirpService
 
         return following.Contains(author.Beak);
     }
-
 }

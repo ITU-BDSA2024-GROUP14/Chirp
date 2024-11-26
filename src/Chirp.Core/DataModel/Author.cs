@@ -17,8 +17,8 @@ public class Author : IdentityUser<int>
 
     [PersonalData] public required string Beak { get; set; }
 
-    public new required string Email { get; set; }
-    public List<Cheep>? Cheeps { get; set; }
+    [PersonalData] public new required string Email { get; set; }
+    [PersonalData] public List<Cheep>? Cheeps { get; set; }
 
-    public List<Author> Following { get; set; } = [];
+    [PersonalData] public List<Author> Following { get; set; } = [];
 }
