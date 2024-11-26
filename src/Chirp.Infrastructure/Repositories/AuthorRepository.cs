@@ -88,6 +88,11 @@ public class AuthorRepository : IAuthorRepository
         return user.Following.Contains(author);
     }
 
+    private bool Exists(Author author)
+    {
+        return _dbcontext.Authors.Any(a => a.Beak == author.Beak);
+    }
+
     public List<string> GetFollowing(string authorName)
     {
         var author = _dbcontext.Authors.Include(author => author.Following).First(author => author.Beak == authorName);
