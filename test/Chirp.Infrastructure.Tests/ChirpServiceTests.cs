@@ -350,4 +350,51 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         
     }
     
+    [Fact]
+    public void GetFollowingReturnsFollower()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        var author1 = authorrepo.GetAuthorByName("Roger Histand");
+        var author2 = authorrepo.GetAuthorByName("Luanna Muro");
+        Assert.NotNull(author1);
+        Assert.NotNull(author2);
+        authorrepo.FollowUser(author1, author2);
+        Assert.Contains(author1.Following, author => author==author2);
+        Assert.Single(author1.Following);
+        
+        //Act
+        List<String> result = service.GetFollowing("Roger Histand");
+        
+        //Assert
+        Assert.Contains(result, s => s=="Luanna Muro");
+        Assert.Single(result);
+    }
+    
+    [Fact]
+    public void GetFollowingReturnsEmpty()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        var author1 = authorrepo.GetAuthorByName("Roger Histand");
+        Assert.NotNull(author1);
+        Assert.Empty(author1.Following);
+        
+        //Act
+        List<String> result = service.GetFollowing("Roger Histand");
+        
+        //Assert
+        Assert.Empty(result);
+    }
+    
 }
