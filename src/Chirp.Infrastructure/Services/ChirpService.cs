@@ -45,9 +45,8 @@ public class ChirpService : IChirpService
     {
         var author = _authorRepository.GetAuthorByName(authorName) ??
                      _authorRepository.CreateAuthor(authorName, authorEmail);
-        
-        var cheep = _cheepRepository.CreateCheep(author, text, timestamp);
-        _authorRepository.AddCheep(author, cheep);
+
+        _cheepRepository.CreateCheep(author, text, timestamp);
     }
 
     public AuthorDTO? GetAuthorByName(string authorName)

@@ -91,19 +91,7 @@ public class AuthorRepository : IAuthorRepository
         user.Following.Remove(toUnFollow);
         _dbcontext.SaveChanges();
     }
-
-    public void AddCheep(Author author, Cheep cheep)
-    {
-        _dbcontext.Authors.Update(author);
-        if (author.Cheeps is null)
-        {
-            author.Cheeps = [];
-        }
-        author.Cheeps.Add(cheep);
-        _dbcontext.SaveChanges();
-        
-    }
-
+    
     private static bool IsFollowing(Author user, Author author)
     {
         return user.Following.Contains(author);
