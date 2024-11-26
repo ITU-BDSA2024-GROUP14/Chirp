@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Core.DataModel;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
@@ -128,7 +129,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var authorRepo = new AuthorRepository(context);
             authorRepo.FollowUser(follower, followee);
         }
-        
+
         // Assert
         using (var context = _fixture.CreateContext())
         {
@@ -156,7 +157,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
 
             // Act
             var authorRepo = new AuthorRepository(context);
-            authorRepo.FollowUser(follower, followee);
+            Assert.Throws<AuthorMissingException>(() => authorRepo.FollowUser(follower, followee));
         }
 
         // Assert
@@ -182,19 +183,19 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         {
             context.Authors.Add(followee);
             context.SaveChanges();
-            
+
             // Act
             var authorRepo = new AuthorRepository(context);
-            authorRepo.FollowUser(follower, followee);
+            Assert.Throws<AuthorMissingException>(() => authorRepo.FollowUser(follower, followee));
         }
 
         // Assert
         using (var context = _fixture.CreateContext())
         {
             Assert.False(context.Authors.Any(a => a.Beak == follower.Beak));
-            
+
             var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
-            
+
             Assert.Empty(updatedFollowee.Following);
         }
     }
@@ -212,7 +213,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         {
             // Act
             var authorRepo = new AuthorRepository(context);
-            authorRepo.FollowUser(follower, followee);
+            Assert.Throws<AuthorMissingException>(() => authorRepo.FollowUser(follower, followee));
         }
 
         // Assert
@@ -231,7 +232,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
 
         var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
         var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
-        
+
         using (var context = _fixture.CreateContext())
         {
             context.Authors.AddRange(follower, followee);
@@ -243,7 +244,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var authorRepo = new AuthorRepository(context);
             authorRepo.UnFollowUser(follower, followee);
         }
-        
+
         // Assert
         using (var context = _fixture.CreateContext())
         {
@@ -254,7 +255,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
             Assert.Empty(updatedFollowee.Following);
         }
     }
-    
+
     [Fact]
     public void MissingUserUnfollow_MissingUser_Succeeds()
     {
@@ -263,14 +264,14 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
 
         var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
         var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
-        
+
         using (var context = _fixture.CreateContext())
         {
             // Act
             var authorRepo = new AuthorRepository(context);
-            authorRepo.UnFollowUser(follower, followee);
+            Assert.Throws<AuthorMissingException>(() => authorRepo.UnFollowUser(follower, followee));
         }
-        
+
         // Assert
         using (var context = _fixture.CreateContext())
         {
@@ -284,10 +285,10 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     {
         // Arrange
         _fixture.SeedDatabase();
-        
+
         var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
         var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
-        
+
         using (var context = _fixture.CreateContext())
         {
             context.Authors.AddRange(follower, followee);
@@ -297,13 +298,13 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var authorRepo = new AuthorRepository(context);
             authorRepo.UnFollowUser(follower, followee);
         }
-        
+
         // Assert
         using (var context = _fixture.CreateContext())
         {
             var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
             var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
-            
+
             Assert.Empty(updatedFollowee.Following);
             Assert.Empty(updatedFollower.Following);
         }
@@ -314,9 +315,9 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     {
         // Arrange
         _fixture.SeedDatabase();
-        
+
         var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        
+
         using (var context = _fixture.CreateContext())
         {
             context.Authors.AddRange(follower);
@@ -326,7 +327,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var authorRepo = new AuthorRepository(context);
             authorRepo.UnFollowUser(follower, follower);
         }
-        
+
         // Assert
         using (var context = _fixture.CreateContext())
         {

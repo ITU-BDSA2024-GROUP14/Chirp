@@ -1,6 +1,7 @@
 using System.Data;
 using Chirp.Core;
 using Chirp.Core.DataModel;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
