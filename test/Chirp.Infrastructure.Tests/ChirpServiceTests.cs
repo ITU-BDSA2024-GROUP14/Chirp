@@ -143,6 +143,8 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         var cheeprepo = new CheepRepository(context);
         var authorrepo = new AuthorRepository(context);
         var service = new ChirpService(cheeprepo, authorrepo);
+        Assert.Empty(context.Authors);
+
         //Act
         service.CreateAuthor("John Doe", "John@doe.com");
         //Assert
