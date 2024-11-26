@@ -341,7 +341,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         
         
         //Act
-        Assert.ThrowsAny<Exception>(() => service.FollowUser("Roger Histand", "Roger Histand")
+        Assert.Throws<ArgumentException>(() => service.FollowUser("Roger Histand", "Roger Histand")
         );
         var author1 = authorrepo.GetAuthorByName("Roger Histand");
         
