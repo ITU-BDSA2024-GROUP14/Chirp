@@ -78,4 +78,116 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
             Assert.Equal(author.Cheeps, fromDB.Cheeps);
         }
     }
+
+    [Fact]
+    public void ExistingUserFollow_ExistingUser_Succeeds()
+    {
+        // Arrange
+        _fixture.SeedDatabase();
+
+        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
+        var followee = new Author { Beak = "Morten", Email = "morten@test.com" };
+
+        using (var context = _fixture.CreateContext())
+        {
+            context.Authors.AddRange(follower, followee);
+            context.SaveChanges();
+
+            // Act
+            var authorRepo = new AuthorRepository(context);
+            authorRepo.FollowUser(follower, followee);
+        }
+
+        // Assert
+        using (var context = _fixture.CreateContext())
+        {
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+
+            Assert.Contains(updatedFollowee, updatedFollower.Following);
+            Assert.DoesNotContain(updatedFollower, updatedFollowee.Following);
+        }
+    }
+
+    [Fact]
+    public void ExistingUserFollow_MissingUser_Fails()
+    {
+        // Arrange
+        _fixture.SeedDatabase();
+
+        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
+        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+
+        using (var context = _fixture.CreateContext())
+        {
+            context.Authors.Add(follower);
+            context.SaveChanges();
+
+            // Act
+            var authorRepo = new AuthorRepository(context);
+            authorRepo.FollowUser(follower, followee);
+        }
+
+        // Assert
+        using (var context = _fixture.CreateContext())
+        {
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
+
+            Assert.Empty(updatedFollower.Following);
+        }
+    }
+
+    [Fact]
+    public void MissingUserFollow_ExistingUser_Fails()
+    {
+        // Arrange
+        _fixture.SeedDatabase();
+
+        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
+        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+
+        using (var context = _fixture.CreateContext())
+        {
+            context.Authors.Add(followee);
+            context.SaveChanges();
+            
+            // Act
+            var authorRepo = new AuthorRepository(context);
+            authorRepo.FollowUser(follower, followee);
+        }
+
+        // Assert
+        using (var context = _fixture.CreateContext())
+        {
+            Assert.False(context.Authors.Any(a => a.Beak == follower.Beak));
+            
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+            
+            Assert.Empty(updatedFollowee.Following);
+        }
+    }
+
+    [Fact]
+    public void MissingUserFollow_MissingUser_Fails()
+    {
+        // Arrange
+        _fixture.SeedDatabase();
+
+        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
+        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+
+        using (var context = _fixture.CreateContext())
+        {
+            // Act
+            var authorRepo = new AuthorRepository(context);
+            authorRepo.FollowUser(follower, followee);
+        }
+
+        // Assert
+        using (var context = _fixture.CreateContext())
+        {
+            Assert.False(context.Authors.Any(a => a.Beak == follower.Beak));
+            Assert.False(context.Authors.Any(a => a.Beak == followee.Beak));
+        }
+    }
 }
