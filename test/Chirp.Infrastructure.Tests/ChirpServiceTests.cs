@@ -304,6 +304,28 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
     
     [Fact]
+    public void FollowUserCannotFollowSelf()
+    {
+        //Arrange
+        _fixture.SeedDatabase();
+        using var context = _fixture.CreateContext();
+        context.Database.EnsureCreated();
+        var cheeprepo = new CheepRepository(context);
+        var authorrepo = new AuthorRepository(context);
+        var service = new ChirpService(cheeprepo, authorrepo);
+        
+        
+        //Act
+        Assert.ThrowsAny<Exception>(() => service.FollowUser("Roger Histand", "Roger Histand")
+        );
+        var author1 = authorrepo.GetAuthorByName("Roger Histand");
+        
+        //Assert
+        Assert.NotNull(author1);
+        Assert.DoesNotContain(author1.Following, author => author==author1);
+    }
+    
+    [Fact]
     public void UnFollowUser()
     {
         //Arrange
