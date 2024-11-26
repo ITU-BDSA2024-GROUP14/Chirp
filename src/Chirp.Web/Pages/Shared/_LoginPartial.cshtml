@@ -3,8 +3,8 @@
     <div>
         <a href="/@(User.Claims.FirstOrDefault(c => c.Type == "Beak")?.Value)">my timeline</a> |
         <a href="/">public timeline</a> |
-        <a asp-area="Identity" asp-page="/Account/Manage/PersonalData">about me</a> |
-        <a asp-area="Identity" asp-page="/Account/Logout">logout [@(User.Claims.FirstOrDefault(c => c.Type == "Beak")?.Value)]</a>
+        <a asp-page="PersonalData">about me</a> |
+        <a asp-area="Identity" asp-page="/Account/Logout">logout [@(User.Claims.FirstOrDefault(c => c.Type == "Beak")?.Value)]</a> |
     </div>
 }
 else
