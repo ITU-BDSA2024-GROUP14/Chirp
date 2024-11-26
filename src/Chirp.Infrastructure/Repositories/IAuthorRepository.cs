@@ -10,5 +10,4 @@ public interface IAuthorRepository
     public void FollowUser(Author user, Author toFollowAuthor);
     public List<string> GetFollowing(string authorName);
     void UnFollowUser(Author user, Author toUnFollow);
-    public void AddCheep(Author author, Cheep cheep);
 }
