@@ -1,4 +1,5 @@
 using System.Data;
+using Chirp.Core.DataModel;
 using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Repositories;
@@ -130,11 +131,7 @@ public class ChirpService : IChirpService
             throw new AuthorMissingException(authorName);
         }
 
-        var originalPost = _cheepRepository.GetOriginalCheepById(cheepId);
-        if (originalPost is null)
-        {
-            throw new CheepNotFoundException(cheepId);
-        }
+        var originalPost = (OriginalCheep)_cheepRepository.GetCheepById(cheepId);
         
         _cheepRepository.CreateRepost(author, originalPost, DateTime.Now);
     }

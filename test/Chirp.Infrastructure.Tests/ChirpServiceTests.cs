@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore.Storage;

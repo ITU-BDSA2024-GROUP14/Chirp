@@ -82,9 +82,9 @@ public class CheepRepository : ICheepRepository
         return cheep;
     }
 
-    public OriginalCheep GetOriginalCheepById(int cheepId)
+    public Cheep GetCheepById(int cheepId)
     {
-        var cheep = _dbcontext.OriginalCheeps.Find(cheepId);
+        var cheep = _dbcontext.Cheeps.Find(cheepId);
         if (cheep == null)
         {
             throw new CheepNotFoundException(cheepId);
