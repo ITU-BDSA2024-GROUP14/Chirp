@@ -20,7 +20,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByNameTest()
+    public void GetAuthorByName_ReturnsAuthor()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -36,7 +36,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByEmailTest()
+    public void GetAuthorByEmail_ReturnsAuthor()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -311,7 +311,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void UserFollowSelf_Fails()
+    public void UserFollow_Self_Fails()
     {
         // Arrange
         _fixture.SeedDatabase();
