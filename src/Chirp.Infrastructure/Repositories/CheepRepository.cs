@@ -56,7 +56,7 @@ public class CheepRepository : ICheepRepository
         return query.ToList();
     }
 
-    public Cheep CreateCheep(Author author, string text, DateTime timestamp)
+    public OriginalCheep CreateCheep(Author author, string text, DateTime timestamp)
     {
         var cheep = new OriginalCheep() { Author = author, Text = text, TimeStamp = timestamp };
         if (cheep.GetText().Length > Cheep.MaxLength)
@@ -69,9 +69,22 @@ public class CheepRepository : ICheepRepository
         return cheep;
     }
 
-    public Cheep GetCheepById(int cheepId)
+    public RepostCheep CreateRepost(Author author, OriginalCheep originalCheep, DateTime timestamp)
     {
-        var cheep = _dbcontext.Cheeps.Find(cheepId);
+        var cheep = new RepostCheep
+        {
+            Author = author,
+            TimeStamp = timestamp,
+            Content = originalCheep
+        };
+        _dbcontext.Cheeps.Add(cheep);
+        _dbcontext.SaveChanges();
+        return cheep;
+    }
+
+    public OriginalCheep GetOriginalCheepById(int cheepId)
+    {
+        var cheep = _dbcontext.OriginalCheeps.Find(cheepId);
         if (cheep == null)
         {
             throw new CheepNotFoundException(cheepId);
