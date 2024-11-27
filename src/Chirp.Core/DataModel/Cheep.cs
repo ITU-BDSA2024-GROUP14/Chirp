@@ -8,7 +8,8 @@ public abstract class Cheep
     public const int MaxLength = 160;
     public int CheepId { get; set; }
     public int AuthorId { get; set; }
-    public abstract string Text { get;}
     public required Author Author { get; set; }
     public required DateTime TimeStamp { get; set; }
+
+    public abstract string GetText();
 }
