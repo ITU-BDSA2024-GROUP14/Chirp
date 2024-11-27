@@ -1,6 +1,6 @@
 ﻿namespace Chirp.Core.DataModel;
 
-public class OriginalCheep: Cheep
+public class OriginalCheep (String text) : Cheep
 {
-    public required string Text { get; set; }
+    public override string Text { get { return text; } }
 }
