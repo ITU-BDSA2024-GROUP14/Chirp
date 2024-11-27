@@ -44,6 +44,13 @@ public abstract class TimelineModel(IChirpService service) : PageModel
         }
         return RedirectToPage();
     }
+    
+    public IActionResult OnPostReCheep(int originalCheepId)
+    {
+        _service.RepostCheep(GetLoggedInDisplayName(), originalCheepId);
+        
+        return RedirectToPage();
+    }
 
     private void FollowUser(string toFollowAuthorName)
     {
