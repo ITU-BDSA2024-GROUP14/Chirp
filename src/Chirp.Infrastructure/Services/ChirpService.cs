@@ -1,4 +1,5 @@
 using System.Data;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Repositories;
 
@@ -119,6 +120,23 @@ public class ChirpService : IChirpService
     public List<string> GetFollowing(string loggedInDisplayName)
     {
         return _authorRepository.GetFollowing(loggedInDisplayName);
+    }
+
+    public void RepostCheep(string authorName, int cheepId)
+    {
+        var author = _authorRepository.GetAuthorByName(authorName);
+        if (author is null)
+        {
+            throw new AuthorMissingException(authorName);
+        }
+
+        var originalPost = _cheepRepository.GetOriginalCheepById(cheepId);
+        if (originalPost is null)
+        {
+            throw new CheepNotFoundException(cheepId);
+        }
+        
+        _cheepRepository.CreateRepost(author, originalPost, DateTime.Now);
     }
 
 
