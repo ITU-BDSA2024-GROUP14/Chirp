@@ -17,7 +17,7 @@ public class AuthorClaimsPrincipalFactory : UserClaimsPrincipalFactory<Author, I
     protected override async Task<ClaimsIdentity> GenerateClaimsAsync(Author user)
     {
        var identity = await base.GenerateClaimsAsync(user);
-       identity.AddClaim(new Claim("Beak", user.Beak));
+       identity.AddClaim(new Claim("Beak", user.DisplayName));
        return identity;
     }
 }

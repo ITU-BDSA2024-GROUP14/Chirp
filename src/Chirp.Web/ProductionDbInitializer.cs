@@ -20,55 +20,55 @@ public class ProductionDbInitializer : IDbInitializer
             var a1 = new Author()
             {
                 AuthorId = 1,
-                Beak = "Roger Histand",
+                DisplayName = "Roger Histand",
                 Email = "Roger+Histand@hotmail.com",
                 Cheeps = new List<Cheep>()
             };
             var a2 = new Author()
             {
-                AuthorId = 2, Beak = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>()
+                AuthorId = 2, DisplayName = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>()
             };
             var a3 = new Author()
             {
                 AuthorId = 3,
-                Beak = "Wendell Ballan",
+                DisplayName = "Wendell Ballan",
                 Email = "Wendell-Ballan@gmail.com",
                 Cheeps = new List<Cheep>()
             };
             var a4 = new Author()
             {
-                AuthorId = 4, Beak = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>()
+                AuthorId = 4, DisplayName = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>()
             };
             var a5 = new Author()
             {
-                AuthorId = 5, Beak = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", Cheeps = new List<Cheep>()
+                AuthorId = 5, DisplayName = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", Cheeps = new List<Cheep>()
             };
             var a6 = new Author()
             {
-                AuthorId = 6, Beak = "Mellie Yost", Email = "Mellie+Yost@ku.dk", Cheeps = new List<Cheep>()
+                AuthorId = 6, DisplayName = "Mellie Yost", Email = "Mellie+Yost@ku.dk", Cheeps = new List<Cheep>()
             };
             var a7 = new Author()
             {
                 AuthorId = 7,
-                Beak = "Malcolm Janski",
+                DisplayName = "Malcolm Janski",
                 Email = "Malcolm-Janski@gmail.com",
                 Cheeps = new List<Cheep>()
             };
             var a8 = new Author()
             {
                 AuthorId = 8,
-                Beak = "Octavio Wagganer",
+                DisplayName = "Octavio Wagganer",
                 Email = "Octavio.Wagganer@dtu.dk",
                 Cheeps = new List<Cheep>()
             };
             var a9 = new Author()
             {
-                AuthorId = 9, Beak = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>()
+                AuthorId = 9, DisplayName = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>()
             };
             var a10 = new Author()
             {
                 AuthorId = 10,
-                Beak = "Jacqualine Gilcoine",
+                DisplayName = "Jacqualine Gilcoine",
                 Email = "Jacqualine.Gilcoine@gmail.com",
                 Cheeps = new List<Cheep>()
             };
@@ -77,7 +77,7 @@ public class ProductionDbInitializer : IDbInitializer
             var a11 = new Author
             {
                 AuthorId = 12,
-                Beak = "Adrian",
+                DisplayName = "Adrian",
                 Email = "adho@itu.dk",
                 Cheeps = new List<Cheep>(),
                 UserName = "adho@itu.dk",

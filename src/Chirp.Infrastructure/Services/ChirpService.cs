@@ -116,9 +116,9 @@ public class ChirpService : IChirpService
         _authorRepository.UnFollowUser(user, toUnFollow);
     }
 
-    public List<string> GetFollowing(string loggedInBeak)
+    public List<string> GetFollowing(string loggedInDisplayName)
     {
-        return _authorRepository.GetFollowing(loggedInBeak);
+        return _authorRepository.GetFollowing(loggedInDisplayName);
     }
 
 
@@ -131,6 +131,6 @@ public class ChirpService : IChirpService
             throw new NullReferenceException("User does not exist.");
         }
 
-        return following.Contains(author.Beak);
+        return following.Contains(author.DisplayName);
     }
 }

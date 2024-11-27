@@ -28,7 +28,7 @@ public class PublicModel : TimelineModel
             return Page();
         }
 
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "DisplayName")?.Value;
 
         if (authorName == null)
         {

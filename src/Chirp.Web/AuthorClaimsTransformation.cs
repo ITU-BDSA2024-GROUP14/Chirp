@@ -18,7 +18,7 @@ public class AuthorClaimsTransformation : IClaimsTransformation
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
         var claimsIdentity = new ClaimsIdentity();
-        const string claimType = "Beak";
+        const string claimType = "DisplayName";
         if (!principal.HasClaim(claim => claim.Type == claimType))
         {
             var user = await _userManager.GetUserAsync(principal);
@@ -26,7 +26,7 @@ public class AuthorClaimsTransformation : IClaimsTransformation
             // If the user is in the middle of registering using an external login, the user is not yet created
             if (user != null)
             {
-                claimsIdentity.AddClaim(new Claim(claimType, user.Beak));
+                claimsIdentity.AddClaim(new Claim(claimType, user.DisplayName));
             }
         }
 

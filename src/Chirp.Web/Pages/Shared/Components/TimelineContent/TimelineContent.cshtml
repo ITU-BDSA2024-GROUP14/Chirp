@@ -6,7 +6,7 @@
         @foreach (var cheep in Model.Cheeps)
         {
             <li>
-                @if (User.Identity is { IsAuthenticated: true } && cheep.Author != Model.GetLoggedInBeak())
+                @if (User.Identity is { IsAuthenticated: true } && cheep.Author != Model.GetLoggedInDisplayName())
                 {
                     {
                         <div class="flipFollow">
