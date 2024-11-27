@@ -2,10 +2,18 @@
 
 public class OriginalCheep : Cheep
 {
-    public required string Text { get; init; }
+    private string _text;
+
+    public required string Text
+    {
+        init
+        {
+            _text = value;
+        }
+    }
 
     public override string GetText()
     {
-        return Text;
+        return _text;
     }
 }
