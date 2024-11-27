@@ -44,7 +44,7 @@ public class CheepRepository : ICheepRepository
     public IEnumerable<Cheep> GetCheepsByAuthor(List<string> authorUsernameList, int skip = 0, int? size = null)
     {
         var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        query = query.Where(Cheep => authorUsernameList.Contains(Cheep.Author.Beak));
+        query = query.Where(Cheep => authorUsernameList.Contains(Cheep.Author.DisplayName));
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
         query = query.Skip(skip);
 

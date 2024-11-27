@@ -41,7 +41,7 @@ public class PersonalDataModel : PageModel
             return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "DisplayName")?.Value;
         if (authorName != null)
         {
             Author = _service.GetAuthorByName(authorName) ?? throw new NullReferenceException();

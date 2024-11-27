@@ -14,7 +14,7 @@ public class AuthorDTO
     [SetsRequiredMembers]
     public AuthorDTO(Author author)
     {
-        Name = author.Beak;
+        Name = author.DisplayName;
         Email = author.Email;
         Cheeps = [];
         if (author.Cheeps != null)
@@ -28,7 +28,7 @@ public class AuthorDTO
         Following = [];
         foreach (var a in author.Following)
         {
-            Following.Add(a.Beak);
+            Following.Add(a.DisplayName);
         }
     }
 }

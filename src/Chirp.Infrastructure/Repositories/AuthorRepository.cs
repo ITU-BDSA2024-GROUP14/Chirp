@@ -22,7 +22,7 @@ public class AuthorRepository : IAuthorRepository
     /// <returns>The requested author</returns>
     public Author? GetAuthorByName(string authorName)
     {
-        return _dbcontext.Authors.FirstOrDefault(a => a.Beak == authorName);
+        return _dbcontext.Authors.FirstOrDefault(a => a.DisplayName == authorName);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class AuthorRepository : IAuthorRepository
     /// <param name="authorEmail">The email of the author</param>
     public Author CreateAuthor(string authorName, string authorEmail)
     {
-        var author = new Author { Beak = authorName, Email = authorEmail };
+        var author = new Author { DisplayName = authorName, Email = authorEmail };
         _dbcontext.Authors.Add(author);
         _dbcontext.SaveChanges();
         return author;
@@ -52,12 +52,12 @@ public class AuthorRepository : IAuthorRepository
     {
         if (!Exists(user))
         {
-            throw new AuthorMissingException(user.Beak);
+            throw new AuthorMissingException(user.DisplayName);
         }
         
         if (!Exists(toFollowAuthor))
         {
-            throw new AuthorMissingException(user.Beak);
+            throw new AuthorMissingException(user.DisplayName);
         }
         
         if (IsFollowing(user, toFollowAuthor))
@@ -74,12 +74,12 @@ public class AuthorRepository : IAuthorRepository
     {
         if (!Exists(user))
         {
-            throw new AuthorMissingException(user.Beak);
+            throw new AuthorMissingException(user.DisplayName);
         }
         
         if (!Exists(toUnFollow))
         {
-            throw new AuthorMissingException(user.Beak);
+            throw new AuthorMissingException(user.DisplayName);
         }
         
         if (!IsFollowing(user, toUnFollow))
@@ -99,12 +99,12 @@ public class AuthorRepository : IAuthorRepository
 
     private bool Exists(Author author)
     {
-        return _dbcontext.Authors.Any(a => a.Beak == author.Beak);
+        return _dbcontext.Authors.Any(a => a.DisplayName == author.DisplayName);
     }
 
     public List<string> GetFollowing(string authorName)
     {
-        var author = _dbcontext.Authors.Include(author => author.Following).First(author => author.Beak == authorName);
-        return author.Following.Select(a => a.Beak).ToList();
+        var author = _dbcontext.Authors.Include(author => author.Following).First(author => author.DisplayName == authorName);
+        return author.Following.Select(a => a.DisplayName).ToList();
     }
 }

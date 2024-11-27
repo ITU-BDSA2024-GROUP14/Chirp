@@ -3,6 +3,7 @@ using System;
 using Chirp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241127120027_BeakRemoval")]
+    partial class BeakRemoval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -117,12 +120,12 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(160)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(13)
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("TEXT");
 
                     b.HasKey("CheepId");
@@ -130,10 +133,6 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Cheeps");
-
-                    b.HasDiscriminator<string>("Type").HasValue("Cheep");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -266,30 +265,6 @@ namespace Chirp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Chirp.Core.DataModel.OriginalCheep", b =>
-                {
-                    b.HasBaseType("Chirp.Core.DataModel.Cheep");
-
-                    b.Property<string>("_text")
-                        .IsRequired()
-                        .HasMaxLength(160)
-                        .HasColumnType("TEXT");
-
-                    b.HasDiscriminator().HasValue("OriginalCheep");
-                });
-
-            modelBuilder.Entity("Chirp.Core.DataModel.RepostCheep", b =>
-                {
-                    b.HasBaseType("Chirp.Core.DataModel.Cheep");
-
-                    b.Property<int>("ContentCheepId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("ContentCheepId");
-
-                    b.HasDiscriminator().HasValue("RepostCheep");
-                });
-
             modelBuilder.Entity("AuthorAuthor", b =>
                 {
                     b.HasOne("Chirp.Core.DataModel.Author", null)
@@ -365,17 +340,6 @@ namespace Chirp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Chirp.Core.DataModel.RepostCheep", b =>
-                {
-                    b.HasOne("Chirp.Core.DataModel.OriginalCheep", "Content")
-                        .WithMany()
-                        .HasForeignKey("ContentCheepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("Chirp.Core.DataModel.Author", b =>

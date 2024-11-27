@@ -173,7 +173,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         //Act
         service.CreateAuthor("John Doe", "John@doe.com");
         //Assert
-        Assert.Equal("John Doe", context.Authors.First().Beak);
+        Assert.Equal("John Doe", context.Authors.First().DisplayName);
     }
 
     [Fact]
@@ -191,7 +191,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
             timestamp: DateTime.Now);
         //Assert
         var cheep = context.Cheeps.AsEnumerable().First(cheep => cheep.GetText() == "This is good test CHEEP");
-        Assert.Equal("Helge", cheep.Author.Beak);
+        Assert.Equal("Helge", cheep.Author.DisplayName);
     }
 
     [Fact]
@@ -210,8 +210,8 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
             timestamp: DateTime.Now);
         //Assert
         var cheep = context.Cheeps.AsEnumerable().First(cheep => cheep.GetText() == "This is good test CHEEP");
-        var author = context.Authors.First(author => author.Beak == authorName);
-        Assert.Equal(authorName, cheep.Author.Beak);
+        var author = context.Authors.First(author => author.DisplayName == authorName);
+        Assert.Equal(authorName, cheep.Author.DisplayName);
         Assert.NotNull(author);
     }
 

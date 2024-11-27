@@ -19,7 +19,7 @@ public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Author>().HasIndex(a => a.Beak).IsUnique();
+        modelBuilder.Entity<Author>().HasIndex(a => a.DisplayName).IsUnique();
         modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
         modelBuilder.Entity<Author>().Ignore(a => a.AuthorId);
         modelBuilder.Entity<OriginalCheep>().Property("_text").HasMaxLength(Cheep.MaxLength);

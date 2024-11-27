@@ -15,7 +15,7 @@ public class Author : IdentityUser<int>
         set => Id = value;
     }
 
-    [PersonalData] public required string Beak { get; set; }
+    [PersonalData] public required string DisplayName { get; set; }
 
     [PersonalData] public new required string Email { get; set; }
     [PersonalData] public List<Cheep>? Cheeps { get; set; }

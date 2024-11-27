@@ -12,6 +12,6 @@ public class CheepDTO
     {
         Text = cheep.GetText();
         Timestamp = cheep.TimeStamp.ToString("dd/MM/yy H:mm:ss");
-        Author = cheep.Author.Beak;
+        Author = cheep.Author.DisplayName;
     }
 }
