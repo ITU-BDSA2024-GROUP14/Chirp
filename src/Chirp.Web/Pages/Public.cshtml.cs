@@ -17,6 +17,7 @@ public class PublicModel : TimelineModel
 
     public ActionResult OnGet([FromQuery] int page = 1)
     {
+        base.SetPageNumber(page);
         Cheeps = _service.GetCheeps(page);
         return Page();
     }

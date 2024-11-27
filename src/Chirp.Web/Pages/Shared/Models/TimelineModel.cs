@@ -11,6 +11,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
 {
 
     protected readonly IChirpService _service = service;
+    public int PageNumber = 1;
 
     public List<CheepDTO> Cheeps { get; set; } = [];
 
@@ -29,6 +30,11 @@ public abstract class TimelineModel(IChirpService service) : PageModel
         }
 
         return userDisplayName;
+    }
+
+    public void SetPageNumber(int page)
+    {
+        PageNumber = page;
     }
 
     public IActionResult OnPostFlipFollow(string authorName)
