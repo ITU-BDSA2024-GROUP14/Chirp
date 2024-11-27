@@ -22,9 +22,14 @@ public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
         modelBuilder.Entity<Author>().HasIndex(a => a.Beak).IsUnique();
         modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
         modelBuilder.Entity<Author>().Ignore(a => a.AuthorId);
-        modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(Cheep.MaxLength);
-
+        modelBuilder.Entity<OriginalCheep>().Property("_text").HasMaxLength(Cheep.MaxLength);
+        
         modelBuilder.Entity<Author>().HasMany(a => a.Following).WithMany().UsingEntity(j => j.ToTable("Follows"));
+        
+        modelBuilder.Entity<Cheep>()
+            .HasDiscriminator<string>("Type")
+            .HasValue<OriginalCheep>(nameof(OriginalCheep))
+            .HasValue<RepostCheep>(nameof(RepostCheep));
 
         base.OnModelCreating(modelBuilder);
     }
