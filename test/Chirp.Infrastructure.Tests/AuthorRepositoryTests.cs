@@ -32,7 +32,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var author = authorrepo.GetAuthorByName(name);
         //Assert
         Assert.NotNull(author);
-        Assert.Equal(name, author.Beak);
+        Assert.Equal(name, author.DisplayName);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var author = authorrepo.GetAuthorByEmail("ropf@itu.dk");
         //Assert
         Assert.NotNull(author);
-        Assert.Equal(name, author.Beak);
+        Assert.Equal(name, author.DisplayName);
     }
 
     [Fact]
@@ -57,13 +57,13 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         var options = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection).Options;
-        var author = new Author { Beak = "Anna", Email = "test@test.com" };
+        var author = new Author { DisplayName = "Anna", Email = "test@test.com" };
         using (var context = new ChirpDBContext(options))
         {
             context.Database.EnsureCreated();
             context.Authors.AddRange(
-                new Author { Beak = "Bob", Email = "john@doe.com" },
-                new Author { Beak = "Chalie", Email = "this@isbad.com" },
+                new Author { DisplayName = "Bob", Email = "john@doe.com" },
+                new Author { DisplayName = "Chalie", Email = "this@isbad.com" },
                 author);
             context.SaveChanges();
         }
@@ -71,10 +71,10 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         using (var context = new ChirpDBContext(options))
         {
             var service = new AuthorRepository(context);
-            var fromDB = service.GetAuthorByName(author.Beak);
+            var fromDB = service.GetAuthorByName(author.DisplayName);
 
             Assert.NotNull(fromDB);
-            Assert.Equal(author.Beak, fromDB.Beak);
+            Assert.Equal(author.DisplayName, fromDB.DisplayName);
             Assert.Equal(author.Email, fromDB.Email);
             Assert.Equal(author.Cheeps, fromDB.Cheeps);
         }
@@ -86,8 +86,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Morten", Email = "morten@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Morten", Email = "morten@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -102,8 +102,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
-            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.DisplayName == follower.DisplayName);
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.DisplayName == followee.DisplayName);
 
             Assert.Contains(updatedFollowee, updatedFollower.Following);
             Assert.DoesNotContain(updatedFollower, updatedFollowee.Following);
@@ -116,8 +116,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Morten", Email = "morten@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Morten", Email = "morten@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -133,8 +133,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
-            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.DisplayName == follower.DisplayName);
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.DisplayName == followee.DisplayName);
 
             Assert.Contains(updatedFollowee, updatedFollower.Following);
             Assert.DoesNotContain(updatedFollower, updatedFollowee.Following);
@@ -147,8 +147,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Jonathan", Email = "jonathan@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -163,10 +163,10 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.DisplayName == follower.DisplayName);
 
             Assert.Empty(updatedFollower.Following);
-            Assert.False(context.Authors.Any(a => a.Beak == followee.Beak));
+            Assert.False(context.Authors.Any(a => a.DisplayName == followee.DisplayName));
         }
     }
 
@@ -176,8 +176,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Jonathan", Email = "jonathan@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -192,9 +192,9 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            Assert.False(context.Authors.Any(a => a.Beak == follower.Beak));
+            Assert.False(context.Authors.Any(a => a.DisplayName == follower.DisplayName));
 
-            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.DisplayName == followee.DisplayName);
 
             Assert.Empty(updatedFollowee.Following);
         }
@@ -206,8 +206,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Jonathan", Email = "jonathan@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -219,8 +219,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            Assert.False(context.Authors.Any(a => a.Beak == follower.Beak));
-            Assert.False(context.Authors.Any(a => a.Beak == followee.Beak));
+            Assert.False(context.Authors.Any(a => a.DisplayName == follower.DisplayName));
+            Assert.False(context.Authors.Any(a => a.DisplayName == followee.DisplayName));
         }
     }
 
@@ -230,8 +230,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Jonathan", Email = "jonathan@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -248,8 +248,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
-            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.DisplayName == follower.DisplayName);
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.DisplayName == followee.DisplayName);
 
             Assert.DoesNotContain(updatedFollowee, updatedFollower.Following);
             Assert.Empty(updatedFollowee.Following);
@@ -262,8 +262,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Jonathan", Email = "jonathan@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -275,8 +275,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            Assert.False(context.Authors.Any(a => a.Beak == follower.Beak));
-            Assert.False(context.Authors.Any(a => a.Beak == followee.Beak));
+            Assert.False(context.Authors.Any(a => a.DisplayName == follower.DisplayName));
+            Assert.False(context.Authors.Any(a => a.DisplayName == followee.DisplayName));
         }
     }
 
@@ -286,8 +286,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
-        var followee = new Author { Beak = "Jonathan", Email = "jonathan@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
+        var followee = new Author { DisplayName = "Jonathan", Email = "jonathan@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -302,8 +302,8 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
-            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.Beak == followee.Beak);
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.DisplayName == follower.DisplayName);
+            var updatedFollowee = context.Authors.Include(a => a.Following).First(a => a.DisplayName == followee.DisplayName);
 
             Assert.Empty(updatedFollowee.Following);
             Assert.Empty(updatedFollower.Following);
@@ -316,7 +316,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Arrange
         _fixture.SeedDatabase();
 
-        var follower = new Author { Beak = "Anna", Email = "anna@test.com" };
+        var follower = new Author { DisplayName = "Anna", Email = "anna@test.com" };
 
         using (var context = _fixture.CreateContext())
         {
@@ -331,7 +331,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         // Assert
         using (var context = _fixture.CreateContext())
         {
-            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.Beak == follower.Beak);
+            var updatedFollower = context.Authors.Include(a => a.Following).First(a => a.DisplayName == follower.DisplayName);
             Assert.Empty(updatedFollower.Following);
         }
     }
