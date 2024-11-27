@@ -31,7 +31,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
         {
             expectedCount = context.Cheeps.Count() + 1;
 
-            var author = new Author { Beak = authorName, AuthorId = authorId, Email = email };
+            var author = new Author { DisplayName = authorName, AuthorId = authorId, Email = email };
             var date = new DateTime(year, month, day);
 
             context.Cheeps.Add(
@@ -95,7 +95,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
     [Fact] //Tests that a 190 character long cheep text is handled correctly
     public void LongCheepsDisallowed()
     {
-        var author = new Author { Beak = "jones", AuthorId = 1234, Email = "jones@mail.com" };
+        var author = new Author { DisplayName = "jones", AuthorId = 1234, Email = "jones@mail.com" };
         var date = new DateTime(2024, 03, 02);
         using (var context = _fixture.CreateContext())
         {
@@ -122,7 +122,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
     public void OrderedCheeps()
     {
         // Arrange
-        var author = new Author { Beak = "jones", AuthorId = 1234, Email = "jones@mail.com" };
+        var author = new Author { DisplayName = "jones", AuthorId = 1234, Email = "jones@mail.com" };
 
         using (var context = _fixture.CreateContext())
         {

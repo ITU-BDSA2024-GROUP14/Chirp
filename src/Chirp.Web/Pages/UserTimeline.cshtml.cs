@@ -18,14 +18,14 @@ public class UserTimelineModel(IChirpService service) : TimelineModel(service)
             Cheeps = _service.GetCheepsFromAuthor(authorName, page);
             return Page();
         }
-        var loggedInBeak = GetLoggedInBeak();
+        var loggedInDisplayName = GetLoggedInDisplayName();
 
-        if (loggedInBeak != authorName)
+        if (loggedInDisplayName != authorName)
         {
             Cheeps = _service.GetCheepsFromAuthor(authorName, page);
             return Page();
         }
-        var followList = _service.GetFollowing(loggedInBeak);
+        var followList = _service.GetFollowing(loggedInDisplayName);
         followList.Add(authorName);
         Cheeps = _service.GetCheepsFromMultipleAuthors(followList);
         return Page();
@@ -38,7 +38,7 @@ public class UserTimelineModel(IChirpService service) : TimelineModel(service)
             return Page();
         }
 
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "DisplayName")?.Value;
         if (authorName == null)
         {
             return RedirectToPage("./PublicTimeline");
