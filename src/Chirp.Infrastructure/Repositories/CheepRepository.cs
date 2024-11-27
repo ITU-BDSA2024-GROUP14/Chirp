@@ -68,4 +68,15 @@ public class CheepRepository : ICheepRepository
         _dbcontext.SaveChanges();
         return cheep;
     }
+
+    public Cheep GetCheepById(int cheepId)
+    {
+        var cheep = _dbcontext.Cheeps.Find(cheepId);
+        if (cheep == null)
+        {
+            throw new CheepNotFoundException(cheepId);
+        }
+        
+        return cheep;
+    }
 }
