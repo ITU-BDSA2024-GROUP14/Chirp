@@ -49,7 +49,8 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     {
         _service.ReCheep(GetLoggedInDisplayName(), originalCheepId);
         
-        return RedirectToPage();
+        string authorName = GetLoggedInDisplayName();
+        return RedirectToPage("./UserTimeline", new { authorName });
     }
 
     private void FollowUser(string toFollowAuthorName)
