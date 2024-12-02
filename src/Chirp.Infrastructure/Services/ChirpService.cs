@@ -131,7 +131,7 @@ public class ChirpService : IChirpService
             throw new AuthorMissingException(authorName);
         }
 
-        var originalPost = (OriginalCheep)_cheepRepository.GetCheepById(cheepId);
+        var originalPost = _cheepRepository.GetOriginalCheepById(cheepId);
         
         _cheepRepository.CreateReCheep(author, originalPost, DateTime.Now);
     }
