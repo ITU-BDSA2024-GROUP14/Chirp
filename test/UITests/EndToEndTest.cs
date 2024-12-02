@@ -61,7 +61,7 @@ public class EndToEndTest : SelfHostedPageTest
         await Expect(Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Test user's Timeline" }))
             .ToBeVisibleAsync();
         await Expect(Page.GetByText("Test user This is a test")).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Paragraph)).ToContainTextAsync("Test user This is a test cheep —");
+        await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Test user This is a test cheep —");
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "public timeline" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
