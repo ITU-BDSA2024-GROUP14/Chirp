@@ -17,13 +17,12 @@ public class AuthorDTO
         Name = author.DisplayName;
         Email = author.Email;
         Cheeps = [];
-        if (author.Cheeps != null)
+
+        foreach (var cheep in author.Cheeps)
         {
-            foreach (var cheep in author.Cheeps)
-            {
-                Cheeps.Add(new CheepDTO(cheep));
-            }
+            Cheeps.Add(new CheepDTO(cheep));
         }
+
 
         Following = [];
         foreach (var a in author.Following)
