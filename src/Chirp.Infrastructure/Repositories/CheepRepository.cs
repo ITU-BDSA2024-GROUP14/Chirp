@@ -29,6 +29,7 @@ public class CheepRepository : ICheepRepository
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null)
     {
         var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
+        query = query.Include(cheep => (cheep as RepostCheep)!.Content).AsQueryable();
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
 
         query = query.Skip(skip);
