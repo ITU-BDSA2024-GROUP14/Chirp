@@ -25,6 +25,7 @@ public class UserTimelineModel(IChirpService service) : TimelineModel(service)
             Cheeps = _service.GetCheepsFromAuthor(authorName, page);
             return Page();
         }
+        base.SetPageNumber(page);
         var followList = _service.GetFollowing(loggedInDisplayName);
         followList.Add(authorName);
         Cheeps = _service.GetCheepsFromMultipleAuthors(followList);
