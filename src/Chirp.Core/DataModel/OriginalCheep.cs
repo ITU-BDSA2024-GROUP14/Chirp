@@ -2,7 +2,7 @@
 
 public class OriginalCheep : Cheep
 {
-    private string _text;
+    private readonly string _text = null!; //The field is never null, since it has a setter that is required. The warning can therefore be ignored.
 
     public required string Text
     {
