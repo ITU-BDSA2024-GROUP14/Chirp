@@ -71,7 +71,7 @@ public class CheepRepository : ICheepRepository
         return cheep;
     }
 
-    public RepostCheep CreateRepost(Author author, OriginalCheep originalCheep, DateTime timestamp)
+    public RepostCheep CreateReCheep(Author author, OriginalCheep originalCheep, DateTime timestamp)
     {
         var cheep = new RepostCheep
         {

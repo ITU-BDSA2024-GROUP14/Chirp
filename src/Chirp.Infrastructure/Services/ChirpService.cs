@@ -123,7 +123,7 @@ public class ChirpService : IChirpService
         return _authorRepository.GetFollowing(loggedInDisplayName);
     }
 
-    public void RepostCheep(string authorName, int cheepId)
+    public void ReCheep(string authorName, int cheepId)
     {
         var author = _authorRepository.GetAuthorByName(authorName);
         if (author is null)
@@ -133,7 +133,7 @@ public class ChirpService : IChirpService
 
         var originalPost = (OriginalCheep)_cheepRepository.GetCheepById(cheepId);
         
-        _cheepRepository.CreateRepost(author, originalPost, DateTime.Now);
+        _cheepRepository.CreateReCheep(author, originalPost, DateTime.Now);
     }
 
 

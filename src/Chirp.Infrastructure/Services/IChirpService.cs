@@ -15,5 +15,5 @@ public interface IChirpService
     public bool CheckIfFollowing(string authorName, string followingAuthorName);
     public void UnFollowUser(string authorName, string toUnFollowAuthorName);
     public List<string> GetFollowing(string loggedInDisplayName);
-    public void RepostCheep(string authorName, int cheepId);
+    public void ReCheep(string authorName, int cheepId);
 }

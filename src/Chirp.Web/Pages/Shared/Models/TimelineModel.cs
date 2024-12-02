@@ -47,7 +47,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     
     public IActionResult OnPostReCheep(int originalCheepId)
     {
-        _service.RepostCheep(GetLoggedInDisplayName(), originalCheepId);
+        _service.ReCheep(GetLoggedInDisplayName(), originalCheepId);
         
         return RedirectToPage();
     }
