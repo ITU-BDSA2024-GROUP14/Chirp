@@ -28,8 +28,11 @@ public class CheepRepository : ICheepRepository
     /// <returns>Specified cheeps from the database.</returns>
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null)
     {
-        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        query = query.Include(cheep => (cheep as RepostCheep)!.Content).AsQueryable();
+        var query = _dbcontext.Cheeps
+            .Include(cheep => cheep.Author)
+            .Include(cheep => (cheep as RepostCheep)!.Content)
+            .Include(cheep => (cheep as RepostCheep)!.Content.Author)
+            .AsQueryable();
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
 
         query = query.Skip(skip);
@@ -44,9 +47,13 @@ public class CheepRepository : ICheepRepository
 
     public IEnumerable<Cheep> GetCheepsByAuthor(List<string> authorUsernameList, int skip = 0, int? size = null)
     {
-        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        query = query.Include(cheep => (cheep as RepostCheep)!.Content).AsQueryable();
-        query = query.Where(Cheep => authorUsernameList.Contains(Cheep.Author.DisplayName));
+        var query = _dbcontext.Cheeps
+            .Include(cheep => cheep.Author)
+            .AsQueryable()
+            .Include(cheep => (cheep as RepostCheep)!.Content)
+            .Include(cheep => (cheep as RepostCheep)!.Content.Author)
+            .AsQueryable();
+        query = query.Where(cheep => authorUsernameList.Contains(cheep.Author.DisplayName));
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
         query = query.Skip(skip);
 
