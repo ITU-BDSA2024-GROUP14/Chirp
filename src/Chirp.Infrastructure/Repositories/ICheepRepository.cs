@@ -8,5 +8,5 @@ public interface ICheepRepository
     public IEnumerable<Cheep> GetCheeps(int skip, int? size);
     public OriginalCheep CreateCheep(Author author, string text, DateTime timestamp);
     public RepostCheep CreateReCheep(Author author, OriginalCheep originalCheep, DateTime timestamp);
-    public Cheep GetCheepById(int cheepId);
+    public OriginalCheep GetOriginalCheepById(int cheepId);
 }

@@ -91,14 +91,22 @@ public class CheepRepository : ICheepRepository
         return cheep;
     }
 
-    public Cheep GetCheepById(int cheepId)
+    public OriginalCheep GetOriginalCheepById(int cheepId)
     {
-        var cheep = _dbcontext.Cheeps.Find(cheepId);
-        if (cheep == null)
+        var cheep = _dbcontext.Cheeps
+            .Include(c => (c as RepostCheep)!.Content)
+            .FirstOrDefault(c => c.CheepId == cheepId);
+
+        while (cheep is RepostCheep repostCheep)
+        {
+            cheep = repostCheep.Content;
+        }
+        
+        if (cheep == null || cheep is not OriginalCheep originalCheep)
         {
             throw new CheepNotFoundException(cheepId);
         }
-        
-        return cheep;
+
+        return originalCheep;
     }
 }
