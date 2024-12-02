@@ -11,8 +11,6 @@ namespace Chirp.Infrastructure.Data;
 public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
 {
     public DbSet<Cheep> Cheeps { get; set; }
-    public DbSet<OriginalCheep> OriginalCheeps { get; set; }
-    public DbSet<RepostCheep> RepostCheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
 
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
