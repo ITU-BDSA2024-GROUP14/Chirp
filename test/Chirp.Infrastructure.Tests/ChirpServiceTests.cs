@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -190,7 +191,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         service.CreateCheep("Helge", text: "This is good test CHEEP", authorEmail: "rpof@itu.dk",
             timestamp: DateTime.Now);
         //Assert
-        var cheep = context.Cheeps.First(cheep => cheep.Text == "This is good test CHEEP");
+        var cheep = context.Cheeps.AsEnumerable().First(cheep => cheep.GetText() == "This is good test CHEEP");
         Assert.Equal("Helge", cheep.Author.DisplayName);
     }
 
@@ -209,7 +210,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         service.CreateCheep(authorName, text: "This is good test CHEEP", authorEmail: "rpof@itu.dk",
             timestamp: DateTime.Now);
         //Assert
-        var cheep = context.Cheeps.First(cheep => cheep.Text == "This is good test CHEEP");
+        var cheep = context.Cheeps.AsEnumerable().First(cheep => cheep.GetText() == "This is good test CHEEP");
         var author = context.Authors.First(author => author.DisplayName == authorName);
         Assert.Equal(authorName, cheep.Author.DisplayName);
         Assert.NotNull(author);

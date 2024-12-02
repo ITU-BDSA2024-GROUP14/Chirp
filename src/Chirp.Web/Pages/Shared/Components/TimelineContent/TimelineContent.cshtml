@@ -6,24 +6,35 @@
         @foreach (var cheep in Model.Cheeps)
         {
             <li>
+                <p>
+                    <strong>
+                        <a href="/@cheep.Author">@cheep.Author</a>
+                    </strong>
+                    @if (cheep.ReCheepedAuthor != null)
+                    {
+                        <span>re-cheeped <strong><a href="/@cheep.ReCheepedAuthor">@cheep.ReCheepedAuthor</a></strong></span>
+                    }
+                    <br/>
+                    @cheep.Text
+                    <small>&mdash; @cheep.Timestamp</small>
+                </p>
                 @if (User.Identity is { IsAuthenticated: true } && cheep.Author != Model.GetLoggedInDisplayName())
                 {
-                    {
+                    <div style="display: flex; flex-direction: row; gap: 5px">
                         <div class="flipFollow">
                             <form method="post" asp-page-handler="FlipFollow">
                                 <input type="hidden" name="authorName" value="@cheep.Author"/>
                                 <button type="submit">@(Model.CheckIfFollowing(cheep.Author) ? "Unfollow" : "Follow")</button>
                             </form>
                         </div>
-                    }
+                        <div class="reCheep">
+                            <form method="post" asp-page-handler="ReCheep">
+                                <input type="hidden" name="originalCheepId" value="@cheep.Id"/>
+                                <button type="submit">@("Re-cheep")</button>
+                            </form>
+                        </div>
+                    </div>
                 }
-                <p>
-                    <strong>
-                        <a href="/@cheep.Author">@cheep.Author</a>
-                    </strong>
-                    @cheep.Text
-                    <small>&mdash; @cheep.Timestamp</small>
-                </p>
             </li>
         }
     </ul>

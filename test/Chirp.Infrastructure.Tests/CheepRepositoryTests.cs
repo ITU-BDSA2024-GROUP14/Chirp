@@ -35,7 +35,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var date = new DateTime(year, month, day);
 
             context.Cheeps.Add(
-                new Cheep
+                new OriginalCheep()
                 {
                     Author = author,
                     AuthorId = author.AuthorId,
@@ -60,7 +60,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
         Assert.Equal(expectedCount, cheepsReturned.Count);
         // Check that the added cheep is in the list
         Assert.Contains(cheepsReturned, c =>
-            c.Text == text &&
+            c.GetText() == text &&
             c.AuthorId == authorId &&
             c.CheepId == cheepId &&
             c.TimeStamp.Year == year &&
@@ -113,7 +113,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var cheeps = service.GetCheeps();
             if (cheeps.Any())
             {
-                Assert.InRange(cheeps.First().Text.Length, 0, Cheep.MaxLength);
+                Assert.InRange(cheeps.First().GetText().Length, 0, Cheep.MaxLength);
             }
         }
     }

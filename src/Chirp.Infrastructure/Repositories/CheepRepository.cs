@@ -28,7 +28,11 @@ public class CheepRepository : ICheepRepository
     /// <returns>Specified cheeps from the database.</returns>
     public IEnumerable<Cheep> GetCheeps(int skip = 0, int? size = null)
     {
-        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
+        var query = _dbcontext.Cheeps
+            .Include(cheep => cheep.Author)
+            .Include(cheep => (cheep as RepostCheep)!.Content)
+            .Include(cheep => (cheep as RepostCheep)!.Content.Author)
+            .AsQueryable();
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
 
         query = query.Skip(skip);
@@ -43,8 +47,13 @@ public class CheepRepository : ICheepRepository
 
     public IEnumerable<Cheep> GetCheepsByAuthor(List<string> authorUsernameList, int skip = 0, int? size = null)
     {
-        var query = _dbcontext.Cheeps.Include(cheep => cheep.Author).AsQueryable();
-        query = query.Where(Cheep => authorUsernameList.Contains(Cheep.Author.DisplayName));
+        var query = _dbcontext.Cheeps
+            .Include(cheep => cheep.Author)
+            .AsQueryable()
+            .Include(cheep => (cheep as RepostCheep)!.Content)
+            .Include(cheep => (cheep as RepostCheep)!.Content.Author)
+            .AsQueryable();
+        query = query.Where(cheep => authorUsernameList.Contains(cheep.Author.DisplayName));
         query = query.OrderByDescending(cheep => cheep.TimeStamp);
         query = query.Skip(skip);
 
@@ -56,10 +65,10 @@ public class CheepRepository : ICheepRepository
         return query.ToList();
     }
 
-    public Cheep CreateCheep(Author author, string text, DateTime timestamp)
+    public OriginalCheep CreateCheep(Author author, string text, DateTime timestamp)
     {
-        var cheep = new Cheep { Author = author, Text = text, TimeStamp = timestamp };
-        if (cheep.Text.Length > Cheep.MaxLength)
+        var cheep = new OriginalCheep() { Author = author, Text = text, TimeStamp = timestamp };
+        if (cheep.GetText().Length > Cheep.MaxLength)
         {
             throw new CheepTooLongException(cheep);
         }
@@ -67,5 +76,37 @@ public class CheepRepository : ICheepRepository
         _dbcontext.Cheeps.Add(cheep);
         _dbcontext.SaveChanges();
         return cheep;
+    }
+
+    public RepostCheep CreateReCheep(Author author, OriginalCheep originalCheep, DateTime timestamp)
+    {
+        var cheep = new RepostCheep
+        {
+            Author = author,
+            TimeStamp = timestamp,
+            Content = originalCheep
+        };
+        _dbcontext.Cheeps.Add(cheep);
+        _dbcontext.SaveChanges();
+        return cheep;
+    }
+
+    public OriginalCheep GetOriginalCheepById(int cheepId)
+    {
+        var cheep = _dbcontext.Cheeps
+            .Include(c => (c as RepostCheep)!.Content)
+            .FirstOrDefault(c => c.CheepId == cheepId);
+
+        while (cheep is RepostCheep repostCheep)
+        {
+            cheep = repostCheep.Content;
+        }
+        
+        if (cheep == null || cheep is not OriginalCheep originalCheep)
+        {
+            throw new CheepNotFoundException(cheepId);
+        }
+
+        return originalCheep;
     }
 }
