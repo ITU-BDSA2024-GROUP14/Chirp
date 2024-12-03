@@ -46,10 +46,55 @@ Describe the illustration briefly, i.e., how your application is built, tested, 
 
 ### Team work
 
+!!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS:!!
 Show a screenshot of your project board right before hand-in.
 Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
+!!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS!!
 
-Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the `main` branch of your repository.
+When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
+Then the description is made into GitHub issues, with user stories and acceptance criteria, and added to the GitHub kanban board.
+
+Later someone will assign themselves to the issue, create a branch and move the issue to “In Progress” on the kanban board.
+They will complete the issue and check off the acceptance criteria.
+When the issue is complete, and all tests pass, they will move it to “Pre approval” on the kanban board, and create a pull request.
+
+Another developer will review the pull request, and either suggest changes, in which case the original developer fixes the problems, and request a re-review.
+
+When it is approved in review and all tests pass, the branch is merged into main and the issue is moved to “Done” on the kanban board.
+
+```plantuml
+start
+:Receive Project Description;
+
+:Read indivudually and discuss
+as group;
+
+:Someone writes the issue
+and it is added to kanban board;
+
+:Someone assigns themselves to the issue
+and moves it on the kanban board;
+
+:Complete the issue, and check
+the acceptance criteria off;
+
+repeat :Complete an acceptance criteria;
+repeat while (More acceptance criteria?) is (yes)
+->no;
+
+:Create pull request
+and move it on the kanban board;
+
+repeat :Someone reviews the code;
+backward:Original developer fixes problems;
+repeat while (Review approved and
+checks pass?) is (no)
+->yes;
+
+:Branch is merged into main
+and issue is closed;
+end
+```
 
 ### How to make _Chirp!_ work locally
 
@@ -68,12 +113,23 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 ### License
 
-State which software license you chose for your application.
+When deciding which license to use the most important consideration is whether any GPL libraries are used in the project, since the licence then must be GPL.
+None of the libraries used has the GPL license, or any other copyleft license. 
+Therefore the choice of license was left open, and the MIT license was chosen. 
+The MIT license is one of the most permissive licenses, allowing the program to be used for almost anything as long as the original copyright notice and license are included. 
+This also means the program can be used as is, and the developers have no responsibility for maintaining the product.
+As discussed in the open source lecture, there are many advantages with using open source as your license.
+Additionally, since this is a school project, it makes sense to both be as open source as possible, and to not take responsibility for maintaining the code longterm.
 
 ### LLMs, ChatGPT, CoPilot, and others
 
-State which LLM(s) were used during development of your project.
-In case you were not using any, just state so.
-In case you were using an LLM to support your development, briefly describe when and how it was applied.
-Reflect in writing to which degree the responses of the LLM were helpful.
-Discuss briefly if application of LLMs sped up your development or if the contrary was the case.
+In the development process LLM were used sparingly to support the coding process.
+GitHub copilot and the JetBrains AI was occasionally used to finish lines of code, when it came with good suggestions. 
+It also wrote some of the documentation for the code and helped with some tests.
+ChatGPT was used occasionally to suggest names, explain error messages, and other similar uses.
+
+Often the answers were wrong or irrelevant though, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, making it a small problem.
+It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
+Since neither ever contributed significantly to the codebase it has not been added as a co-author to any commits.
+
+
