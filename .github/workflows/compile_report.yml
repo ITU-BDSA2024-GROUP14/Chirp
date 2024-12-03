@@ -1,7 +1,11 @@
 name: Compile report to pdf 
 
-on: 
-  workflow_dispatch: 
+on:
+  push:
+    paths:
+      - docs/**
+  workflow_dispatch:
+
 
 jobs:
   convert_via_pandoc:
