@@ -134,4 +134,17 @@ public class PlaywrightTest : SelfHostedPageTest
         await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).Not.ToBeVisibleAsync();
         await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("Starbuck now is what we hear the worst.");
     }
+    [Test]
+    public async Task PagenationButtons()
+    {
+        await Page.GotoAsync(serverAddress);
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
+        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
+        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
+        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
+    }
 }
