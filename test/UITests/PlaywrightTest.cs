@@ -18,6 +18,12 @@ public class PlaywrightTest : SelfHostedPageTest
     {
         serverAddress = GetServerAddress();
     }
+    
+    [SetUp]
+    public void Reset()
+    {
+        ResetDatabase();
+    }
 
     [Test]
     public async Task XSSAttackResiliancy()
