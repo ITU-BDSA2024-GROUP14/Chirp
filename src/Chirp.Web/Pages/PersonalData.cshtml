@@ -16,7 +16,7 @@
         <h3>Your Email:</h3>
         <p>@Model.Author?.Email</p>
         <h3>You are Following:</h3>
-        <ul id="messagelist" class="cheeps">
+        <ul id="followList" class="cheeps">
             @foreach (var name in Model.Author?.Following!)
             {
                 <li>
