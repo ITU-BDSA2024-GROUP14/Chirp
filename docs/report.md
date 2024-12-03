@@ -46,10 +46,55 @@ Describe the illustration briefly, i.e., how your application is built, tested, 
 
 ### Team work
 
+!!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS:!!
 Show a screenshot of your project board right before hand-in.
 Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
+!!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS!!
 
-Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the `main` branch of your repository.
+When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the individual problems.
+Then the description is made into Github issues, with user stories and acceptance criteria, and added to the Github kanban board.
+
+Later someone will assign themselves to the issue, create a branch and move the issue to “In Progress” on the kanban board.
+They will complete the issue and check off the acceptance criteria.
+When the issue is complete, and all tests pass, they will move it to “Pre approval” on the kanban board, and create a pull request.
+
+Another developer will review the pull request, and either suggest changes, in which case the original developer fixes the problems, and request a re-review.
+
+When it is approved in review and all tests pass, the branch is merged into main and the issue is moved to “Done” on the kanban board.
+
+´´´plantuml
+start
+:Receive Project Description;
+
+:Read indivudually and discuss
+as group;
+
+:Someone writes the issue
+and it is added to kanban board;
+
+:Someone assigns themselves to the issue
+and moves it on the kanban board;
+
+:Complete the issue, and check
+the acceptance criteria off;
+
+repeat :Complete an acceptance criteria;
+repeat while (More acceptance criteria?) is (yes)
+->no;
+
+:Create pull request
+and move it on the kanban board;
+
+repeat :Someone reviews the code;
+backward:Original developer fixes problems;
+repeat while (Review approved and
+checks pass?) is (no)
+->yes;
+
+:Branch is merged into main
+and issue is closed;
+end
+´´´
 
 ### How to make _Chirp!_ work locally
 
