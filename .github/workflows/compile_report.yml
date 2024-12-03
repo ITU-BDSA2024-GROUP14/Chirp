@@ -11,9 +11,9 @@ jobs:
 
       - uses: docker://pandoc/latex:3.5
         with:
-          args: --output=output/report.pdf docs/report.md  
+          args: --output=docs/report.pdf docs/report.md  
           
       - uses: actions/upload-artifact@v4
         with:
-          name: output
-          path: output
+          name: report
+          path: docs/report.pdf
