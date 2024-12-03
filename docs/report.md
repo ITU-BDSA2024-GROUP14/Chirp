@@ -62,7 +62,7 @@ Another developer will review the pull request, and either suggest changes, in w
 
 When it is approved in review and all tests pass, the branch is merged into main and the issue is moved to “Done” on the kanban board.
 
-´´´plantuml
+```plantuml
 start
 :Receive Project Description;
 
@@ -94,7 +94,7 @@ checks pass?) is (no)
 :Branch is merged into main
 and issue is closed;
 end
-´´´
+```
 
 ### How to make _Chirp!_ work locally
 
