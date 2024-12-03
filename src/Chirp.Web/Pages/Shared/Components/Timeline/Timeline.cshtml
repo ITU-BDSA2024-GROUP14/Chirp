@@ -1,0 +1,8 @@
+
+<h2> @ViewBag.TimelineOwner Timeline </h2>
+
+@await Component.InvokeAsync("CheepBox", new {model = this.Model})
+
+@await Component.InvokeAsync("TimelineContent", new {model = this.Model})
+
+@await Component.InvokeAsync("PaginationButtons", new {model = this.Model})

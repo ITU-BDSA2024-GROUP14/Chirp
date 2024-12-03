@@ -7,50 +7,5 @@
 }
 
 <div>
-    <h2> @routeName's Timeline </h2>
-
-    @if (User.Identity is { IsAuthenticated: true })
-    {
-        <div class="cheepbox">
-            <h3>What's on your mind @(Model.GetLoggedInBeak())?</h3>
-            <form method="post">
-                <input style="float: left" type="text" asp-for="Message">
-                <input type="submit" value="Share">
-                <span asp-validation-for="Message"></span>
-            </form>
-        </div>
-    }
-
-    @if (Model.Cheeps.Any())
-    {
-        <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
-                <li>
-                    @if (User.Identity is { IsAuthenticated: true } && cheep.Author != Model.GetLoggedInBeak())
-                    {
-                        {
-                            <div class="flipFollow">
-                                <form method="post" asp-page-handler="FlipFollow">
-                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                    <button type="submit">@(Model.CheckIfFollowing(cheep.Author) ? "Unfollow" : "Follow")</button>
-                                </form>
-                            </div>
-                        }
-                    }
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.Timestamp</small>
-                    </p>
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <em>There are no cheeps so far.</em>
-    }
+    @await Component.InvokeAsync("Timeline", new {model = this.Model, timelineOwner = @routeName + "'s"})
 </div>

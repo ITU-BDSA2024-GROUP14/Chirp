@@ -1,0 +1,10 @@
+@model Chirp.Web.Pages.Shared.Models.TimelineModel
+
+<div>
+    @if (Model.PageNumber > 1)
+    {
+        <a href="?page=@(Model.PageNumber - 1)"><button type="submit">Previous Page</button></a>
+    }
+    <p>@Model.PageNumber</p>
+    <a href="?page=@(Model.PageNumber + 1)"><button type="submit">Next Page</button></a>
+</div>

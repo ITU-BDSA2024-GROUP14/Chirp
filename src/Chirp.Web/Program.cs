@@ -22,7 +22,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 
 builder.Services.AddDefaultIdentity<Author>(options =>
-        options.SignIn.RequireConfirmedAccount = true)
+        options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
 builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>

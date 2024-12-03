@@ -17,6 +17,21 @@ namespace Chirp.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FollowingId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AuthorId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("Follows", (string)null);
+                });
+
             modelBuilder.Entity("Chirp.Core.DataModel.Author", b =>
                 {
                     b.Property<int>("Id")
@@ -26,12 +41,12 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Beak")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -41,10 +56,6 @@ namespace Chirp.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Following")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -81,7 +92,7 @@ namespace Chirp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Beak")
+                    b.HasIndex("DisplayName")
                         .IsUnique();
 
                     b.HasIndex("Email")
@@ -106,12 +117,12 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(160)
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(13)
                         .HasColumnType("TEXT");
 
                     b.HasKey("CheepId");
@@ -119,6 +130,10 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Cheeps");
+
+                    b.HasDiscriminator<string>("Type").HasValue("Cheep");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -251,6 +266,45 @@ namespace Chirp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Chirp.Core.DataModel.OriginalCheep", b =>
+                {
+                    b.HasBaseType("Chirp.Core.DataModel.Cheep");
+
+                    b.Property<string>("_text")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("OriginalCheep");
+                });
+
+            modelBuilder.Entity("Chirp.Core.DataModel.RepostCheep", b =>
+                {
+                    b.HasBaseType("Chirp.Core.DataModel.Cheep");
+
+                    b.Property<int>("ContentCheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("ContentCheepId");
+
+                    b.HasDiscriminator().HasValue("RepostCheep");
+                });
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.HasOne("Chirp.Core.DataModel.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Core.DataModel.Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Chirp.Core.DataModel.Cheep", b =>
                 {
                     b.HasOne("Chirp.Core.DataModel.Author", "Author")
@@ -311,6 +365,17 @@ namespace Chirp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Chirp.Core.DataModel.RepostCheep", b =>
+                {
+                    b.HasOne("Chirp.Core.DataModel.OriginalCheep", "Content")
+                        .WithMany()
+                        .HasForeignKey("ContentCheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("Chirp.Core.DataModel.Author", b =>

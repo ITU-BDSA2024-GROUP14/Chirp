@@ -1,6 +1,8 @@
 using Chirp.Core;
 using Chirp.Core.DataModel;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Repositories;
 
@@ -20,7 +22,7 @@ public class AuthorRepository : IAuthorRepository
     /// <returns>The requested author</returns>
     public Author? GetAuthorByName(string authorName)
     {
-        return _dbcontext.Authors.FirstOrDefault(a => a.Beak == authorName);
+        return _dbcontext.Authors.FirstOrDefault(a => a.DisplayName == authorName);
     }
 
     /// <summary>
@@ -40,7 +42,7 @@ public class AuthorRepository : IAuthorRepository
     /// <param name="authorEmail">The email of the author</param>
     public Author CreateAuthor(string authorName, string authorEmail)
     {
-        var author = new Author { Beak = authorName, Email = authorEmail };
+        var author = new Author { DisplayName = authorName, Email = authorEmail };
         _dbcontext.Authors.Add(author);
         _dbcontext.SaveChanges();
         return author;
@@ -48,38 +50,61 @@ public class AuthorRepository : IAuthorRepository
 
     public void FollowUser(Author user, Author toFollowAuthor)
     {
+        if (!Exists(user))
+        {
+            throw new AuthorMissingException(user.DisplayName);
+        }
+        
+        if (!Exists(toFollowAuthor))
+        {
+            throw new AuthorMissingException(user.DisplayName);
+        }
+        
         if (IsFollowing(user, toFollowAuthor))
         {
             return;
         }
 
         _dbcontext.Authors.Update(user);
-        user.Following.Add(toFollowAuthor.Beak);
+        user.Following.Add(toFollowAuthor);
         _dbcontext.SaveChanges();
     }
 
     public void UnFollowUser(Author user, Author toUnFollow)
     {
+        if (!Exists(user))
+        {
+            throw new AuthorMissingException(user.DisplayName);
+        }
+        
+        if (!Exists(toUnFollow))
+        {
+            throw new AuthorMissingException(user.DisplayName);
+        }
+        
         if (!IsFollowing(user, toUnFollow))
         {
             return;
         }
 
         _dbcontext.Authors.Update(user);
-        user.Following.Remove(toUnFollow.Beak);
+        user.Following.Remove(toUnFollow);
         _dbcontext.SaveChanges();
     }
-
+    
     private static bool IsFollowing(Author user, Author author)
     {
-        return user.Following.Contains(author.Beak);
+        return user.Following.Contains(author);
+    }
+
+    private bool Exists(Author author)
+    {
+        return _dbcontext.Authors.Any(a => a.DisplayName == author.DisplayName);
     }
 
     public List<string> GetFollowing(string authorName)
     {
-        var author = _dbcontext.Authors.First(author => author.Beak == authorName);
-        return author.Following;
+        var author = _dbcontext.Authors.Include(author => author.Following).First(author => author.DisplayName == authorName);
+        return author.Following.Select(a => a.DisplayName).ToList();
     }
-
-
 }
