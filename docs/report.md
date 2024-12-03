@@ -68,10 +68,13 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 ### License
 
+When deciding which license to use the most important consideration is whether any GPL libraries are used in the project, since the licence then must be GPL.
 None of the libraries used has the GPL license, or any other copyleft license. 
-Therefore the choice of license was open, and the MIT license was used. 
-The MIT license is one of the most permissive licenses, allowing the program to be used for almost anything as long as the original copyright notice and license is included. 
-It also means the program can be used as is, and the developers have no responsibility for maintaining the product.
+Therefore the choice of license was left open, and the MIT license was chosen. 
+The MIT license is one of the most permissive licenses, allowing the program to be used for almost anything as long as the original copyright notice and license are included. 
+This also means the program can be used as is, and the developers have no responsibility for maintaining the product.
+As discussed in the open source lecture, there are many advantages with using open source as your license.
+Additionally, since this is a school project, it makes sense to both be as open source as possible, and to not take responsibility for maintaining the code longterm.
 
 ### LLMs, ChatGPT, CoPilot, and others
 
