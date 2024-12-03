@@ -89,14 +89,6 @@ public class PlaywrightTest : SelfHostedPageTest
         await Page.GetByLabel("Confirm Password").PressAsync("Tab");
         await Page.GetByPlaceholder("JohnDoe").FillAsync("Coolguy123");
         await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Click here to confirm your" })
-            .ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("joe@mama.com");
-        await Page.GetByPlaceholder("name@example.com").PressAsync("Tab");
-        await Page.GetByPlaceholder("password").FillAsync("W3are!");
-        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [Coolguy123]" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("h3")).ToContainTextAsync("What's on your mind Coolguy123?");

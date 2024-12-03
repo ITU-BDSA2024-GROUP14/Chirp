@@ -46,14 +46,6 @@ public class EndToEndTest : SelfHostedPageTest
         await Page.GetByPlaceholder("JohnDoe").ClickAsync();
         await Page.GetByPlaceholder("JohnDoe").FillAsync("Test user");
         await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Click here to confirm your" })
-            .ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("Test@example.dk");
-        await Page.GetByPlaceholder("name@example.com").PressAsync("Tab");
-        await Page.GetByPlaceholder("password").FillAsync("Test1234!");
-        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("This is a test cheep");
         await Expect(Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Share" })).ToBeVisibleAsync();
