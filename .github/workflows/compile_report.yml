@@ -1,7 +1,11 @@
 name: Compile report to pdf 
 
-on: 
-  workflow_dispatch: 
+on:
+  push:
+    paths:
+      - docs/**
+  workflow_dispatch:
+
 
 jobs:
   convert_via_pandoc:
@@ -15,5 +19,5 @@ jobs:
           
       - uses: actions/upload-artifact@v4
         with:
-          name: report
+          name: report.pdf
           path: docs/report.pdf
