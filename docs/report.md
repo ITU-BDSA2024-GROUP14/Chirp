@@ -51,8 +51,8 @@ Show a screenshot of your project board right before hand-in.
 Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
 !!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS!!
 
-When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the individual problems.
-Then the description is made into Github issues, with user stories and acceptance criteria, and added to the Github kanban board.
+When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
+Then the description is made into GitHub issues, with user stories and acceptance criteria, and added to the GitHub kanban board.
 
 Later someone will assign themselves to the issue, create a branch and move the issue to “In Progress” on the kanban board.
 They will complete the issue and check off the acceptance criteria.
