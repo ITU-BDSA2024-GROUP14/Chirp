@@ -72,8 +72,15 @@ State which software license you chose for your application.
 
 ### LLMs, ChatGPT, CoPilot, and others
 
-State which LLM(s) were used during development of your project.
-In case you were not using any, just state so.
-In case you were using an LLM to support your development, briefly describe when and how it was applied.
-Reflect in writing to which degree the responses of the LLM were helpful.
-Discuss briefly if application of LLMs sped up your development or if the contrary was the case.
+In the development process LLM were used sparingly to support the coding process.
+Riders Line Completion were occasionally used to finish lines of code, when it came with good suggestions. 
+This runs locally and does not communicate over the internet, probably making them 
+It assisted making templates for documentation,so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
+ChatGPT was used occasionally to suggest names, explain error messages, and other similar uses.
+
+Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
+It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
+Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
+
+
+[^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
