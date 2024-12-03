@@ -15,5 +15,5 @@ jobs:
           
       - uses: actions/upload-artifact@v4
         with:
-          name: report
+          name: report.pdf
           path: docs/report.pdf
