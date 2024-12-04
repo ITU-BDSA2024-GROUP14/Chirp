@@ -17,4 +17,9 @@ public abstract class SelfHostedPageTest : PageTest
     {
         return s_webApplicationFactory!.ServerAddress;
     }
+
+    protected void ResetWebApplicationFactory()
+    {
+        s_webApplicationFactory = new PlaywrightWebApplicationFactory<Program>();
+    }
 }
