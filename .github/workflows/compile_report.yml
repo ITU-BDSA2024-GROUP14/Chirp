@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: docker://pandoc/latex:3.5
+      - uses: docker://olivers8/pandoc-latex-plantuml
         with:
           args: --output=docs/report.pdf docs/report.md  
           
