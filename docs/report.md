@@ -59,9 +59,29 @@ Briefly describe and illustrate the flow of activities that happen from the new 
 
 ### How to make _Chirp!_ work locally
 
-There has to be some documentation on how to come from cloning your project to a running system.
-That is, Adrian or Helge have to know precisely what to do in which order.
-Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
+To run the project you need the following programs
+
+- Dotnet 8
+    - [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
+- git cli
+
+```sh
+git clone https://github.com/ITU-BDSA2024-GROUP14/Chirp.git
+```
+
+After cloning the project go into _Chirp.Web_ project
+```sh
+cd ./Chirp/src/Chirp.Web
+```
+Run the following command to set up user secrets for running the program locally
+```sh
+dotnet user-secrets set "authentication:github:clientId" "Ov23liOEFAiXHOnNGkH3"
+dotnet user-secrets set "authentication:github:clientSecret" "9cc3aae28d9e5fdfe27f42158842f92687964382"
+```
+
+Now run dotnet run. The program is now running locally, go to http://localhost:5273 to interact with it
+
+
 
 ### How to run test suite locally
 
