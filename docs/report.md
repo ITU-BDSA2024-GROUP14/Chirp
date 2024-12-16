@@ -19,7 +19,6 @@ razorpages and and the UITests.
 
 ### Architecture of deployed application
 
-<<<<<<< HEAD
 ```plantuml
 @startuml
 
@@ -51,8 +50,6 @@ Whenever a client wants to access the app they connect through https to Chirp.We
 When the client opens the app the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
 If the client chooses to they can register and account with OAuth through github in which case github handles this request.
 
-=======
->>>>>>> main
 
 Illustrate the architecture of your deployed application.
 Remember, you developed a client-server application.
