@@ -25,7 +25,7 @@
 
 ### Domain model
 
-``` plantUML
+```plantUML
 @startuml
 
 skin rose
@@ -98,13 +98,107 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 
 ### Sequence of functionality/calls trough _Chirp!_
 
-With a UML sequence diagram, illustrate the flow of messages and data through your _Chirp!_ application.
-Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
+### Register
 
-Make sure that your illustration is complete.
-That is, likely for many of you there will be different kinds of "calls" and responses.
-Some HTTP calls and responses, some calls and responses in C# and likely some more.
-(Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
+```plantuml
+@startuml
+actor User
+participant Chirp.Web as Web
+participant "ASP.NET Identity" as Identity
+database SQLite
+
+User -> Web:                GET /Account/Register
+Web -> User:                Register page
+User -> Web:                POST /Account/Register
+Web -> Identity:            CreateUser()
+Identity -> SQLite:         INSERT author
+SQLite -> Identity:         Author
+Identity -> Web:            IdentityResult
+Web -> User:                Set auth cookie
+
+@enduml
+```
+
+### Login
+
+```plantuml
+@startuml
+actor User
+participant Chirp.Web as Web
+participant "ASP.NET Identity" as Identity
+database SQLite
+
+User -> Web:                GET /Account/Login
+Web -> User:                Login page
+User -> Web:                POST /Account/Login
+Web -> Identity:            PasswordSignInAsync()
+Identity -> SQLite:         SELECT author
+SQLite -> Identity:         Author
+Identity --> Web:           SignInResult
+Web -> User:                Set auth cookie
+
+@enduml
+```
+
+### Authenticate via GitHub
+
+```plantuml
+@startuml
+actor User
+participant Chirp.Web as Web
+participant "ASP.NET Identity" as Identity
+participant "OAuth2 Provider\n(GitHub)" as GitHub
+database SQLite
+
+User -> Web:                GET /Account/Login
+Web -> User:                Login page
+User -> Web:                POST /Account/ExternalLogin
+Web -> Identity:            ConfigureExternal\nAuthenticationProperties()
+Identity -> Web:            AuthenticationProperties
+Web --> User:               Redirect to provider
+User -> GitHub:             Authorize client
+GitHub -> User:             Set OAuth2 cookie
+GitHub --> User:            Redirect to application
+User -> Web:                GET /Account/ExternalLogin/Callback
+Web -> Identity:            ExternalLoginSignInAsync()
+Identity -> Web:            SignInResult
+
+group if: user does not exist
+    Web -> Identity:        CreateUser()
+    Identity -> SQLite:     INSERT author
+    SQLite -> Identity:     Author
+    Identity -> Web:        IdentityResult
+end
+
+Web -> User:                Set auth cookie
+Web --> User:               Redirect to public timeline
+
+@enduml
+```
+
+### Post new cheep
+
+```plantuml
+@startuml
+actor "User (logged in)" as User
+participant Chirp.Web as Web
+participant Chirp.Infrastructure as Infrastructure
+database SQLite
+
+User -> Web:                GET /
+Web -> Infrastructure:      GetCheeps()
+Infrastructure -> SQLite:   SELECT Cheeps
+SQLite -> Infrastructure:   Cheep[]
+Infrastructure -> Web:      CheepDTO[]
+Web -> User:                Public timeline
+User -> Web:                POST /
+Web -> Infrastructure:      CreateCheep()
+Infrastructure -> SQLite:   INSERT cheep
+Infrastructure -> Web:      Success
+Web --> User:               Redirect to user timeline
+
+@enduml
+```
 
 ## Process
 
