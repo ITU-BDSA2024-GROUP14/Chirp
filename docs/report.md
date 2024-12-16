@@ -8,11 +8,17 @@ In case you are using ASP.NET Identity, make sure to illustrate that accordingly
 
 ### Architecture — In the small
 
-Illustrate the organization of your code base.
-That is, illustrate which layers exist in your (onion) architecture.
-Make sure to illustrate which part of your code is residing in which layer.
+![SVG Image](./diagrams/Onion.drawio.svg)
+
+Our solution's structure supercedes the Onion structure which means that
+each of our dotnet projects does not correspond to a onion layer. Our Core dotnet project correspond to
+the core onion layer while the Infrastructure dotnet project is split across both
+the repository layer and service layer. In the service layer our DTO's also resides since these are only
+used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
+razorpages and and the UITests.
 
 ### Architecture of deployed application
+
 
 Illustrate the architecture of your deployed application.
 Remember, you developed a client-server application.
