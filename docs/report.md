@@ -1,3 +1,26 @@
+# _Chirp!_ report (Techical documentation)
+- August Bugge (aubu)
+- Daniel Haubølle (dtha)
+- Jonas Esser (jones)
+- Jonathan Villeret (jonv)
+- Oliver Starup (osta)
+
+## Table of Contents
+- Design and architecture
+    - Domain Model
+    - Architecture - in the small
+    - Architecture of deployed application
+    - User activities
+    - Sequence of functionality/calls through _Chirp!_
+- Process
+    - Build, test, release, and deployment
+    - Team work
+    - How to make _Chirp!_ work locally
+    - How to run test suite locally
+- Ethics
+    - License
+    - LLMs, ChatGPT, CoPilot, and others
+
 ## Design and architecture
 
 ### Domain model
@@ -171,7 +194,7 @@ Now run ```dotnet run```. The program is now running locally, go to http://local
 
 ### How to run test suite locally
 
-#### How to run test suite
+#### How to run test suite 
 
 To run the test suite locally playwright and dotnet 8 needs to be installed. To install playwright, make sure powershell is installed. 
 
@@ -188,7 +211,7 @@ After the above listed  programs is installed on your computer, run the followin
 dotnet test
 ```
 
-#### Tests in _Chirp!_
+#### Tests in _Chirp!_ 
 To ensure requirements, prevent bugs, and new code does not break old code, the project contains Unit tests, integration tests, and End to End tests.
 
 These tests can be found in the following folders
@@ -200,7 +223,7 @@ Project root
     |-- UITests
 ```
 
-##### Chirp.Infrastructure.Tests
+##### Chirp.Infrastructure.Tests  
 The _Infrastructure test_ project contains unit tests for
 
 - Cheeprepository
@@ -209,10 +232,10 @@ The _Infrastructure test_ project contains unit tests for
 
 These tests cover all of the different methods located in their respective classes.
 
-##### IntegrationTests
+##### IntegrationTests  
 The _intregration test_ project contains integration tests, using http requests to test if the website contains implemented features in the html code.
 
-##### UITests
+##### UITests  
 In the _UITests_ project playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
 
 ## Ethics
