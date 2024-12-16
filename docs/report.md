@@ -59,10 +59,49 @@ Likely, it is best to describe how we clone your project, which commands we have
 
 ### How to run test suite locally
 
-List all necessary steps that Adrian or Helge have to perform to execute your test suites.
-Here, you can assume that we already cloned your repository in the step above.
+#### How to run test suite
 
-Briefly describe what kinds of tests you have in your test suites and what they are testing.
+To run the test suite locally playwright and dotnet8 needs to be installed. To install playwright, make sure powershell is installed. 
+
+- [_How to install powershell_](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
+- [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
+
+After installing powershell on your local machine, run the following command in the root of the project
+```sh
+dotnet build
+pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1
+```
+After listed above is installed on your computer, run the follwoing command in the project root to run all tests
+```sh
+dotnet test
+```
+
+#### Tests in _Chirp!_
+To ensure requirements, prevent bugs, and new code does not break old code, the project contains Unit tests, integration tests, and End to End tests.
+
+These tests can be found in the following folders
+```sh
+Project root
+|-- test
+    |-- Chirp.Infrastructure.Tests
+    |-- IntegrationTests
+    |-- UITests
+```
+
+##### Chirp.Infrastructure.Tests
+The _Infrastructure test_ project contains unit tests for
+
+- Cheeprepository
+- ChirpService
+- AuthorService
+
+These tests cover all of the different methods located in their respective classes.
+
+##### IntegrationTests
+The _intregration test_ project contains integration tests using http requests to test if the website contains implemented features in the html code.
+
+##### UITests
+The _UITests_ project uses playwright to create End to End test for the project, this tests the UI, and features that are that are relient on being logged in.
 
 ## Ethics
 
