@@ -2,7 +2,7 @@
 
 ### Domain model
 
-``` plantUML
+```plantUML
 @startuml
 
 skin rose
