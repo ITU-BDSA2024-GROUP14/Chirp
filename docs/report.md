@@ -2,7 +2,7 @@
 
 ### Domain model
 
-``` plantUML
+```plantUML
 @startuml
 
 skin rose
@@ -75,15 +75,7 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 
 ### Sequence of functionality/calls trough _Chirp!_
 
-With a UML sequence diagram, illustrate the flow of messages and data through your _Chirp!_ application.
-Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
-
-Make sure that your illustration is complete.
-That is, likely for many of you there will be different kinds of "calls" and responses.
-Some HTTP calls and responses, some calls and responses in C# and likely some more.
-(Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
-
-#### Register
+### Register
 
 ```plantuml
 @startuml
@@ -104,7 +96,7 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-#### Login
+### Login
 
 ```plantuml
 @startuml
@@ -125,7 +117,7 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-#### Authenticate via GitHub
+### Authenticate via GitHub
 
 ```plantuml
 @startuml
@@ -148,7 +140,7 @@ User -> Web:                GET /Account/ExternalLogin/Callback
 Web -> Identity:            ExternalLoginSignInAsync()
 Identity -> Web:            SignInResult
 
-opt user does not exist
+group if: user does not exist
     Web -> Identity:        CreateUser()
     Identity -> SQLite:     INSERT author
     SQLite -> Identity:     Author
@@ -161,7 +153,7 @@ Web --> User:               Redirect to public timeline
 @enduml
 ```
 
-#### Post new cheep
+### Post new cheep
 
 ```plantuml
 @startuml
