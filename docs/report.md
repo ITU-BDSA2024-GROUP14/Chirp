@@ -2,9 +2,51 @@
 
 ### Domain model
 
-Provide an illustration of your domain model.
-Make sure that it is correct and complete.
-In case you are using ASP.NET Identity, make sure to illustrate that accordingly.
+``` plantUML
+@startuml
+
+skin rose
+
+title Classes - Class Diagram
+
+package Identity{
+  class IdentityUser<int>
+}
+
+package Core {
+  class Author {
+    +string DisplayName
+    +string Email
+  }
+  
+  abstract class Cheep {
+    +int CheepId
+    +DateTime TimeStamp
+    +abstract string GetText()
+  }
+  class OriginalCheep {
+    -string _text
+    +override string GetText()
+  }
+  class ReCheep
+}
+
+Author "Author" -- "Cheeps*" Cheep
+Author --> "Follows*"Author
+Cheep <|-- OriginalCheep
+Cheep <|-- ReCheep
+OriginalCheep "Content" <-- ReCheep
+IdentityUser <|-- Author
+
+@enduml
+```
+
+
+The Domain Model is implemented in the Core package. This contains the classes that represent the core of the data structure.  The core has, by design, very few dependencies. It depends only on Identity. It is the objects defined in the core that are saved in the database.
+
+An Author represents a user of the system. It implements the IdentityUser class to allow for authentication.
+
+A Cheep represents something a user can post. OriginalCheeps represent Cheeps written by the author, while a ReCheep represent repost of an OriginalCheep by another Author.
 
 ### Architecture — In the small
 
