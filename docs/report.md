@@ -71,7 +71,7 @@ After installing powershell on your local machine, run the following command in 
 dotnet build
 pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1
 ```
-After listed above is installed on your computer, run the follwoing command in the project root to run all tests
+After the listed above programs is installed on your computer, run the following command in the project root to run all tests
 ```sh
 dotnet test
 ```
@@ -98,7 +98,7 @@ The _Infrastructure test_ project contains unit tests for
 These tests cover all of the different methods located in their respective classes.
 
 ##### IntegrationTests
-The _intregration test_ project contains integration tests using http requests to test if the website contains implemented features in the html code.
+The _intregration test_ project contains integration tests, using http requests to test if the website contains implemented features in the html code.
 
 ##### UITests
 The _UITests_ project uses playwright to create End to End test for the project, this tests the UI, and features that are that are relient on being logged in.
