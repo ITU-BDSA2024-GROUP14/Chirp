@@ -14,6 +14,38 @@ Make sure to illustrate which part of your code is residing in which layer.
 
 ### Architecture of deployed application
 
+```plantuml
+@startuml
+
+node "Azure" {
+  package "Chirp" {
+    [Chirp.Infrastructure]
+    [Chirp.Core]
+    [Chirp.Web] - HTTPS
+  }
+  database "SQLite"
+}
+
+[Github] - OAuth2
+[Chirp.Infrastructure] ..> OAuth2 : using
+
+[Chirp.Infrastructure] --> [Chirp.Core]
+[Chirp.Infrastructure] --> "SQLite"
+[Chirp.Web] --> [Chirp.Infrastructure]
+
+node "Client" {
+  [Webbrowser] ..> HTTPS : using
+}
+
+@enduml
+```
+
+The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through razorpages.
+Whenever a client wants to access the app they connect through https to Chirp.Web.
+When the client opens the app the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
+If the client chooses to they can register and account with OAuth through github in which case github handles this request.
+
+
 Illustrate the architecture of your deployed application.
 Remember, you developed a client-server application.
 Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
