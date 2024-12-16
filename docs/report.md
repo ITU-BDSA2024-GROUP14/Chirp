@@ -42,7 +42,11 @@ IdentityUser <|-- Author
 ```
 
 
-The Domain Model is implemented in the Core package. This contains the classes that represent the core of the data structure.  The core depends only on Identity. 
+The Domain Model is implemented in the Core package. This contains the classes that represent the core of the data structure.  The core has, by design, very few dependencies. It depends only on Identity. It is the objects defined in the core that are saved in the database.
+
+An Author represents a user of the system. It implements the IdentityUser class to allow for authentication.
+
+A Cheep represents something a user can post. OriginalCheeps represent Cheeps written by the author, while a ReCheep represent repost of an OriginalCheep by another Author.
 
 ### Architecture — In the small
 
