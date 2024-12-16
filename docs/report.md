@@ -51,10 +51,10 @@ A *Cheep* represents something a user can post. *OriginalCheeps* represent *Chee
 
 ![SVG Image](./diagrams/Onion.drawio.svg)
 
-each of our dotnet projects does not correspond to a onion layer. Our Core dotnet project correspond to
-the core onion layer while the Infrastructure dotnet project is split across both
-the repository layer and service layer. In the service layer our DTO's also resides since these are only
 Our solution's structure supersedes the Onion structure which means that
+some Onion layers contain more than one dotnet project. Our *Core* dotnet project correspond to
+the core onion layer while the *Infrastructure* dotnet project is split across both
+the repository layer and service layer. Our DTOs exist in the service layer, since these are only
 used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
 razorpages and the UITests.
 
