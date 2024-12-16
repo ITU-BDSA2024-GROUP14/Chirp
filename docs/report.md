@@ -51,12 +51,12 @@ A *Cheep* represents something a user can post. *OriginalCheeps* represent *Chee
 
 ![SVG Image](./diagrams/Onion.drawio.svg)
 
-Our solution's structure supercedes the Onion structure which means that
 each of our dotnet projects does not correspond to a onion layer. Our Core dotnet project correspond to
 the core onion layer while the Infrastructure dotnet project is split across both
 the repository layer and service layer. In the service layer our DTO's also resides since these are only
+Our solution's structure supersedes the Onion structure which means that
 used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
-razorpages and and the UITests.
+razorpages and the UITests.
 
 ### Architecture of deployed application
 
