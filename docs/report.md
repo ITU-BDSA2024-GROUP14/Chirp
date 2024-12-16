@@ -169,12 +169,14 @@ Additionally, since this is a school project, it makes sense to both be as open 
 ### LLMs, ChatGPT, CoPilot, and others
 
 In the development process LLM were used sparingly to support the coding process.
-GitHub copilot and the JetBrains AI was occasionally used to finish lines of code, when it came with good suggestions. 
-It also wrote some of the documentation for the code and helped with some tests.
+Riders Line Completion were occasionally used to finish lines of code, when it came with good suggestions. 
+This runs locally and does not communicate over the internet, probably making them use less power compared ChatGPT or similar LLM's.
+It assisted making templates for documentation,so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
 ChatGPT was used occasionally to suggest names, explain error messages, and other similar uses.
 
-Often the answers were wrong or irrelevant though, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, making it a small problem.
+Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
 It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
-Since neither ever contributed significantly to the codebase it has not been added as a co-author to any commits.
+Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
 
 
+[^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
