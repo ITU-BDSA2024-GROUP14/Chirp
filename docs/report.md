@@ -166,8 +166,7 @@ dotnet user-secrets set "authentication:github:clientId" "Ov23liOEFAiXHOnNGkH3"
 dotnet user-secrets set "authentication:github:clientSecret" "9cc3aae28d9e5fdfe27f42158842f92687964382"
 ```
 
-Now run dotnet run. The program is now running locally, go to http://localhost:5273 to interact with it
-
+Now run ```dotnet run```. The program is now running locally, go to http://localhost:5273 to interact with it
 
 
 ### How to run test suite locally
