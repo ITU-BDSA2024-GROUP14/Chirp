@@ -204,10 +204,37 @@ Web --> User:               Redirect to user timeline
 
 ### Build, test, release, and deployment
 
-Illustrate with a UML activity diagram how your _Chirp!_ applications are build, tested, released, and deployed.
-That is, illustrate the flow of activities in your respective GitHub Actions workflows.
+**Build & Test**
 
-Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
+The `build_and_test.yml` workflow triggers on changes to main and ensures that all tests pass and that no warnings can enter the code base.
+
+```plantuml
+
+@startuml
+start
+split
+    :Pull request to **main**;
+split again
+    :Push to **main**;
+end split
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+if (Errors or warnings?) then (yes)
+    #red:error;
+    kill
+else (no)
+:Install Playwright;
+:Run tests;
+if (Tests passed?) then (yes)
+    end
+else (no)
+    #red:error;
+    kill
+@enduml
+
+```
 
 ### Team work
 
