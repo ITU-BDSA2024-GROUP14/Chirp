@@ -96,6 +96,14 @@ They can also view the cheeps on the public timeline, change page, and view othe
 Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
 They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
 
+In the two activity diagrams below, pages are orange boxes, actions are green boxes, and external pages are blue boxes.
+Activity diagram for unauthorized user:
+
+![SVG Image](./diagrams/UnauthorizedUserActivities.drawio.svg)
+
+Activity diagram for authorized user:
+
+![SVG Image](./diagrams/AuthorizedUserActivities.drawio.svg)
 User register:
 ```plantUML
 @startuml
