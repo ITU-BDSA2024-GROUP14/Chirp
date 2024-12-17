@@ -84,10 +84,36 @@ razorpages and and the UITests.
 
 ### Architecture of deployed application
 
+```plantuml
+@startuml
 
-Illustrate the architecture of your deployed application.
-Remember, you developed a client-server application.
-Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
+node "Azure" {
+  package "Chirp" {
+    [Chirp.Infrastructure]
+    [Chirp.Core]
+    [Chirp.Web] - HTTPS
+  }
+  database "SQLite"
+}
+
+[Github] - OAuth2
+[Chirp.Infrastructure] ..> OAuth2 : using
+
+[Chirp.Infrastructure] --> [Chirp.Core]
+[Chirp.Infrastructure] --> "SQLite"
+[Chirp.Web] --> [Chirp.Infrastructure]
+
+node "Client" {
+  [Webbrowser] ..> HTTPS : using
+}
+
+@enduml
+```
+
+The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through razorpages.
+Whenever a client wants to access the app they connect through https to Chirp.Web.
+When the client opens the app the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
+If the client chooses to they can register and account with OAuth through github in which case github handles this request.
 
 ### User activities
 
@@ -355,5 +381,6 @@ ChatGPT was used occasionally to suggest names, explain error messages, and othe
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
 It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
 Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
+
 
 [^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
