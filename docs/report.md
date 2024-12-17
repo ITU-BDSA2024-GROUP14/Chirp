@@ -118,10 +118,88 @@ If the client chooses to they can register and account with OAuth through github
 
 ### User activities
 
-Illustrate typical scenarios of a user journey through your _Chirp!_ application.
-That is, start illustrating the first page that is presented to a non-authorized user, illustrate what a non-authorized user can do with your _Chirp!_ application, and finally illustrate what a user can do after authentication.
+Unregistered users start on the public timeline and can either register or login to become a authorized user. 
+They can also view the cheeps on the public timeline, change page, and view other users private timeline, by clicking on their names.
+Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
+They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
 
-Make sure that the illustrations are in line with the actual behavior of your application.
+
+Below are two activity diagrams, about authorized and unauthorized users. The internal pages are orange boxes, actions are green boxes, and external pages are blue boxes.
+
+Activity diagram for unauthorized user:
+
+![SVG Image](./diagrams/UnauthorizedUserActivities.drawio.svg)
+
+Activity diagram for authorized user:
+
+![SVG Image](./diagrams/AuthorizedUserActivities.drawio.svg)
+
+Here are three user journeys representing typical user experiences on our site.
+User registering for the site:
+```plantUML
+@startuml
+
+start
+:Public Timeline
+(Not logged in);
+:Click "Register";
+
+repeat :Register page
+backward:Prints what should 
+be changed;
+:Fill out register form;
+repeat while (Register valid?) is (no)
+->yes;
+
+:Public Timeline
+(Logged in);
+
+@enduml
+```
+User logging in and writing a cheep:
+```plantuml
+@startuml
+
+start
+:Public Timeline;
+
+:Click "login";
+
+repeat :Login Page;
+repeat while (Login valid?) is (no)
+->yes;
+
+repeat :Public Timeline;
+:Write cheep;
+repeat while (Cheep valid?) is (no)
+->yes;
+:Private Timeline;
+
+end
+
+@enduml
+```
+User using the "Forget me!" feature to delet all data about them: 
+```plantuml
+@startuml
+
+start
+:Public Timeline
+(Logged in);
+
+:Click "about me";
+
+:"About me" Page;
+
+:Click "Forget me!";
+
+:Public Timeline
+(Not logged in);
+
+end
+
+@enduml
+```
 
 ### Sequence of functionality/calls trough _Chirp!_
 
