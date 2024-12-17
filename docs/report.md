@@ -261,6 +261,7 @@ end
 The `publish_on_tags.yml` workflow creates a GitHub release containing the compiled binaries for various systems.
 
 ```plantuml
+start
 :Push tag like **v*.*.***;
 :Checkout repository;
 :Setup .NET;
@@ -273,6 +274,7 @@ The `publish_on_tags.yml` workflow creates a GitHub release containing the compi
 :Compile Chirp.Web release for macOS x64;
 :Compile Chirp.Web release for macOS ARM;
 :Create GitHub release;
+end
 ```
 
 **Compile report**
@@ -280,12 +282,14 @@ The `publish_on_tags.yml` workflow creates a GitHub release containing the compi
 The `compile_report.yml` workflow compiles the report and included PlantUML diagrams as PDF.
 
 ```plantuml
+start
 :Push to docs/** path;
 :Checkout repository;
 :Build docker container;
 :Run docker container;
 :Compile report;
 :Upload PDF as artifact;
+end
 ```
 
 ### Team work
