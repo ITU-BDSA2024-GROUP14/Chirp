@@ -12,6 +12,7 @@
     - Architecture of deployed application
     - User activities
     - Sequence of functionality/calls through _Chirp!_
+    - Design decisions
 - Process
     - Build, test, release, and deployment
     - Team work
@@ -199,6 +200,12 @@ Web --> User:               Redirect to user timeline
 
 @enduml
 ```
+
+### Design decisions
+
+#### Self contained releases
+During the development of Chirp, a decision was made to make releases self contained. It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. This is not the case for this project, since it uses dotnet 8.0. Therefore, it is important for the releases to be self contained.
+
 
 ## Process
 
