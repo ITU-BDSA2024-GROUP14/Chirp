@@ -10,20 +10,22 @@ namespace UITests;
 
 [NonParallelizable]
 [TestFixture]
-public class PlaywrightTest : SelfHostedPageTest
+public class PlaywrightTest : PageTest
 {
-    private string serverAddress;
+    private PlaywrightWebApplicationFactory<Program>? _webApplicationFactory;
+    private string serverAddress => _webApplicationFactory!.ServerAddress;
+    private IServiceProvider ServiceProvider => _webApplicationFactory!.Services;
 
     [SetUp]
     public void Setup()
     {
-        serverAddress = GetServerAddress();
+        _webApplicationFactory = new();
     }
-    
+
     [TearDown]
     public void TearDown()
     {
-        ResetWebApplicationFactory();
+        _webApplicationFactory?.Dispose();
     }
 
     [Test]
@@ -41,13 +43,13 @@ public class PlaywrightTest : SelfHostedPageTest
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("\"><script>alert('XSS Test');</script>");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
-        
+
         Page.Dialog += (_, _) =>
         {
             dialogAppeared = true;
         };
-        
-        
+
+
         await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Adrian \"><script>alert('XSS Test');</script>");
         Assert.That(dialogAppeared, Is.False);
     }
@@ -212,9 +214,9 @@ public class PlaywrightTest : SelfHostedPageTest
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         await Page.GotoAsync(serverAddress + "PersonalData");
-        
-        await Expect(Page.Locator(".body").GetByText(user.DisplayName, new() {Exact = true})).ToBeVisibleAsync();
-        await Expect(Page.Locator(".body").GetByText(user.Email, new() {Exact = true})).ToBeVisibleAsync();
+
+        await Expect(Page.Locator(".body").GetByText(user.DisplayName, new() { Exact = true })).ToBeVisibleAsync();
+        await Expect(Page.Locator(".body").GetByText(user.Email, new() { Exact = true })).ToBeVisibleAsync();
 
         foreach (var follow in user.Following)
         {
@@ -226,21 +228,27 @@ public class PlaywrightTest : SelfHostedPageTest
             await Expect(Page.Locator("#messagelist")).ToContainTextAsync(cheep.GetText());
         }
     }
-    
+
     [Test]
     public async Task PagenationButtons()
     {
         await Page.GotoAsync(serverAddress);
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
-        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
+        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync(
+            "In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
-        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync(
+            "In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
+        await Expect(Page.Locator("#messagelist")).Not
+            .ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
-        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync("In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst. — 01/08/23 13.17.39");
+        await Expect(Page.Locator("#messagelist")).Not.ToContainTextAsync(
+            "In the morning of the wind, some few splintered planks, of what present avail to him. — 01/08/23 13.16.57");
     }
-    
+
     [Test]
     public async Task ReCheepShown()
     {
@@ -251,12 +259,16 @@ public class PlaywrightTest : SelfHostedPageTest
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst.");
-        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).Nth(1)).ToBeVisibleAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Adrian re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst.");
+        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" })
+            .GetByRole(AriaRole.Button).Nth(1)).ToBeVisibleAsync();
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button)
+            .Nth(1).ClickAsync();
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync("Adrian re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
     }
-    
+
     [Test]
     public async Task TestRecheepOthers()
     {
@@ -268,7 +280,9 @@ public class PlaywrightTest : SelfHostedPageTest
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck now is what we hear the worst." }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
+        await Page.Locator("li")
+            .Filter(new() { HasText = "Jacqualine Gilcoine Starbuck now is what we hear the worst." })
+            .GetByRole(AriaRole.Button).Nth(1).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Adrian]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
@@ -283,7 +297,9 @@ public class PlaywrightTest : SelfHostedPageTest
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.Locator("button").First.ClickAsync(); //Follow
         await Page.Locator("li:nth-child(2) > div > .reCheep > form > button").ClickAsync(); //Recheep
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("testuser re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
-        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Adrian re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync("testuser re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync("Adrian re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
     }
 }
