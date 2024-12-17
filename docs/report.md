@@ -12,6 +12,7 @@
     - Architecture of deployed application
     - User activities
     - Sequence of functionality/calls through _Chirp!_
+    - Design decisions
 - Process
     - Build, test, release, and deployment
     - Team work
@@ -84,17 +85,121 @@ razorpages and and the UITests.
 
 ### Architecture of deployed application
 
+```plantuml
+@startuml
 
-Illustrate the architecture of your deployed application.
-Remember, you developed a client-server application.
-Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
+node "Azure" {
+  package "Chirp" {
+    [Chirp.Infrastructure]
+    [Chirp.Core]
+    [Chirp.Web] - HTTPS
+  }
+  database "SQLite"
+}
+
+[Github] - OAuth2
+[Chirp.Infrastructure] ..> OAuth2 : using
+
+[Chirp.Infrastructure] --> [Chirp.Core]
+[Chirp.Infrastructure] --> "SQLite"
+[Chirp.Web] --> [Chirp.Infrastructure]
+
+node "Client" {
+  [Webbrowser] ..> HTTPS : using
+}
+
+@enduml
+```
+
+The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through razorpages.
+Whenever a client wants to access the app they connect through https to Chirp.Web.
+When the client opens the app the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
+If the client chooses to they can register and account with OAuth through github in which case github handles this request.
 
 ### User activities
 
-Illustrate typical scenarios of a user journey through your _Chirp!_ application.
-That is, start illustrating the first page that is presented to a non-authorized user, illustrate what a non-authorized user can do with your _Chirp!_ application, and finally illustrate what a user can do after authentication.
+Unregistered users start on the public timeline and can either register or login to become a authorized user. 
+They can also view the cheeps on the public timeline, change page, and view other users private timeline, by clicking on their names.
+Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
+They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
 
-Make sure that the illustrations are in line with the actual behavior of your application.
+
+Below are two activity diagrams, about authorized and unauthorized users. The internal pages are orange boxes, actions are green boxes, and external pages are blue boxes.
+
+Activity diagram for unauthorized user:
+
+![SVG Image](./diagrams/UnauthorizedUserActivities.drawio.svg)
+
+Activity diagram for authorized user:
+
+![SVG Image](./diagrams/AuthorizedUserActivities.drawio.svg)
+
+Here are three user journeys representing typical user experiences on our site.
+User registering for the site:
+```plantUML
+@startuml
+
+start
+:Public Timeline
+(Not logged in);
+:Click "Register";
+
+repeat :Register page
+backward:Prints what should 
+be changed;
+:Fill out register form;
+repeat while (Register valid?) is (no)
+->yes;
+
+:Public Timeline
+(Logged in);
+
+@enduml
+```
+User logging in and writing a cheep:
+```plantuml
+@startuml
+
+start
+:Public Timeline;
+
+:Click "login";
+
+repeat :Login Page;
+repeat while (Login valid?) is (no)
+->yes;
+
+repeat :Public Timeline;
+:Write cheep;
+repeat while (Cheep valid?) is (no)
+->yes;
+:Private Timeline;
+
+end
+
+@enduml
+```
+User using the "Forget me!" feature to delet all data about them: 
+```plantuml
+@startuml
+
+start
+:Public Timeline
+(Logged in);
+
+:Click "about me";
+
+:"About me" Page;
+
+:Click "Forget me!";
+
+:Public Timeline
+(Not logged in);
+
+end
+
+@enduml
+```
 
 ### Sequence of functionality/calls trough _Chirp!_
 
@@ -200,14 +305,103 @@ Web --> User:               Redirect to user timeline
 @enduml
 ```
 
+### Design decisions
+
+#### Self contained releases
+During the development of Chirp, a decision was made to make releases self contained. It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. This is not the case for this project, since it uses dotnet 8.0. Therefore, it is important for the releases to be self contained.
+
+
 ## Process
 
 ### Build, test, release, and deployment
 
-Illustrate with a UML activity diagram how your _Chirp!_ applications are build, tested, released, and deployed.
-That is, illustrate the flow of activities in your respective GitHub Actions workflows.
+**Build & Test**
 
-Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
+The `build_and_test.yml` workflow triggers on changes to main and ensures that all tests pass and that no warnings can enter the code base.
+
+```plantuml
+
+@startuml
+start
+split
+    :Pull request to **main**;
+split again
+    :Push to **main**;
+end split
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+if (Errors or warnings?) then (yes)
+    #red:error;
+    kill
+else (no)
+:Install Playwright;
+:Run tests;
+if (Tests passed?) then (yes)
+    end
+else (no)
+    #red:error;
+    kill
+@enduml
+
+```
+**Deploy to Azure**
+
+The `deploytoazure.yml` workflow publishes the `Chirp.Web` Razor application to the Azure App Service to ensure that our production environment is always up to date.
+
+```plantuml
+
+@startuml
+start
+:Push to **main**;
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+:Compile Chirp.Web release;
+:Login to Azure;
+:Deploy release to Azure;
+end
+@enduml
+
+```
+
+**Publish on tags**
+
+The `publish_on_tags.yml` workflow creates a GitHub release containing the compiled binaries for various systems.
+
+```plantuml
+start
+:Push tag like **v*.*.***;
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+:Install Playwright;
+:Run tests;
+:Compile Chirp.Web release for Windows x64;
+:Compile Chirp.Web release for Linux x64;
+:Compile Chirp.Web release for macOS x64;
+:Compile Chirp.Web release for macOS ARM;
+:Create GitHub release;
+end
+```
+
+**Compile report**
+
+The `compile_report.yml` workflow compiles the report and included PlantUML diagrams as PDF.
+
+```plantuml
+start
+:Push to docs/** path;
+:Checkout repository;
+:Build docker container;
+:Run docker container;
+:Compile report;
+:Upload PDF as artifact;
+end
+```
 
 ### Team work
 
@@ -355,5 +549,6 @@ ChatGPT was used occasionally to suggest names, explain error messages, and othe
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
 It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
 Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
+
 
 [^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
