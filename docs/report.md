@@ -123,7 +123,7 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 
 ### Sequence of functionality/calls trough _Chirp!_
 
-To illustrate the interworkings of the Chirp application, Sequence Diagrams of common operations are provided here.
+To illustrate the interworkings of the _Chirp!_ application, Sequence Diagrams of common operations are provided here.
 
 #### Register
 
