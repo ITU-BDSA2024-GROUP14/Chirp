@@ -66,7 +66,7 @@ IdentityUser <|-- Author
 
 The Domain Model is implemented in the *Core* project. This contains the classes that represent the core of the data structure.  The core has, by design, very few dependencies. It depends only on `Microsoft.AspNetCore.Identity.EntityFrameworkCore`. It is the entities defined in the core that are saved in the database.
 
-An *Author* represents a user of the system. It implements the *IdentityUser* class to allow for authentication.
+An *Author* represents a user of the system. It extends the *IdentityUser* class to allow for authentication.
 
 A *Cheep* represents something a user can post. *OriginalCheeps* represent *Cheep*s written by the poster, while a *ReCheep* represent repost of an *OriginalCheep* by another *Author*.
 
