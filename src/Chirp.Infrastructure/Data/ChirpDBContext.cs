@@ -16,7 +16,12 @@ public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {
     }
-
+    /// <summary>
+    /// This method is called when the model for a derived context has been initialized,
+    /// but before the model has been locked down and used to initialize the context.
+    /// It is used to configure how the data is stored in the database.
+    /// </summary>
+    /// <param name="modelBuilder">This is the ModelBuilder from EFCore used to configure the database</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>().HasIndex(a => a.DisplayName).IsUnique();
