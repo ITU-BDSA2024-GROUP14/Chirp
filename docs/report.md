@@ -307,14 +307,15 @@ Web --> User:               Redirect to user timeline
 
 ### Design decisions
 
-#### Self contained releases
-During the development of Chirp, a decision was made to make releases self contained. 
+#### Self-contained releases
+During the development of Chirp, a decision was made to make releases self-contained. 
 It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. 
 This is not the case for this project, since it uses dotnet 8.0. 
-Therefore, it is important for the releases to be self contained.
+Therefore, it is important for the releases to be self-contained.
 
-In general it has been decided that emails are unique which means two users with different usernames still cannot have the same email.
+In general, it has been decided that emails are unique which means two users with different usernames still cannot have the same email.
 We have made the decision to delete the user with the username "Helge" from the production database so that he can register his github account which uses the same email.
+
 
 
 
