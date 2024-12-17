@@ -25,6 +25,7 @@ builder.Services.AddDefaultIdentity<Author>(options =>
         options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
+//Setup github authentication
 builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
     {
         o.Scope.Add("user:email");
@@ -38,6 +39,7 @@ builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
         o.CallbackPath = "/signin-github";
     });
 
+//Validates scopes of services
 builder.Host.UseDefaultServiceProvider(o =>
 {
     o.ValidateScopes = true;
