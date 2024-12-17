@@ -324,7 +324,7 @@ Project root
 ##### Chirp.Infrastructure.Tests  
 The _Infrastructure test_ project contains unit tests for
 
-- Cheeprepository
+- CheepRepository
 - ChirpService
 - AuthorService
 
