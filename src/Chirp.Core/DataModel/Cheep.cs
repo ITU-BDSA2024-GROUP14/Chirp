@@ -1,7 +1,7 @@
 namespace Chirp.Core.DataModel;
 
 /// <summary>
-/// Represents a Cheep including a short message and posted by an Author.
+/// Represents a Cheep posted by an Author.
 /// </summary>
 public abstract class Cheep
 {
@@ -11,5 +11,7 @@ public abstract class Cheep
     public required Author Author { get; set; }
     public required DateTime TimeStamp { get; set; }
 
+
+    /// <returns>The text content of the cheep.</returns>
     public abstract string GetText();
 }
