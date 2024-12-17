@@ -66,9 +66,9 @@ IdentityUser <|-- Author
 
 The Domain Model is implemented in the *Core* project. This contains the classes that represent the core of the data structure.  The core has, by design, very few dependencies. It depends only on `Microsoft.AspNetCore.Identity.EntityFrameworkCore`. It is the entities defined in the core that are saved in the database.
 
-An *Author* represents a user of the system. It extends the *IdentityUser* class to allow for authentication.
+An `Author` represents a user of the system. It extends the `IdentityUser` class to allow for authentication.
 
-A *Cheep* represents something a user can post. *OriginalCheeps* represent *Cheep*s written by the poster, while a *ReCheep* represent repost of an *OriginalCheep* by another *Author*.
+A `Cheep` represents something an `Author` can post. `OriginalCheep` represents a `Cheep` written by the `Author`, while a `ReCheep` represents a repost of an `OriginalCheep` by another `Author`.
 
 ### Architecture — In the small
 
@@ -331,7 +331,7 @@ The _Infrastructure test_ project contains unit tests for
 These tests cover all of the different methods located in their respective classes.
 
 ##### IntegrationTests  
-The _intregration test_ project contains integration tests, using http requests to test if the website contains implemented features in the html code.
+The _integration test_ project contains integration tests, using HTTP requests to test if the website contains implemented features in the HTML code.
 
 ##### UITests  
 In the _UITests_ project Playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
