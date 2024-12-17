@@ -21,9 +21,9 @@ jobs:
       - name: compile report
         run: |
           cd docs
-          docker run pandoc-latex-plantuml --output=./report.pdf report.md
+          docker run -v ${{ github.workspace }}/docs:/output pandoc-latex-plantuml --output=/output/report.pdf report.md
 
       - uses: actions/upload-artifact@v4
         with:
           name: report.pdf
-          path: report.pdf
+          path: docs/report.pdf
