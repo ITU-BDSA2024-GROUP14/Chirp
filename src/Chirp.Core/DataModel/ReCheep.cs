@@ -6,6 +6,8 @@ public class RepostCheep : Cheep
 {
     public required OriginalCheep Content { get; init; }
     public Author OriginalPoster { get { return Content.Author; } }
+    
+    /// <returns>The text of the Content (original cheep)</returns>
     public override string GetText()
     {
         return Content.GetText();
