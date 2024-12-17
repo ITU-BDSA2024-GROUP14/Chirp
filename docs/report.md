@@ -235,6 +235,28 @@ else (no)
 @enduml
 
 ```
+**Deploy to Azure**
+
+The `deploytoazure.yml` workflow publishes the `Chirp.Web` Razor application to the Azure App Service to ensure that our production environment is always up to date.
+
+```plantuml
+
+@startuml
+start
+:Push to **main**;
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+:Compile Chirp.Web release;
+:Login to Azure;
+:Deploy release to Azure;
+end
+@enduml
+
+```
+
+```
 
 ### Team work
 
