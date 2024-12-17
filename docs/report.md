@@ -256,6 +256,25 @@ end
 
 ```
 
+**Publish on tags**
+
+The `publish_on_tags.yml` workflow creates a GitHub release containing the compiled binaries for various systems.
+
+```plantuml
+:Push tag like **v*.*.***;
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+:Install Playwright;
+:Run tests;
+:Compile Chirp.Web release for Windows x64;
+:Compile Chirp.Web release for Linux x64;
+:Compile Chirp.Web release for macOS x64;
+:Compile Chirp.Web release for macOS ARM;
+:Create GitHub release;
+```
+
 ```
 
 ### Team work
