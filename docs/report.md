@@ -383,5 +383,4 @@ It was helpful as support and probably sped up the coding process, but the final
 Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
 
 
-
 [^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
