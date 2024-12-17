@@ -1,7 +1,7 @@
 namespace Chirp.Core.DataModel;
 
 /// <summary>
-/// Represents a Cheep, a short message posted by an Author.
+/// Represents a Cheep including a short message and posted by an Author.
 /// </summary>
 public abstract class Cheep
 {

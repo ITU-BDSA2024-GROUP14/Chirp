@@ -1,5 +1,7 @@
 ﻿namespace Chirp.Core.DataModel;
-
+/// <summary>
+/// Represents a reposted cheep from any author.
+/// </summary>
 public class RepostCheep : Cheep
 {
     public required OriginalCheep Content { get; init; }
