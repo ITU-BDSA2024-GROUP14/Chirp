@@ -75,11 +75,11 @@ A *Cheep* represents something a user can post. *OriginalCheeps* represent *Chee
 ![SVG Image](./diagrams/Onion.drawio.svg)
 
 Our solution's structure supersedes the Onion structure which means that
-some Onion layers contain more than one dotnet project. Our *Core* dotnet project correspond to
-the core onion layer while the *Infrastructure* dotnet project is split across both
+some Onion layers contain more than one .NET project. Our *Core* .NET project correspond to
+the core onion layer while the *Infrastructure* .NET project is split across both
 the repository layer and service layer. Our DTOs exist in the service layer, since these are only
 used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
-razorpages and the UITests.
+Razor Pages and the UITests.
 
 ### Architecture of deployed application
 
@@ -266,9 +266,9 @@ end
 
 To run the project you need the following programs
 
-- Dotnet 8
-    - [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
-- git cli
+- .NET 8
+    - [_How to install .NET_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
+- Git CLI
 
 Run the following commands
 ```sh
@@ -292,17 +292,17 @@ Now run ```dotnet run```. The program is now running locally, go to http://local
 
 #### How to run test suite 
 
-To run the test suite locally playwright and dotnet 8 needs to be installed. If using another OS than Windows, make sure powershell is installed, so you can install playwright.
+To run the test suite locally Playwright and .NET 8 needs to be installed. If using another OS than Windows, make sure PowerShell is installed, so you can install Playwright.
 
-- [_How to install powershell_](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
-- [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
+- [_How to install PowerShell_](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
+- [_How to install .NET_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
 
-After installing the required software, run the following command from powershell, in the root of the project.
+After installing the required software, run the following command from PowerShell, in the root of the project.
 ```sh
 dotnet build
 ./test/UITests/bin/Debug/net8.0/playwright.ps1
 ```
-If running the commands from another terminal than powershell, run ```pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1``` instead of the second line.
+If running the commands from another terminal than PowerShell, run ```pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1``` instead of the second line.
 
 After the above listed programs are installed on your computer, run the following command in the project root to run all tests
 ```sh
@@ -334,7 +334,7 @@ These tests cover all of the different methods located in their respective class
 The _intregration test_ project contains integration tests, using http requests to test if the website contains implemented features in the html code.
 
 ##### UITests  
-In the _UITests_ project playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
+In the _UITests_ project Playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
 
 ## Ethics
 
