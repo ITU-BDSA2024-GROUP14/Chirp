@@ -336,7 +336,7 @@ dotnet test
 ```
 
 #### Tests in _Chirp!_ 
-To ensure requirements, prevent bugs, and new code does not break old code, the project contains Unit tests, Integration tests, and End to End tests.
+To ensure requirements, prevent bugs, and that new code does not break old code, the project contains Unit tests, Integration tests, and End to End tests.
 
 These tests can be found in the following folders
 ```sh
@@ -354,7 +354,7 @@ The _Infrastructure test_ project contains unit tests for
 - ChirpService
 - AuthorService
 
-These tests cover all of the different methods located in their respective classes.
+These tests cover all methods located in their respective classes.
 
 ##### IntegrationTests  
 The _integration test_ project contains integration tests, using HTTP requests to test if the website contains implemented features in the HTML code.
