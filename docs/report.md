@@ -97,7 +97,9 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 
 ### Sequence of functionality/calls trough _Chirp!_
 
-### Register
+To illustrate the interworkings of the Chirp application, Sequence Diagrams of common operations are provided here.
+
+#### Register
 
 ```plantuml
 @startuml
@@ -118,7 +120,7 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-### Login
+#### Login
 
 ```plantuml
 @startuml
@@ -139,7 +141,7 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-### Authenticate via GitHub
+#### Authenticate via GitHub
 
 ```plantuml
 @startuml
@@ -175,7 +177,7 @@ Web --> User:               Redirect to public timeline
 @enduml
 ```
 
-### Post new cheep
+#### Post new cheep
 
 ```plantuml
 @startuml
@@ -222,7 +224,7 @@ Later someone will assign themselves to the issue, create a branch and move the 
 They will complete the issue and check off the acceptance criteria.
 When the issue is complete, and all tests pass, they will move it to “Pre approval” on the kanban board, and create a pull request.
 
-Another developer will review the pull request, and either suggest changes, in which case the original developer fixes the problems, and request a re-review.
+Another developer will review the pull request, and either suggest changes, in which case the original developer fixes the problems, and requests a re-review.
 
 When it is approved in review and all tests pass, the branch is merged into main and the issue is moved to “Done” on the kanban board.
 
@@ -242,12 +244,12 @@ and moves it on the kanban board;
 :Complete the issue, and check
 the acceptance criteria off;
 
-repeat :Complete an acceptance criteria;
+repeat :Complete an acceptance criterion;
 repeat while (More acceptance criteria?) is (yes)
 ->no;
 
-:Create pull request
-and move it on the kanban board;
+:Create pull request and
+move issue on the kanban board;
 
 repeat :Someone reviews the code;
 backward:Original developer fixes problems;
@@ -268,6 +270,7 @@ To run the project you need the following programs
     - [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
 - git cli
 
+Run the following commands
 ```sh
 git clone https://github.com/ITU-BDSA2024-GROUP14/Chirp.git
 ```
@@ -289,23 +292,25 @@ Now run ```dotnet run```. The program is now running locally, go to http://local
 
 #### How to run test suite 
 
-To run the test suite locally playwright and dotnet 8 needs to be installed. To install playwright, make sure powershell is installed. 
+To run the test suite locally playwright and dotnet 8 needs to be installed. If using another OS than Windows, make sure powershell is installed, so you can install playwright.
 
 - [_How to install powershell_](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
 - [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
 
-After installing powershell on your local machine, run the following command in the root of the project
+After installing the required software, run the following command from powershell, in the root of the project.
 ```sh
 dotnet build
-pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1
+./test/UITests/bin/Debug/net8.0/playwright.ps1
 ```
-After the above listed  programs is installed on your computer, run the following command in the project root to run all tests
+If running the commands from another terminal than powershell, run ```pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1``` instead of the second line.
+
+After the above listed programs are installed on your computer, run the following command in the project root to run all tests
 ```sh
 dotnet test
 ```
 
 #### Tests in _Chirp!_ 
-To ensure requirements, prevent bugs, and new code does not break old code, the project contains Unit tests, integration tests, and End to End tests.
+To ensure requirements, prevent bugs, and new code does not break old code, the project contains Unit tests, Integration tests, and End to End tests.
 
 These tests can be found in the following folders
 ```sh
@@ -341,7 +346,7 @@ Therefore the choice of license was left open, and the MIT license was chosen.
 The MIT license is one of the most permissive licenses, allowing the program to be used for almost anything as long as the original copyright notice and license are included. 
 This also means the program can be used as is, and the developers have no responsibility for maintaining the product.
 As discussed in the open source lecture, there are many advantages with using open source as your license.
-Additionally, since this is a school project, it makes sense to both be as open source as possible, and to not take responsibility for maintaining the code longterm.
+Additionally, since this is an educational project, it makes sense to both be as open source as possible, and to not take responsibility for maintaining the code longterm.
 
 ### LLMs, ChatGPT, CoPilot, and others
 
