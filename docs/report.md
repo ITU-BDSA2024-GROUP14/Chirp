@@ -275,6 +275,17 @@ The `publish_on_tags.yml` workflow creates a GitHub release containing the compi
 :Create GitHub release;
 ```
 
+**Compile report**
+
+The `compile_report.yml` workflow compiles the report and included PlantUML diagrams as PDF.
+
+```plantuml
+:Push to docs/** path;
+:Checkout repository;
+:Build docker container;
+:Run docker container;
+:Compile report;
+:Upload PDF as artifact;
 ```
 
 ### Team work
