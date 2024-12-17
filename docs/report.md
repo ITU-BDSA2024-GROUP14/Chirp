@@ -315,10 +315,93 @@ During the development of Chirp, a decision was made to make releases self conta
 
 ### Build, test, release, and deployment
 
-Illustrate with a UML activity diagram how your _Chirp!_ applications are build, tested, released, and deployed.
-That is, illustrate the flow of activities in your respective GitHub Actions workflows.
+**Build & Test**
 
-Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
+The `build_and_test.yml` workflow triggers on changes to main and ensures that all tests pass and that no warnings can enter the code base.
+
+```plantuml
+
+@startuml
+start
+split
+    :Pull request to **main**;
+split again
+    :Push to **main**;
+end split
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+if (Errors or warnings?) then (yes)
+    #red:error;
+    kill
+else (no)
+:Install Playwright;
+:Run tests;
+if (Tests passed?) then (yes)
+    end
+else (no)
+    #red:error;
+    kill
+@enduml
+
+```
+**Deploy to Azure**
+
+The `deploytoazure.yml` workflow publishes the `Chirp.Web` Razor application to the Azure App Service to ensure that our production environment is always up to date.
+
+```plantuml
+
+@startuml
+start
+:Push to **main**;
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+:Compile Chirp.Web release;
+:Login to Azure;
+:Deploy release to Azure;
+end
+@enduml
+
+```
+
+**Publish on tags**
+
+The `publish_on_tags.yml` workflow creates a GitHub release containing the compiled binaries for various systems.
+
+```plantuml
+start
+:Push tag like **v*.*.***;
+:Checkout repository;
+:Setup .NET;
+:Restore dependencies;
+:Build solution;
+:Install Playwright;
+:Run tests;
+:Compile Chirp.Web release for Windows x64;
+:Compile Chirp.Web release for Linux x64;
+:Compile Chirp.Web release for macOS x64;
+:Compile Chirp.Web release for macOS ARM;
+:Create GitHub release;
+end
+```
+
+**Compile report**
+
+The `compile_report.yml` workflow compiles the report and included PlantUML diagrams as PDF.
+
+```plantuml
+start
+:Push to docs/** path;
+:Checkout repository;
+:Build docker container;
+:Run docker container;
+:Compile report;
+:Upload PDF as artifact;
+end
+```
 
 ### Team work
 
