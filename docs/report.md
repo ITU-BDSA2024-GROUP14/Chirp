@@ -52,7 +52,9 @@ package Core {
     -string _text
     +override string GetText()
   }
-  class ReCheep
+  class ReCheep {
+      +override string GetText()
+  }
 }
 
 Author "Author" -- "Cheeps*" Cheep
