@@ -481,7 +481,7 @@ dotnet user-secrets set "authentication:github:clientSecret" /
 Now run ```dotnet run```. The program is now running locally, go to http://localhost:5273 to interact with it[^2]
 
 
-[^2]: Pushing secrets like these to a public github repo is a bad idea. They are added here to make it easier to run the program, without having to create your own Github OAuth token, and the program _Chirp!_ is not of the importance where this is a problem. 
+[^2]: Pushing secrets like these to a public github repo is a bad idea. They are added here to make it easier to run the program, without having to create your own Github OAuth token, and the program _Chirp!_ is not important enough for this to be a problem.
 
 ### How to run test suite locally
 
