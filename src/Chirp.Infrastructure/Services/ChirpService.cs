@@ -6,7 +6,7 @@ using Chirp.Infrastructure.Repositories;
 
 namespace Chirp.Infrastructure.Services;
 /// <summary>
-/// This class is used as a service to use in the presentation layer of the application to interact with the database.
+/// This class is used as a service in the presentation layer of the application to interact with the database.
 /// </summary>
 public class ChirpService : IChirpService
 {
