@@ -8,38 +8,44 @@ author:
 - Jonathan Antoine Villeret <jonv@itu.dk>
 - Oliver Starup <osta@itu.dk>
 numbersections: true
+header-includes:
+  - \setkeys{Gin}{width=\textwidth}
 ---
 
-# Table of Contents
-- Design and architecture
-    - Domain Model
-    - Architecture - in the small
-    - Architecture of deployed application
-    - User activities
-    - Sequence of functionality/calls through _Chirp!_
-    - Design decisions
-- Process
-    - Build, test, release, and deployment
-    - Team work
-    - How to make _Chirp!_ work locally
-    - How to run test suite locally
-- Ethics
-    - License
-    - LLMs, ChatGPT, CoPilot, and others
+# Table of Contents <a name="Table of Contents"><a/>
+- [Design and architecture](#design-and-architecture-a-namedesign-and-architecturea)
+    - [Domain Model](#domain-model-a-namedomain-modela)
+    - [Architecture - in the small](#architecture--in-the-small-a-namearchitecture--in-the-smalla)
+    - [Architecture of deployed application](#architecture-of-deployed-application-a-namearchitecture-of-deployed-applicationa)
+    - [User activities](#user-activities-a-nameuser-activitiesa)
+    - [Sequence of functionality/calls through _Chirp!_](#sequence-of-functionalitycalls-trough-_chirp_-a-namesequence-of-functionalitycalls-trough-_chirp_a)
+    - [Design decisions](#design-decisions-a-namedesign-decisionsa)
+- [Process](#ethics-a-nameethicsa)
+    - [Build, test, release, and deployment](#build-test-release-and-deployment-a-namebuild-test-release-and-deploymenta)
+    - [Team work](#team-work-a-nameteam-worka)
+    - [How to make _Chirp!_ work locally](#how-to-make-_chirp_-work-locally-a-namehow-to-make-_chirp_-work-locallya)
+    - [How to run test suite locally](#how-to-run-test-suite-a-namehow-to-run-test-suite-a)
+- [Ethics](#ethics-a-nameethicsa)
+    - [License](#license-a-namelicensea)
+    - [LLMs, ChatGPT, CoPilot, and others](#llms-chatgpt-copilot-and-others-a-namellms-chatgpt-copilot-and-othersa)
 
-# Introduction
+# Introduction <a name="Introduction"><a/>
 The following report was created for the course Analysis, Design and Software Architecture. The report will go into the architecture of the project, design decisions, development project, and specific ethics decisions.
 
-# Design and architecture
+This documentation contains inline PlantUML, that automatically compiles using GitHub Actions and Docker. It is therefore recommended to read the PDF document to see the rendered PlantUML diagrams.
 
-## Domain model
+# Design and architecture <a name="Design and architecture"><a/>
+
+## Domain model <a name="Domain model"><a/>
 
 ```plantUML
 @startuml
 
+title Chirp! Domain Model
+
 skin rose
 
-title Classes - Class Diagram
+title Core - Class Diagram
 
 package Identity{
   class IdentityUser<int>
@@ -60,7 +66,9 @@ package Core {
     -string _text
     +override string GetText()
   }
-  class ReCheep
+  class ReCheep {
+      +override string GetText()
+  }
 }
 
 Author "Author" -- "Cheeps*" Cheep
@@ -73,28 +81,30 @@ IdentityUser <|-- Author
 @enduml
 ```
 
+The Domain Model is implemented in the *Core* project. This contains the classes that represent the core of the data structure.  The core has, by design, very few dependencies. It depends only on `Microsoft.AspNetCore.Identity.EntityFrameworkCore`. It is the entities defined in the *Core* that are saved in the database.
 
-The Domain Model is implemented in the Core package. This contains the classes that represent the core of the data structure.  The core has, by design, very few dependencies. It depends only on Identity. It is the objects defined in the core that are saved in the database.
+An `Author` represents a user of the system. It extends the `IdentityUser` class to allow for authentication. It extends from `IdentityUser<int>` to have an integer key, to follow the same structure as Cheeps.
 
-An Author represents a user of the system. It implements the IdentityUser class to allow for authentication.
+A `Cheep` represents something an `Author` can post. `OriginalCheep` represents a `Cheep` written by the `Author`, while a `ReCheep` represents a repost of an `OriginalCheep` by another `Author`.
 
-A Cheep represents something a user can post. OriginalCheeps represent Cheeps written by the author, while a ReCheep represent repost of an OriginalCheep by another Author.
+## Architecture — In the small <a name="Architecture — In the small"><a/>
 
-## Architecture — In the small
+![Diagram over Onion Architecture](./diagrams/Onion.drawio.svg)
 
-![SVG Image](./diagrams/Onion.drawio.svg)
+Above is a diagram of the onion structure of the program. 
+It follows the onion structure, however some onion layers contains more than one .NET project.
+The *Core* .NET project correspond to
+the core onion layer while the *Infrastructure* .NET project is split across both
+the repository layer and service layer. The DTOs exist in the service layer, since these are only
+used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer contains the frontend
+Razor Pages and the UITests.
 
-Our solution's structure supercedes the Onion structure which means that
-each of our dotnet projects does not correspond to a onion layer. Our Core dotnet project correspond to
-the core onion layer while the Infrastructure dotnet project is split across both
-the repository layer and service layer. In the service layer our DTO's also resides since these are only
-used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
-razorpages and and the UITests.
-
-## Architecture of deployed application
+## Architecture of deployed application <a name="Architecture of deployed application"><a/>
 
 ```plantuml
 @startuml
+
+title Component diagram of Chirp!
 
 node "Azure" {
   package "Chirp" {
@@ -119,28 +129,28 @@ node "Client" {
 @enduml
 ```
 
-The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through razorpages.
-Whenever a client wants to access the app they connect through https to Chirp.Web.
-When the client opens the app the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
-If the client chooses to they can register and account with OAuth through github in which case github handles this request.
+The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through Razor Pages.
+Whenever a client wants to access the app, they connect through HTTPS to Chirp.Web.
+When the client opens the app, the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
+If the client chooses to, they can register an account with GitHub through OAuth in which case GitHub handles this request.
 
-## User activities
+## User activities <a name="User activities"><a/>
 
-Unregistered users start on the public timeline and can either register or login to become a authorized user. 
-They can also view the cheeps on the public timeline, change page, and view other users private timeline, by clicking on their names.
-Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
-They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
+Unregistered users start on the public timeline and can either register or login to become an authorized user. 
+They can also view the cheeps on the public timeline, change page, and view other users' private timeline, by clicking on their names.
+Once authorized you can do the same as an unauthorized user, but in a addition they can post new cheeps, follow other users, or recheep their cheeps. 
+They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about themselves.
 
 
 Below are two activity diagrams, about authorized and unauthorized users. The internal pages are orange boxes, actions are green boxes, and external pages are blue boxes.
 
 Activity diagram for unauthorized user:
 
-![SVG Image](./diagrams/UnauthorizedUserActivities.drawio.svg)
+![Activity diagram for unauthorized user](./diagrams/UnauthorizedUserActivities.drawio.svg)
 
 Activity diagram for authorized user:
 
-![SVG Image](./diagrams/AuthorizedUserActivities.drawio.svg)
+![Activity diagram for authorized user](./diagrams/AuthorizedUserActivities.drawio.svg)
 
 Here are three user journeys representing typical user experiences on our site.
 User registering for the site:
@@ -187,7 +197,7 @@ end
 
 @enduml
 ```
-User using the "Forget me!" feature to delet all data about them: 
+User using the "Forget me!" feature to delete all data about them: 
 ```plantuml
 @startuml
 
@@ -209,12 +219,15 @@ end
 @enduml
 ```
 
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls trough _Chirp!_ <a name="Sequence of functionality/calls trough _Chirp!_"><a/>
 
-## Register
+To illustrate the interworkings of the _Chirp!_ application, Sequence Diagrams of common operations are provided here.
 
 ```plantuml
 @startuml
+
+title "Register"
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -232,10 +245,11 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-## Login
-
 ```plantuml
 @startuml
+
+title Login
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -253,10 +267,11 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-## Authenticate via GitHub
-
 ```plantuml
 @startuml
+
+title Authenticate via GitHub
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -289,10 +304,11 @@ Web --> User:               Redirect to public timeline
 @enduml
 ```
 
-## Post new cheep
-
 ```plantuml
 @startuml
+
+title Create new Cheep
+
 actor "User (logged in)" as User
 participant Chirp.Web as Web
 participant Chirp.Infrastructure as Infrastructure
@@ -313,22 +329,22 @@ Web --> User:               Redirect to user timeline
 @enduml
 ```
 
-## Design decisions
+## Design decisions <a name="Design decisions"><a/>
 
-### Self-contained releases
+### Self-contained releases <a name="Self-contained releases"><a/>
 During the development of Chirp, a decision was made to make releases self-contained. 
-It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. 
-This is not the case for this project, since it uses dotnet 8.0. 
+It was not a requirement to have self-contained releases, because it was assumed that all interested users can use the application with .NET 7.0. 
+This is not the case for this project, since it uses .NET 8.0. 
 Therefore, it is important for the releases to be self-contained.
 
 In general, it has been decided that emails are unique which means two users with different usernames still cannot have the same email.
 We have made the decision to delete the user with the username "Helge" from the production database so that he can register his github account which uses the same email.
 
-### Onion Architecture
+### Onion Architecture <a name="Onion Architecture"><a/>
 
 In session 7 of the course, requirement 1.f describes an implementation of an Onion Architecture.
-We have chosen not to follow the described structure, because we believe it violates the Onion Architecture.
-We have chosen have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
+We have chosen not to follow the described interpretation rigorously, because we believe it violates the principles of the Onion Architecture pattern.
+Instead, we have chosen to have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
 Ideally, the *Core* would have no dependencies, and represent only the idea of our data structure. Our *Author* class needs to depend on *Identity*, to implement authorization, though.
 
 In our *Infrastructure* layer, we have defined DTOs, repositories and repository interfaces. These are defined here, because they are not directly related to the data model, but to how the data is stored in a database.
@@ -338,10 +354,11 @@ We also have Services defined here, that depend on the repositories and DTOs.
 Our *Web* project depends on the inner layers.
 
 This enforces the idea of antisymmetric dependencies in the Onion Architecture; all layers in the system only depend on the layers that are deeper in the architecture.
+We could also have chosen to have our repository interfaces in the *Core*, but we did not.
 
-# Process
+# Process <a name="Process"><a/>
 
-## Build, test, release, and deployment
+## Build, test, release, and deployment <a name="Build, test, release, and deployment"><a/>
 
 **Build & Test**
 
@@ -350,6 +367,9 @@ The `build_and_test.yml` workflow triggers on changes to main and ensures that a
 ```plantuml
 
 @startuml
+
+title Build & Test
+
 start
 split
     :Pull request to **main**;
@@ -381,6 +401,9 @@ The `deploytoazure.yml` workflow publishes the `Chirp.Web` Razor application to 
 ```plantuml
 
 @startuml
+
+title Deploy to Azure
+
 start
 :Push to **main**;
 :Checkout repository;
@@ -401,6 +424,9 @@ The `publish_on_tags.yml` workflow creates a GitHub release containing the compi
 
 ```plantuml
 start
+
+title Publish on tags
+
 :Push tag like **v*.*.***;
 :Checkout repository;
 :Setup .NET;
@@ -422,6 +448,9 @@ The `compile_report.yml` workflow compiles the report and included PlantUML diag
 
 ```plantuml
 start
+
+title Compile report
+
 :Push to docs/** path;
 :Checkout repository;
 :Build docker container;
@@ -431,13 +460,13 @@ start
 end
 ```
 
-## Team work
+## Team work <a name="Team work"><a/>
 
 ![Kanban Board](diagrams/KanbanBoard.png)
 
 The screenshot above shows our project board at its final state. All required features have been implemented.
-In the final week, we have discussed the possibility of moving the repository interfaces into the Core layer, although this will not be implemented.
 
+Below is a flowchart illustrating our workflow after a new project description is published.
 When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
 Then the description is made into GitHub issues, with user stories and acceptance criteria, and added to the GitHub kanban board.
 
@@ -445,12 +474,15 @@ Later someone will assign themselves to the issue, create a branch and move the 
 They will complete the issue and check off the acceptance criteria.
 When the issue is complete, and all tests pass, they will move it to “Pre approval” on the kanban board, and create a pull request.
 
-Another developer will review the pull request, and either suggest changes, in which case the original developer fixes the problems, and request a re-review.
+Another developer will review the pull request, and either suggest changes, in which case the original developer fixes the problems, and requests a re-review.
 
 When it is approved in review and all tests pass, the branch is merged into main and the issue is moved to “Done” on the kanban board.
 
 ```plantuml
 start
+
+title Development workflow
+
 :Receive Project Description;
 
 :Read indivudually and discuss
@@ -465,12 +497,12 @@ and moves it on the kanban board;
 :Complete the issue, and check
 the acceptance criteria off;
 
-repeat :Complete an acceptance criteria;
+repeat :Complete an acceptance criterion;
 repeat while (More acceptance criteria?) is (yes)
 ->no;
 
-:Create pull request
-and move it on the kanban board;
+:Create pull request and
+move issue on the kanban board;
 
 repeat :Someone reviews the code;
 backward:Original developer fixes problems;
@@ -483,14 +515,15 @@ and issue is closed;
 end
 ```
 
-## How to make _Chirp!_ work locally
+## How to make _Chirp!_ work locally <a name="How to make _Chirp!_ work locally"><a/>
 
 To run the project you need the following programs
 
-- Dotnet 8
-    - [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
-- git cli
+- .NET 8
+    - [_How to install .NET_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
+- Git CLI
 
+Run the following commands
 ```sh
 git clone https://github.com/ITU-BDSA2024-GROUP14/Chirp.git
 ```
@@ -511,27 +544,29 @@ Now run ```dotnet run```. The program is now running locally, go to http://local
 
 [^2]: Pushing secrets like these to a public github repo is a bad idea. They are added here to make it easier to run the program, without having to create your own Github OAuth token, and the program _Chirp!_ is not important enough for this to be a problem.
 
-## How to run test suite locally
+## How to run test suite locally <a name="How to run test suite locally"><a/>
 
-### How to run test suite 
+### How to run test suite  <a name="How to run test suite "><a/>
 
-To run the test suite locally playwright and dotnet 8 needs to be installed. To install playwright, make sure powershell is installed. 
+To run the test suite locally Playwright and .NET 8 needs to be installed. If using another OS than Windows, make sure PowerShell is installed, so you can install Playwright.
 
-- [_How to install powershell_](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
-- [_How to install dotnet_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
+- [_How to install PowerShell_](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
+- [_How to install .NET_](https://learn.microsoft.com/en-us/dotnet/core/install/) 
 
-After installing powershell on your local machine, run the following command in the root of the project
+After installing the required software, run the following command from PowerShell, in the root of the project.
 ```sh
 dotnet build
-pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1
+./test/UITests/bin/Debug/net8.0/playwright.ps1
 ```
-After the above listed  programs is installed on your computer, run the following command in the project root to run all tests
+If running the commands from another terminal than PowerShell, run ```pwsh ./test/UITests/bin/Debug/net8.0/playwright.ps1``` instead of the second line.
+
+After the above listed programs are installed on your computer, run the following command in the project root to run all tests
 ```sh
 dotnet test
 ```
 
-### Tests in _Chirp!_ 
-To ensure requirements, prevent bugs, and new code does not break old code, the project contains Unit tests, integration tests, and End to End tests.
+### Tests in _Chirp!_  <a name="Tests in _Chirp!_ "><a/>
+To ensure requirements, prevent bugs, and that new code does not break old code, the project contains Unit tests, Integration tests, and End-to-End tests.
 
 These tests can be found in the following folders
 ```sh
@@ -542,24 +577,24 @@ Project root
     |-- UITests
 ```
 
-#### Chirp.Infrastructure.Tests  
+#### Chirp.Infrastructure.Tests   <a name="Chirp.Infrastructure.Tests  "><a/>
 The _Infrastructure test_ project contains unit tests for
 
-- Cheeprepository
+- CheepRepository
 - ChirpService
 - AuthorService
 
-These tests cover all of the different methods located in their respective classes.
+These tests cover all methods located in their respective classes.
 
-#### IntegrationTests  
-The _intregration test_ project contains integration tests, using http requests to test if the website contains implemented features in the html code.
+#### IntegrationTests   <a name="IntegrationTests  "><a/>
+The _integration test_ project contains integration tests, using HTTP requests to test if the website contains implemented features in the HTML code.
 
-#### UITests  
-In the _UITests_ project playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
+#### UITests   <a name="UITests  "><a/>
+In the _UITests_ project Playwright has been used to create End to End tests for the project. These test the UI, and features that are relient on being logged in.
 
-# Ethics
+# Ethics <a name="Ethics"><a/>
 
-## License
+## License <a name="License"><a/>
 
 When deciding which license to use the most important consideration is whether any GPL libraries are used in the project, since the licence then must be GPL.
 None of the libraries used has the GPL license, or any other copyleft license. 
@@ -567,19 +602,17 @@ Therefore the choice of license was left open, and the MIT license was chosen.
 The MIT license is one of the most permissive licenses, allowing the program to be used for almost anything as long as the original copyright notice and license are included. 
 This also means the program can be used as is, and the developers have no responsibility for maintaining the product.
 As discussed in the open source lecture, there are many advantages with using open source as your license.
-Additionally, since this is a school project, it makes sense to both be as open source as possible, and to not take responsibility for maintaining the code longterm.
+Additionally, since this is an educational project, it makes sense to both be as open source as possible, and to not take responsibility for maintaining the code longterm.
 
-## LLMs, ChatGPT, CoPilot, and others
+## LLMs, ChatGPT, CoPilot, and others <a name="LLMs, ChatGPT, CoPilot, and others"><a/>
 
 In the development process LLM were used sparingly to support the coding process.
 Riders Line Completion were occasionally used to finish lines of code, when it came with good suggestions. 
 This runs locally and does not communicate over the internet, probably making them use less power compared ChatGPT or similar LLM's.
-It assisted making templates for documentation,so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
+It assisted making templates for documentation, so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
 ChatGPT was used occasionally to suggest names, explain error messages, and other similar uses.
 
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
 It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
-Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
 
 
-[^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
