@@ -8,6 +8,8 @@ author:
 - Jonathan Antoine Villeret <jonv@itu.dk>
 - Oliver Starup <osta@itu.dk>
 numbersections: true
+header-includes:
+  - \setkeys{Gin}{width=\textwidth}
 ---
 
 # Table of Contents
