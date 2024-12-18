@@ -324,7 +324,7 @@ We have chosen have our *Core* contain the Data Model for our project. This was 
 Ideally, the *Core* would have no dependencies, and represent only the idea of our data structure. Our *Author* class needs to depend on *Identity*, to implement authorization, though.
 
 In our *Infrastructure* layer, we have defined DTOs, repositories and repository interfaces. These are defined here, because they are not directly related to the data model, but to how the data is stored in a database.
-Both of these depend on the *Core*.
+Both of these depend on the *Core*. If the DTOs/repository interfaces had been in *Core*, and the Model been in *Infrastructure*, the *Core* would depend on an outer layer, which would have been unacceptable.
 We also have Services defined here, that depend on the repositories and DTOs.
 
 Our *Web* project depends on the inner layers.
