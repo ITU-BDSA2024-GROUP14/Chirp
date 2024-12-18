@@ -580,7 +580,7 @@ Additionally, since this is an educational project, it makes sense to both be as
 In the development process LLM were used sparingly to support the coding process.
 Riders Line Completion were occasionally used to finish lines of code, when it came with good suggestions. 
 This runs locally and does not communicate over the internet, probably making them use less power compared ChatGPT or similar LLM's.
-It assisted making templates for documentation,so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
+It assisted making templates for documentation, so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
 ChatGPT was used occasionally to suggest names, explain error messages, and other similar uses.
 
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
