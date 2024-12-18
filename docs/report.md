@@ -330,8 +330,8 @@ We have made the decision to delete the user with the username "Helge" from the 
 ### Onion Architecture
 
 In session 7 of the course, requirement 1.f describes an implementation of an Onion Architecture.
-We have chosen not to follow the described structure, because we believe it violates the Onion Architecture.
-We have chosen to have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
+We have chosen not to follow the described interpretation rigorously, because we believe it violates the principles of the Onion Architecture pattern.
+In contrary, we have chosen to have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
 Ideally, the *Core* would have no dependencies, and represent only the idea of our data structure. Our *Author* class needs to depend on *Identity*, to implement authorization, though.
 
 In our *Infrastructure* layer, we have defined DTOs, repositories and repository interfaces. These are defined here, because they are not directly related to the data model, but to how the data is stored in a database.
