@@ -32,7 +32,7 @@ header-includes:
 # Introduction
 The following report was created for the course Analysis, Design and Software Architecture. The report will go into the architecture of the project, design decisions, development project, and specific ethics decisions.
 
-This documentation contains inline plantuml, that automacilly compiles using github actions and docker, it is therefore recommended to read the pdf document so see plantuml as pictures.
+This documentation contains inline PlantUML, that automatically compiles using GitHub Actions and Docker. It is therefore recommended to read the PDF document to see the rendered PlantUML diagrams.
 
 # Design and architecture
 
