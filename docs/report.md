@@ -129,7 +129,7 @@ If the client chooses to, they can register an account with GitHub through OAuth
 
 Unregistered users start on the public timeline and can either register or login to become an authorized user. 
 They can also view the cheeps on the public timeline, change page, and view other users' private timeline, by clicking on their names.
-Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
+Once authorized you can do the same as an unauthorized user, but in a addition they can post new cheeps, follow other users, or recheep their cheeps. 
 They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
 
 
