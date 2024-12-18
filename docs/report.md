@@ -561,7 +561,7 @@ These tests cover all methods located in their respective classes.
 The _integration test_ project contains integration tests, using HTTP requests to test if the website contains implemented features in the HTML code.
 
 #### UITests  
-In the _UITests_ project Playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
+In the _UITests_ project Playwright has been used to create End to End test for the project. These test the UI, and features that are relient on being logged in.
 
 # Ethics
 
