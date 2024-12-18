@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Chirp.Web.Areas.Identity.Pages;
 
+/// <summary>
+/// Data model personal data page
+/// </summary>
 public class PersonalDataModel : PageModel
 {
     private readonly UserManager<Author> _userManager;
@@ -21,6 +24,13 @@ public class PersonalDataModel : PageModel
     private readonly IChirpService _service;
     public AuthorDTO? Author;
 
+    /// <summary>
+    /// Sets needed fields for the class
+    /// </summary>
+    /// <param name="userManager">userManger of the page</param>
+    /// <param name="signInManager">signInManager of the page</param>
+    /// <param name="logger">logger of the page</param>
+    /// <param name="service">The IChirpService to interact with the base from</param>
     public PersonalDataModel(
         UserManager<Author> userManager,
         SignInManager<Author> signInManager,
@@ -33,6 +43,12 @@ public class PersonalDataModel : PageModel
         _service = service;
     }
 
+    /// <summary>
+    /// Sets the logged in user
+    /// Sets the cheeps, follow list and name of the logged in author
+    /// </summary>
+    /// <returns>Task to be waited on, returns NotFound object if the logged in user cannot be found</returns>
+    /// <exception cref="NullReferenceException"></exception>
     public async Task<IActionResult> OnGet()
     {
         var user = await _userManager.GetUserAsync(User);
@@ -52,6 +68,12 @@ public class PersonalDataModel : PageModel
     }
 
     //Method inspired by PersonalDataModel in the Identity scaffolded pages
+    /// <summary>
+    /// Finds the logged in user and tries to delete the user
+    /// On success signs out the user, and redirects to the root page (Public timeline)
+    /// </summary>
+    /// <returns>Task to be waited on, if no user is logged in it returns a NotFound Task</returns>
+    /// <exception cref="InvalidOperationException">Throws exception if it dosent successfully delete user</exception>
     public async Task<IActionResult> OnPostForgetUser()
     {
         var user = await _userManager.GetUserAsync(User);

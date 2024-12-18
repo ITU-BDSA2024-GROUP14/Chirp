@@ -2,7 +2,9 @@ using Chirp.Core.DataModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Infrastructure.Data;
-
+/// <summary>
+/// This interface represents a database initializer for the Chirp application.
+/// </summary>
 public interface IDbInitializer
 {
     /// <summary>

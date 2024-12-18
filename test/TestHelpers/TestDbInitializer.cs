@@ -3,16 +3,25 @@ using Chirp.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace TestHelpers;
-
+/// <summary>
+/// This class represents a database initializer for the Chirp application.
+/// It is used as a helper to seed the database with test data.
+/// </summary>
 public class TestDbInitializer : IDbInitializer
 {
     private readonly ChirpDBContext _chirpContext;
-
+    /// <summary>
+    /// Constructor for the TestDbInitializer class.
+    /// </summary>
+    /// <param name="chirpContext">The database context passed in through dependency injection</param>
     public TestDbInitializer(ChirpDBContext chirpContext)
     {
         _chirpContext = chirpContext;
     }
-    
+    /// <summary>
+    /// This method adds seed data to the test database.
+    /// </summary>
+    /// <param name="userManager">This is the UserManager used to add ASP.net Identity users to the database</param>
     public void Seed(UserManager<Author>? userManager = null)
     {
         if (!(_chirpContext.Authors.Any() && _chirpContext.Cheeps.Any()))
