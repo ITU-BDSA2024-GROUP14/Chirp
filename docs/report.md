@@ -39,7 +39,7 @@ The following report was created for the course Analysis, Design and Software Ar
 
 skin rose
 
-title Classes - Class Diagram
+title Core - Class Diagram
 
 package Identity{
   class IdentityUser<int>
