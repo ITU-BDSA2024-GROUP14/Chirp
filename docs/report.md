@@ -123,7 +123,7 @@ node "Client" {
 The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through Razor Pages.
 Whenever a client wants to access the app, they connect through HTTPS to Chirp.Web.
 When the client opens the app, the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
-If the client chooses to, they can register and account with OAuth through GitHub in which case GitHub handles this request.
+If the client chooses to, they can register an account with OAuth through GitHub in which case GitHub handles this request.
 
 ## User activities
 
