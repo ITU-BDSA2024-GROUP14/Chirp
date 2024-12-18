@@ -22,6 +22,9 @@
     - License
     - LLMs, ChatGPT, CoPilot, and others
 
+## Introduction
+The following report was created for the course Analysis, Design and Software Architecture. The report will go into the architecture of the project, design decisions, development project, and specific ethics decisions.
+
 ## Design and architecture
 
 ### Domain model
