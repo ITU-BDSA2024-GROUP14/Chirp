@@ -566,7 +566,7 @@ dotnet test
 ```
 
 ### Tests in _Chirp!_  <a name="Tests in _Chirp!_ "><a/>
-To ensure requirements, prevent bugs, and that new code does not break old code, the project contains Unit tests, Integration tests, and End to End tests.
+To ensure requirements, prevent bugs, and that new code does not break old code, the project contains Unit tests, Integration tests, and End-to-End tests.
 
 These tests can be found in the following folders
 ```sh
