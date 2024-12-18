@@ -41,6 +41,8 @@ This documentation contains inline plantuml, that automacilly compiles using git
 ```plantUML
 @startuml
 
+title Chirp! Domain Model
+
 skin rose
 
 title Core - Class Diagram
@@ -101,6 +103,8 @@ Razor Pages and the UITests.
 
 ```plantuml
 @startuml
+
+title Component diagram of Chirp!
 
 node "Azure" {
   package "Chirp" {
@@ -219,10 +223,11 @@ end
 
 To illustrate the interworkings of the _Chirp!_ application, Sequence Diagrams of common operations are provided here.
 
-### Register
-
 ```plantuml
 @startuml
+
+title "Register"
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -240,10 +245,11 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-### Login
-
 ```plantuml
 @startuml
+
+title Login
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -261,10 +267,11 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-### Authenticate via GitHub
-
 ```plantuml
 @startuml
+
+title Authenticate via GitHub
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -297,10 +304,11 @@ Web --> User:               Redirect to public timeline
 @enduml
 ```
 
-### Post new cheep
-
 ```plantuml
 @startuml
+
+title Create new Cheep
+
 actor "User (logged in)" as User
 participant Chirp.Web as Web
 participant Chirp.Infrastructure as Infrastructure
@@ -359,6 +367,9 @@ The `build_and_test.yml` workflow triggers on changes to main and ensures that a
 ```plantuml
 
 @startuml
+
+title Build & Test
+
 start
 split
     :Pull request to **main**;
@@ -390,6 +401,9 @@ The `deploytoazure.yml` workflow publishes the `Chirp.Web` Razor application to 
 ```plantuml
 
 @startuml
+
+title Deploy to Azure
+
 start
 :Push to **main**;
 :Checkout repository;
@@ -410,6 +424,9 @@ The `publish_on_tags.yml` workflow creates a GitHub release containing the compi
 
 ```plantuml
 start
+
+title Publish on tags
+
 :Push tag like **v*.*.***;
 :Checkout repository;
 :Setup .NET;
@@ -431,6 +448,9 @@ The `compile_report.yml` workflow compiles the report and included PlantUML diag
 
 ```plantuml
 start
+
+title Compile report
+
 :Push to docs/** path;
 :Checkout repository;
 :Build docker container;
@@ -460,6 +480,9 @@ When it is approved in review and all tests pass, the branch is merged into main
 
 ```plantuml
 start
+
+title Development workflow
+
 :Receive Project Description;
 
 :Read indivudually and discuss
