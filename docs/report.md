@@ -39,6 +39,8 @@ The following report was created for the course Analysis, Design and Software Ar
 ```plantUML
 @startuml
 
+title Chirp! Domain Model
+
 skin rose
 
 title Core - Class Diagram
@@ -87,17 +89,20 @@ A `Cheep` represents something an `Author` can post. `OriginalCheep` represents 
 
 ![Diagram over Onion Architecture](./diagrams/Onion.drawio.svg)
 
-Our solution's structure supersedes the Onion structure which means that
-some Onion layers contain more than one .NET project. Our *Core* .NET project correspond to
+Above is a diagram of the onion structure of the program. 
+It follows the onion structure, however some onion layers contains more than one .NET project.
+The *Core* .NET project correspond to
 the core onion layer while the *Infrastructure* .NET project is split across both
-the repository layer and service layer. Our DTOs exist in the service layer, since these are only
-used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
+the repository layer and service layer. The DTOs exist in the service layer, since these are only
+used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer contains the frontend
 Razor Pages and the UITests.
 
 ## Architecture of deployed application <a name="Architecture of deployed application"><a/>
 
 ```plantuml
 @startuml
+
+title Component diagram of Chirp!
 
 node "Azure" {
   package "Chirp" {
@@ -216,10 +221,11 @@ end
 
 To illustrate the interworkings of the _Chirp!_ application, Sequence Diagrams of common operations are provided here.
 
-### Register <a name="Register"><a/>
-
 ```plantuml
 @startuml
+
+title "Register"
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -237,10 +243,11 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-### Login <a name="Login"><a/>
-
 ```plantuml
 @startuml
+
+title Login
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -258,10 +265,11 @@ Web -> User:                Set auth cookie
 @enduml
 ```
 
-### Authenticate via GitHub <a name="Authenticate via GitHub"><a/>
-
 ```plantuml
 @startuml
+
+title Authenticate via GitHub
+
 actor User
 participant Chirp.Web as Web
 participant "ASP.NET Identity" as Identity
@@ -294,10 +302,11 @@ Web --> User:               Redirect to public timeline
 @enduml
 ```
 
-### Post new cheep <a name="Post new cheep"><a/>
-
 ```plantuml
 @startuml
+
+title Create new Cheep
+
 actor "User (logged in)" as User
 participant Chirp.Web as Web
 participant Chirp.Infrastructure as Infrastructure
@@ -356,6 +365,9 @@ The `build_and_test.yml` workflow triggers on changes to main and ensures that a
 ```plantuml
 
 @startuml
+
+title Build & Test
+
 start
 split
     :Pull request to **main**;
@@ -387,6 +399,9 @@ The `deploytoazure.yml` workflow publishes the `Chirp.Web` Razor application to 
 ```plantuml
 
 @startuml
+
+title Deploy to Azure
+
 start
 :Push to **main**;
 :Checkout repository;
@@ -407,6 +422,9 @@ The `publish_on_tags.yml` workflow creates a GitHub release containing the compi
 
 ```plantuml
 start
+
+title Publish on tags
+
 :Push tag like **v*.*.***;
 :Checkout repository;
 :Setup .NET;
@@ -428,6 +446,9 @@ The `compile_report.yml` workflow compiles the report and included PlantUML diag
 
 ```plantuml
 start
+
+title Compile report
+
 :Push to docs/** path;
 :Checkout repository;
 :Build docker container;
@@ -443,6 +464,7 @@ end
 
 The screenshot above shows our project board at its final state. All required features have been implemented.
 
+Below is a flowchart illustrating our workflow after a new project description is published.
 When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
 Then the description is made into GitHub issues, with user stories and acceptance criteria, and added to the GitHub kanban board.
 
@@ -456,6 +478,9 @@ When it is approved in review and all tests pass, the branch is merged into main
 
 ```plantuml
 start
+
+title Development workflow
+
 :Receive Project Description;
 
 :Read indivudually and discuss
@@ -587,7 +612,5 @@ ChatGPT was used occasionally to suggest names, explain error messages, and othe
 
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
 It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
-Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
 
 
-[^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
