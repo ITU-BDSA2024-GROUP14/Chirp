@@ -587,7 +587,5 @@ ChatGPT was used occasionally to suggest names, explain error messages, and othe
 
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
 It was helpful as support and probably sped up the coding process, but the final product most likely did not change because of it.
-Since neither ever contributed significantly[^1] to the codebase it has not been added as a co-author to any commits.
 
 
-[^1]: It is obviously up to debate when a contribution becomes "significant", so this is just the opinion the group.
