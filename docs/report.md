@@ -123,14 +123,14 @@ node "Client" {
 The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through Razor Pages.
 Whenever a client wants to access the app, they connect through HTTPS to Chirp.Web.
 When the client opens the app, the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
-If the client chooses to, they can register and account with OAuth through GitHub in which case GitHub handles this request.
+If the client chooses to, they can register an account with GitHub through OAuth in which case GitHub handles this request.
 
 ## User activities
 
-Unregistered users start on the public timeline and can either register or login to become a authorized user. 
-They can also view the cheeps on the public timeline, change page, and view other users private timeline, by clicking on their names.
-Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
-They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
+Unregistered users start on the public timeline and can either register or login to become an authorized user. 
+They can also view the cheeps on the public timeline, change page, and view other users' private timeline, by clicking on their names.
+Once authorized you can do the same as an unauthorized user, but in a addition they can post new cheeps, follow other users, or recheep their cheeps. 
+They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about themselves.
 
 
 Below are two activity diagrams, about authorized and unauthorized users. The internal pages are orange boxes, actions are green boxes, and external pages are blue boxes.
@@ -188,7 +188,7 @@ end
 
 @enduml
 ```
-User using the "Forget me!" feature to delet all data about them: 
+User using the "Forget me!" feature to delete all data about them: 
 ```plantuml
 @startuml
 
