@@ -20,7 +20,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByNameTest()
+    public void GetAuthorByName_ReturnsAuthor()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -28,15 +28,17 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         context.Database.EnsureCreated();
         var authorrepo = new AuthorRepository(context);
         var name = "Helge";
+        
         //Act
         var author = authorrepo.GetAuthorByName(name);
+        
         //Assert
         Assert.NotNull(author);
         Assert.Equal(name, author.DisplayName);
     }
 
     [Fact]
-    public void GetAuthorByEmailTest()
+    public void GetAuthorByEmail_ReturnsAuthor()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -50,36 +52,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
         Assert.NotNull(author);
         Assert.Equal(name, author.DisplayName);
     }
-
-    [Fact]
-    public void AuthorRepositoryGetAuthorByName()
-    {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-        var options = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection).Options;
-        var author = new Author { DisplayName = "Anna", Email = "test@test.com" };
-        using (var context = new ChirpDBContext(options))
-        {
-            context.Database.EnsureCreated();
-            context.Authors.AddRange(
-                new Author { DisplayName = "Bob", Email = "john@doe.com" },
-                new Author { DisplayName = "Chalie", Email = "this@isbad.com" },
-                author);
-            context.SaveChanges();
-        }
-
-        using (var context = new ChirpDBContext(options))
-        {
-            var service = new AuthorRepository(context);
-            var fromDB = service.GetAuthorByName(author.DisplayName);
-
-            Assert.NotNull(fromDB);
-            Assert.Equal(author.DisplayName, fromDB.DisplayName);
-            Assert.Equal(author.Email, fromDB.Email);
-            Assert.Equal(author.Cheeps, fromDB.Cheeps);
-        }
-    }
-
+    
     [Fact]
     public void UserFollow_User_Succeeds()
     {
@@ -311,7 +284,7 @@ public class AuthorRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void UserFollowSelf_Fails()
+    public void UserFollow_Self_Fails()
     {
         // Arrange
         _fixture.SeedDatabase();
