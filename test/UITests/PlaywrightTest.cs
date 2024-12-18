@@ -3,7 +3,6 @@ using Chirp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
 using TestHelpers;
 
 namespace UITests;
@@ -12,29 +11,29 @@ namespace UITests;
 [TestFixture]
 public class PlaywrightTest : SelfHostedPageTest
 {
-    private string serverAddress;
-
     [OneTimeSetUp]
     public void Setup()
     {
         serverAddress = GetServerAddress();
     }
 
+    private string serverAddress;
+
     [Test]
     public async Task XSSAttackResiliancy()
     {
-        bool dialogAppeared = false;
+        var dialogAppeared = false;
         //Act
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("\"><script>alert('XSS Test');</script>");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Share" }).ClickAsync();
 
         Page.Dialog += (_, _) =>
         {
@@ -50,16 +49,16 @@ public class PlaywrightTest : SelfHostedPageTest
     public async Task SQLInjectionAttackTest()
     {
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("Robert'); DROP TABLE AspNetUsers;--");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Share" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "public timeline" }).ClickAsync();
     }
 
     [Test]
@@ -145,27 +144,30 @@ public class PlaywrightTest : SelfHostedPageTest
     public async Task TestFollow()
     {
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
 
         // Follow Jacqualine
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine" }).GetByRole(AriaRole.Button).First
+        await Page.Locator("li").Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine" })
+            .GetByRole(AriaRole.Button).First
             .ClickAsync();
 
         // Expect Jacqualine to be visible on personal timeline, while logged in
-        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        await Expect(Page.Locator("p").Filter(new() { HasText = "Jacqualine Gilcoine" }).GetByRole(AriaRole.Link).First)
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "my timeline" }).ClickAsync();
+        await Expect(Page.Locator("p").Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine" })
+                .GetByRole(AriaRole.Link).First)
             .ToBeVisibleAsync();
 
         // Expect Jacqualine (not recheeps) to not be visible on Adrians timeline, when not logged in
-        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Adrian]" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [Adrian]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Click here to Logout" }).ClickAsync();
         await Page.GotoAsync(serverAddress + "Adrian");
-        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine", HasNotText = "re-cheeped" })
+        await Expect(Page.Locator("li")
+            .Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine", HasNotText = "re-cheeped" })
             .GetByRole(AriaRole.Link)).ToHaveCountAsync(0);
     }
 
@@ -173,24 +175,26 @@ public class PlaywrightTest : SelfHostedPageTest
     public async Task UnfollowTest()
     {
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
         await Page.GetByPlaceholder("name@example.com").PressAsync("Tab");
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
+
         // unfollow
         await Page.Locator("li")
-            .Filter(new() { HasText = "Jacqualine Gilcoine" })
-            .Filter(new () {HasText = "Unfollow"})
+            .Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine" })
+            .Filter(new LocatorFilterOptions { HasText = "Unfollow" })
             .GetByRole(AriaRole.Button).First.ClickAsync();
-        
+
         // go to own timeline
-        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "my timeline" }).ClickAsync();
+
         // expect Jacqualine's original cheeps to not be visible
-        await Expect(Page.Locator("#messagelist").Filter(new() {HasText = "Jacqualine Gilcoine", HasNotText = "re-cheeped"})).ToHaveCountAsync(0);
+        await Expect(Page.Locator("#messagelist")
+                .Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine", HasNotText = "re-cheeped" }))
+            .ToHaveCountAsync(0);
     }
 
     [Test]
@@ -207,14 +211,16 @@ public class PlaywrightTest : SelfHostedPageTest
         }
 
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("ropf@itu.dk");
         await Page.GetByPlaceholder("password").FillAsync("LetM31n!");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Page.GotoAsync(serverAddress + "PersonalData");
 
-        await Expect(Page.Locator(".body").GetByText(user.DisplayName, new() { Exact = true })).ToBeVisibleAsync();
-        await Expect(Page.Locator(".body").GetByText(user.Email, new() { Exact = true })).ToBeVisibleAsync();
+        await Expect(Page.Locator(".body").GetByText(user.DisplayName, new LocatorGetByTextOptions { Exact = true }))
+            .ToBeVisibleAsync();
+        await Expect(Page.Locator(".body").GetByText(user.Email, new LocatorGetByTextOptions { Exact = true }))
+            .ToBeVisibleAsync();
 
         foreach (var follow in user.Following)
         {
@@ -232,8 +238,8 @@ public class PlaywrightTest : SelfHostedPageTest
     {
         await Page.GotoAsync(serverAddress);
         await Expect(Page.Locator("#messagelist > li").First).ToBeVisibleAsync();
-        
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Next Page" }).ClickAsync();
 
         await Expect(Page.Locator("#messagelist > li").First).ToBeVisibleAsync();
     }
@@ -242,17 +248,18 @@ public class PlaywrightTest : SelfHostedPageTest
     public async Task ReCheepShown()
     {
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync("Jacqualine Gilcoine Starbuck now is what we hear the worst.");
-        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" })
+        await Expect(Page.Locator("li").Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine Starbuck" })
             .GetByRole(AriaRole.Button).Nth(1)).ToBeVisibleAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button)
+        await Page.Locator("li").Filter(new LocatorFilterOptions { HasText = "Jacqualine Gilcoine Starbuck" })
+            .GetByRole(AriaRole.Button)
             .Nth(1).ClickAsync();
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync("Adrian re-cheeped Jacqualine Gilcoine Starbuck now is what we hear the worst.");
@@ -262,31 +269,34 @@ public class PlaywrightTest : SelfHostedPageTest
     public async Task TestRecheepOthers()
     {
         await Page.GotoAsync(serverAddress);
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("adho@itu.dk");
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("M32Want_Access");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Page.Locator("li")
-            .Filter(new() { HasText = "Jacqualine Gilcoine Starbuck now is what we hear the worst." })
+            .Filter(
+                new LocatorFilterOptions { HasText = "Jacqualine Gilcoine Starbuck now is what we hear the worst." })
             .GetByRole(AriaRole.Button).Nth(1).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Adrian]" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "logout [Adrian]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Click here to Logout" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("2@2");
         await Page.GetByPlaceholder("name@example.com").PressAsync("Tab");
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("M32Want_Access");
-        await Page.GetByLabel("Password", new() { Exact = true }).PressAsync("Tab");
+        await Page.GetByLabel("Password", new PageGetByLabelOptions { Exact = true }).FillAsync("M32Want_Access");
+        await Page.GetByLabel("Password", new PageGetByLabelOptions { Exact = true }).PressAsync("Tab");
         await Page.GetByLabel("Confirm Password").FillAsync("M32Want_Access");
         await Page.GetByPlaceholder("JohnDoe").ClickAsync();
         await Page.GetByPlaceholder("JohnDoe").FillAsync("testuser");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Register" }).ClickAsync();
         await Page.Locator("button").First.ClickAsync(); //Follow
         await Page.Locator("li:nth-child(2) > div > .reCheep > form > button").ClickAsync(); //Recheep
-        await Expect(Page.Locator("li").Filter(new() { HasText = "testuser re-cheeped" }).First).ToBeVisibleAsync();
-        await Expect(Page.Locator("li").Filter(new() { HasText = "Adrian re-cheeped" }).First).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new LocatorFilterOptions { HasText = "testuser re-cheeped" }).First)
+            .ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new LocatorFilterOptions { HasText = "Adrian re-cheeped" }).First)
+            .ToBeVisibleAsync();
     }
 }

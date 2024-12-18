@@ -5,12 +5,12 @@ using TestHelpers;
 namespace IntegrationTests;
 
 /// <summary>
-/// Tests for the Webpage.
+///     Tests for the Webpage.
 /// </summary>
 public class WebpageTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
+    private readonly WebApplicationFactory<Program> _fixture;
 
     public WebpageTests(CustomWebApplicationFactory<Program> fixture)
     {

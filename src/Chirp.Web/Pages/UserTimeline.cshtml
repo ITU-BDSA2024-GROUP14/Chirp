@@ -1,5 +1,5 @@
 ﻿@page "/{authorName}"
-@model Chirp.Web.Pages.UserTimelineModel
+@model UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
@@ -7,5 +7,5 @@
 }
 
 <div>
-    @await Component.InvokeAsync("Timeline", new {model = this.Model, timelineOwner = @routeName + "'s"})
+    @await Component.InvokeAsync("Timeline", new { model = Model, timelineOwner = routeName + "'s" })
 </div>

@@ -1,6 +1,5 @@
 using System.Data.Common;
 using Chirp.Infrastructure.Data;
-using Chirp.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;

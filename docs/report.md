@@ -437,10 +437,10 @@ end
 
 ## Team work
 
-!!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS:!!
-Show a screenshot of your project board right before hand-in.
-Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
-!!THIS NEEDS TO BE DONE!!!! IT HAS TO BE DONE AS ONE OF THE LAST THINGS!!
+![Kanban Board](diagrams/KanbanBoard.png)
+
+The screenshot above shows our project board at its final state. All required features have been implemented.
+In the final week, we have discussed the possibility of moving the repository interfaces into the Core layer, although this will not be implemented.
 
 When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
 Then the description is made into GitHub issues, with user stories and acceptance criteria, and added to the GitHub kanban board.
