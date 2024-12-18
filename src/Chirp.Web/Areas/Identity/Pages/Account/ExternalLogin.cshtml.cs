@@ -3,35 +3,30 @@
 
 #nullable disable
 
-using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Chirp.Core.DataModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 
 namespace Chirp.Web.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
 public class ExternalLoginModel : PageModel
 {
+    private readonly IEmailSender _emailSender;
+    private readonly IUserEmailStore<Author> _emailStore;
+    private readonly ILogger<ExternalLoginModel> _logger;
     private readonly SignInManager<Author> _signInManager;
     private readonly UserManager<Author> _userManager;
     private readonly IUserStore<Author> _userStore;
-    private readonly IUserEmailStore<Author> _emailStore;
-    private readonly IEmailSender _emailSender;
-    private readonly ILogger<ExternalLoginModel> _logger;
 
     public ExternalLoginModel(
         SignInManager<Author> signInManager,
@@ -73,24 +68,6 @@ public class ExternalLoginModel : PageModel
     /// </summary>
     [TempData]
     public string ErrorMessage { get; set; }
-
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
-    public class InputModel
-    {
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [DisplayName]
-        [Display(Name = "Username")]
-        public string DisplayName { get; set; }
-    }
 
     public IActionResult OnGet()
     {
@@ -134,24 +111,22 @@ public class ExternalLoginModel : PageModel
         {
             return RedirectToPage("./Lockout");
         }
-        else
+
+        // If the user does not have an account, then ask the user to create an account.
+        ProviderDisplayName = info.ProviderDisplayName;
+        Input = new InputModel();
+        if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
         {
-            // If the user does not have an account, then ask the user to create an account.
-            ProviderDisplayName = info.ProviderDisplayName;
-            Input = new InputModel();
-            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-            {
-                Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            }
-
-
-            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
-            {
-                Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
-            }
-
-            return await OnPostConfirmationAsync(returnUrl);
+            Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
         }
+
+
+        if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+        {
+            Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
+        }
+
+        return await OnPostConfirmationAsync(returnUrl);
     }
 
     public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
@@ -187,7 +162,7 @@ public class ExternalLoginModel : PageModel
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         null,
-                        new { area = "Identity", userId = userId, code = code },
+                        new { area = "Identity", userId, code },
                         Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -196,7 +171,7 @@ public class ExternalLoginModel : PageModel
                     // If account confirmation is required, we need to show the link if we don't have a real email sender
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                        return RedirectToPage("./RegisterConfirmation", new { Input.Email });
                     }
 
                     await _signInManager.SignInAsync(user, false, info.LoginProvider);
@@ -237,5 +212,23 @@ public class ExternalLoginModel : PageModel
         }
 
         return (IUserEmailStore<Author>)_userStore;
+    }
+
+    /// <summary>
+    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+    ///     directly from your code. This API may change or be removed in future releases.
+    /// </summary>
+    public class InputModel
+    {
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [DisplayName]
+        [Display(Name = "Username")]
+        public string DisplayName { get; set; }
     }
 }

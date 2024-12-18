@@ -1,10 +1,10 @@
 ﻿@page "/"
-@model Chirp.Web.Pages.PublicModel
+@model PublicModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
 }
 
 <div>
-    @await Component.InvokeAsync("Timeline", new {model = this.Model, timelineOwner = "Public"})
+    @await Component.InvokeAsync("Timeline", new { model = Model, timelineOwner = "Public" })
 </div>

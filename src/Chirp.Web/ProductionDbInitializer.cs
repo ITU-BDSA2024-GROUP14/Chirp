@@ -4,68 +4,89 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Web;
 
+/// <summary>
+///     This class represents a database initializer for the Chirp application in a production environment.
+///     It is used as a helper to seed the database with test data.
+/// </summary>
 public class ProductionDbInitializer : IDbInitializer
 {
     private readonly ChirpDBContext _chirpContext;
 
+    /// <summary>
+    ///     Constructor for the ProductionDbInitializer class.
+    /// </summary>
+    /// <param name="chirpContext">The database context passed in through dependency injection</param>
     public ProductionDbInitializer(ChirpDBContext chirpContext)
     {
         _chirpContext = chirpContext;
     }
 
+    /// <summary>
+    ///     This method adds seed data to the production database.
+    /// </summary>
+    /// <param name="userManager">This is the UserManager used to add ASP.net Identity users to the database</param>
     public void Seed(UserManager<Author>? userManager = null)
     {
         if (!(_chirpContext.Authors.Any() && _chirpContext.Cheeps.Any()))
         {
-            var a1 = new Author()
+            var a1 = new Author
             {
                 AuthorId = 1,
                 DisplayName = "Roger Histand",
                 Email = "Roger+Histand@hotmail.com",
                 Cheeps = new List<Cheep>()
             };
-            var a2 = new Author()
+            var a2 = new Author
             {
                 AuthorId = 2, DisplayName = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>()
             };
-            var a3 = new Author()
+            var a3 = new Author
             {
                 AuthorId = 3,
                 DisplayName = "Wendell Ballan",
                 Email = "Wendell-Ballan@gmail.com",
                 Cheeps = new List<Cheep>()
             };
-            var a4 = new Author()
+            var a4 = new Author
             {
-                AuthorId = 4, DisplayName = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>()
+                AuthorId = 4,
+                DisplayName = "Nathan Sirmon",
+                Email = "Nathan+Sirmon@dtu.dk",
+                Cheeps = new List<Cheep>()
             };
-            var a5 = new Author()
+            var a5 = new Author
             {
-                AuthorId = 5, DisplayName = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", Cheeps = new List<Cheep>()
+                AuthorId = 5,
+                DisplayName = "Quintin Sitts",
+                Email = "Quintin+Sitts@itu.dk",
+                Cheeps = new List<Cheep>()
             };
-            var a6 = new Author()
+            var a6 = new Author
             {
                 AuthorId = 6, DisplayName = "Mellie Yost", Email = "Mellie+Yost@ku.dk", Cheeps = new List<Cheep>()
             };
-            var a7 = new Author()
+            var a7 = new Author
             {
                 AuthorId = 7,
                 DisplayName = "Malcolm Janski",
                 Email = "Malcolm-Janski@gmail.com",
                 Cheeps = new List<Cheep>()
             };
-            var a8 = new Author()
+            var a8 = new Author
             {
                 AuthorId = 8,
                 DisplayName = "Octavio Wagganer",
                 Email = "Octavio.Wagganer@dtu.dk",
                 Cheeps = new List<Cheep>()
             };
-            var a9 = new Author()
+            var a9 = new Author
             {
-                AuthorId = 9, DisplayName = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>()
+                AuthorId = 9,
+                DisplayName = "Johnnie Calixto",
+                Email = "Johnnie+Calixto@itu.dk",
+                Cheeps = new List<Cheep>()
             };
-            var a10 = new Author()
+            var a10 = new Author
             {
                 AuthorId = 10,
                 DisplayName = "Jacqualine Gilcoine",

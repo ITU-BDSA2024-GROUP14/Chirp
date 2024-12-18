@@ -1,26 +1,33 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
-using System.Threading.Tasks;
 using Chirp.Core.DataModel;
 using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace Chirp.Web.Areas.Identity.Pages;
 
+/// <summary>
+///     Data model personal data page
+/// </summary>
 public class PersonalDataModel : PageModel
 {
-    private readonly UserManager<Author> _userManager;
-    private readonly SignInManager<Author> _signInManager;
     private readonly ILogger<PersonalDataModel> _logger;
     private readonly IChirpService _service;
+    private readonly SignInManager<Author> _signInManager;
+    private readonly UserManager<Author> _userManager;
     public AuthorDTO? Author;
 
+    /// <summary>
+    ///     Sets needed fields for the class
+    /// </summary>
+    /// <param name="userManager">userManger of the page</param>
+    /// <param name="signInManager">signInManager of the page</param>
+    /// <param name="logger">logger of the page</param>
+    /// <param name="service">The IChirpService to interact with the base from</param>
     public PersonalDataModel(
         UserManager<Author> userManager,
         SignInManager<Author> signInManager,
@@ -33,6 +40,12 @@ public class PersonalDataModel : PageModel
         _service = service;
     }
 
+    /// <summary>
+    ///     Sets the logged in user
+    ///     Sets the cheeps, follow list and name of the logged in author
+    /// </summary>
+    /// <returns>Task to be waited on, returns NotFound object if the logged in user cannot be found</returns>
+    /// <exception cref="NullReferenceException"></exception>
     public async Task<IActionResult> OnGet()
     {
         var user = await _userManager.GetUserAsync(User);
@@ -48,10 +61,17 @@ public class PersonalDataModel : PageModel
             Author.Cheeps = _service.GetCheepsFromAuthor(authorName);
             Author.Following = _service.GetFollowing(authorName);
         }
+
         return Page();
     }
 
     //Method inspired by PersonalDataModel in the Identity scaffolded pages
+    /// <summary>
+    ///     Finds the logged in user and tries to delete the user
+    ///     On success signs out the user, and redirects to the root page (Public timeline)
+    /// </summary>
+    /// <returns>Task to be waited on, if no user is logged in it returns a NotFound Task</returns>
+    /// <exception cref="InvalidOperationException">Throws exception if it dosent successfully delete user</exception>
     public async Task<IActionResult> OnPostForgetUser()
     {
         var user = await _userManager.GetUserAsync(User);
@@ -63,7 +83,7 @@ public class PersonalDataModel : PageModel
         var result = await _userManager.DeleteAsync(user);
         if (!result.Succeeded)
         {
-            throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+            throw new InvalidOperationException("Unexpected error occurred deleting user.");
         }
 
         await _signInManager.SignOutAsync();

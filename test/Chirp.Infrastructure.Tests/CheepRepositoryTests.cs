@@ -1,4 +1,3 @@
-using Chirp.Core;
 using Chirp.Core.DataModel;
 using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Repositories;
@@ -7,12 +6,12 @@ using TestHelpers;
 namespace Chirp.Infrastructure.Tests;
 
 /// <summary>
-/// Tests for the CheepRepository.
+///     Tests for the CheepRepository.
 /// </summary>
 public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
 {
+    private readonly ChirpDbContextFixture _fixture;
 
-    private ChirpDbContextFixture _fixture;
     public CheepRepositoryTests(ChirpDbContextFixture fixture)
     {
         _fixture = fixture;
@@ -35,7 +34,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
             var date = new DateTime(year, month, day);
 
             context.Cheeps.Add(
-                new OriginalCheep()
+                new OriginalCheep
                 {
                     Author = author,
                     AuthorId = author.AuthorId,
@@ -93,7 +92,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact] //Tests that a 190 character long cheep text is handled correctly
-    public void LongCheepsDisallowed()
+    public void CreateCheep_TooLong_ThrowsException()
     {
         var author = new Author { DisplayName = "jones", AuthorId = 1234, Email = "jones@mail.com" };
         var date = new DateTime(2024, 03, 02);
@@ -119,7 +118,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void OrderedCheeps()
+    public void GetCheeps_OrderedByCreateDate()
     {
         // Arrange
         var author = new Author { DisplayName = "jones", AuthorId = 1234, Email = "jones@mail.com" };

@@ -3,14 +3,17 @@ using Chirp.Core.DataModel;
 
 namespace Chirp.Infrastructure.Data.DataTransferObjects;
 
+/// <summary>
+///     This DataTransferObject represents the important information about an author without
+///     the fields we don't need in the rest of the program.
+/// </summary>
 public class AuthorDTO
 {
-    public required string Name { get; set; }
-    public required string Email { get; set; }
-    public required List<CheepDTO> Cheeps { get; set; }
-
-    public required List<string> Following { get; set; }
-
+    /// <summary>
+    ///     This constructor creates an AuthorDTO from an Author object, used to move specific information
+    ///     about an author, without moving all information.
+    /// </summary>
+    /// <param name="author">The author object to instantiate a AuthorDTO from</param>
     [SetsRequiredMembers]
     public AuthorDTO(Author author)
     {
@@ -30,4 +33,10 @@ public class AuthorDTO
             Following.Add(a.DisplayName);
         }
     }
+
+    public required string Name { get; set; }
+    public required string Email { get; set; }
+    public required List<CheepDTO> Cheeps { get; set; }
+
+    public required List<string> Following { get; set; }
 }
