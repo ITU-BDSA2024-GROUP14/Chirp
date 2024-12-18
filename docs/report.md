@@ -22,6 +22,9 @@
     - License
     - LLMs, ChatGPT, CoPilot, and others
 
+## Introduction
+The following report was created for the course Analysis, Design and Software Architecture. The report will go into the architecture of the project, design decisions, development project, and specific ethics decisions.
+
 ## Design and architecture
 
 ### Domain model
@@ -310,9 +313,29 @@ Web --> User:               Redirect to user timeline
 
 ### Design decisions
 
-#### Self contained releases
-During the development of Chirp, a decision was made to make releases self contained. It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. This is not the case for this project, since it uses dotnet 8.0. Therefore, it is important for the releases to be self contained.
+#### Self-contained releases
+During the development of Chirp, a decision was made to make releases self-contained. 
+It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. 
+This is not the case for this project, since it uses dotnet 8.0. 
+Therefore, it is important for the releases to be self-contained.
 
+In general, it has been decided that emails are unique which means two users with different usernames still cannot have the same email.
+We have made the decision to delete the user with the username "Helge" from the production database so that he can register his github account which uses the same email.
+
+#### Onion Architecture
+
+In session 7 of the course, requirement 1.f describes an implementation of an Onion Architecture.
+We have chosen not to follow the described structure, because we believe it violates the Onion Architecture.
+We have chosen have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
+Ideally, the *Core* would have no dependencies, and represent only the idea of our data structure. Our *Author* class needs to depend on *Identity*, to implement authorization, though.
+
+In our *Infrastructure* layer, we have defined DTOs, repositories and repository interfaces. These are defined here, because they are not directly related to the data model, but to how the data is stored in a database.
+Both of these depend on the *Core*. If the DTOs/repository interfaces had been in *Core*, and the Model been in *Infrastructure*, the *Core* would depend on an outer layer, which would have been unacceptable.
+We also have Services defined here, that depend on the repositories and DTOs.
+
+Our *Web* project depends on the inner layers.
+
+This enforces the idea of antisymmetric dependencies in the Onion Architecture; all layers in the system only depend on the layers that are deeper in the architecture.
 
 ## Process
 
