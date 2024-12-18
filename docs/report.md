@@ -8,6 +8,8 @@ author:
 - Jonathan Antoine Villeret <jonv@itu.dk>
 - Oliver Starup <osta@itu.dk>
 numbersections: true
+header-includes:
+  - \setkeys{Gin}{width=\textwidth}
 ---
 
 # Table of Contents
@@ -39,7 +41,7 @@ The following report was created for the course Analysis, Design and Software Ar
 
 skin rose
 
-title Classes - Class Diagram
+title Core - Class Diagram
 
 package Identity{
   class IdentityUser<int>
@@ -321,8 +323,8 @@ Web --> User:               Redirect to user timeline
 
 ### Self-contained releases
 During the development of Chirp, a decision was made to make releases self-contained. 
-It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with dotnet 7.0. 
-This is not the case for this project, since it uses dotnet 8.0. 
+It was not a requirement to have self-contained releases, because it was assumed that all interested users can use the application with .NET 7.0. 
+This is not the case for this project, since it uses .NET 8.0. 
 Therefore, it is important for the releases to be self-contained.
 
 In general, it has been decided that emails are unique which means two users with different usernames still cannot have the same email.
@@ -331,8 +333,8 @@ We have made the decision to delete the user with the username "Helge" from the 
 ### Onion Architecture
 
 In session 7 of the course, requirement 1.f describes an implementation of an Onion Architecture.
-We have chosen not to follow the described structure, because we believe it violates the Onion Architecture.
-We have chosen have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
+We have chosen not to follow the described interpretation rigorously, because we believe it violates the principles of the Onion Architecture pattern.
+Instead, we have chosen to have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
 Ideally, the *Core* would have no dependencies, and represent only the idea of our data structure. Our *Author* class needs to depend on *Identity*, to implement authorization, though.
 
 In our *Infrastructure* layer, we have defined DTOs, repositories and repository interfaces. These are defined here, because they are not directly related to the data model, but to how the data is stored in a database.
@@ -441,7 +443,6 @@ end
 ![Kanban Board](diagrams/KanbanBoard.png)
 
 The screenshot above shows our project board at its final state. All required features have been implemented.
-In the final week, we have discussed the possibility of moving the repository interfaces into the Core layer, although this will not be implemented.
 
 Below is a flowchart illustrating our workflow after a new project description is published.
 When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
@@ -564,7 +565,7 @@ These tests cover all methods located in their respective classes.
 The _integration test_ project contains integration tests, using HTTP requests to test if the website contains implemented features in the HTML code.
 
 #### UITests  
-In the _UITests_ project Playwright has been used to create End to End test for the project. These tests test the UI, and features that are relient on being logged in.
+In the _UITests_ project Playwright has been used to create End to End tests for the project. These test the UI, and features that are relient on being logged in.
 
 # Ethics
 
@@ -583,7 +584,7 @@ Additionally, since this is an educational project, it makes sense to both be as
 In the development process LLM were used sparingly to support the coding process.
 Riders Line Completion were occasionally used to finish lines of code, when it came with good suggestions. 
 This runs locally and does not communicate over the internet, probably making them use less power compared ChatGPT or similar LLM's.
-It assisted making templates for documentation,so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
+It assisted making templates for documentation, so it was easy to fill out, and wrote some of the setup code for some of the simpler tests.
 ChatGPT was used occasionally to suggest names, explain error messages, and other similar uses.
 
 Often the answers were wrong or irrelevant, especially regarding ChatGPT, however it rarely took long to figure out whether the answer was useful, so it did not waste much time.
