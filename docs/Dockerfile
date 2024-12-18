@@ -10,4 +10,4 @@ RUN dnf update -y && \
         librsvg2-tools && \
     pip install pandoc-plantuml-filter
 COPY ./ ./
-ENTRYPOINT ["pandoc", "--filter", "pandoc-plantuml"]
+ENTRYPOINT ["pandoc", "-f" , "markdown-implicit_figures" , "--filter", "pandoc-plantuml"]
