@@ -9,7 +9,7 @@ namespace Chirp.Web.ViewComponents;
 public class TimelineViewComponent : ViewComponent
 {
     /// <summary>
-    /// Returns the timeline, weather public or private, that has all of the needed things in it, such as cheepbox, pagination buttons, and the timeline content
+    /// Returns the timeline, whether public or private, that has all of the needed things in it, such as cheepbox, pagination buttons, and the timeline content
     /// </summary>
     /// <param name="model">The model to connect the timeline to</param>
     /// /// <param name="timelineOwner">The owner of the timeline, should either be public or the name of a user</param>
