@@ -336,6 +336,7 @@ We also have Services defined here, that depend on the repositories and DTOs.
 Our *Web* project depends on the inner layers.
 
 This enforces the idea of antisymmetric dependencies in the Onion Architecture; all layers in the system only depend on the layers that are deeper in the architecture.
+We could also have chosen to have our repository interfaces in the *Core*, but we did not.
 
 ## Process
 
