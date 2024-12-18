@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Chirp.Core.DataModel;
 
 /// <summary>
-/// Represents a user of the system.
+///     Represents a user of the system.
 /// </summary>
 public class Author : IdentityUser<int>
 {
