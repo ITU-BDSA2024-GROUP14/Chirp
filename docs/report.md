@@ -83,7 +83,7 @@ A `Cheep` represents something an `Author` can post. `OriginalCheep` represents 
 
 ## Architecture — In the small
 
-![SVG Image](./diagrams/Onion.drawio.svg)
+![Diagram over Onion Architecture](./diagrams/Onion.drawio.svg)
 
 Our solution's structure supersedes the Onion structure which means that
 some Onion layers contain more than one .NET project. Our *Core* .NET project correspond to
@@ -137,11 +137,11 @@ Below are two activity diagrams, about authorized and unauthorized users. The in
 
 Activity diagram for unauthorized user:
 
-![SVG Image](./diagrams/UnauthorizedUserActivities.drawio.svg)
+![Activity diagram for unauthorized user](./diagrams/UnauthorizedUserActivities.drawio.svg)
 
 Activity diagram for authorized user:
 
-![SVG Image](./diagrams/AuthorizedUserActivities.drawio.svg)
+![Activity diagram for authorized user](./diagrams/AuthorizedUserActivities.drawio.svg)
 
 Here are three user journeys representing typical user experiences on our site.
 User registering for the site:
