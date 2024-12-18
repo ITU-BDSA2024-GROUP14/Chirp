@@ -1,0 +1,29 @@
+name: Compile report to pdf 
+
+on:
+  push:
+    paths:
+      - docs/**
+  workflow_dispatch:
+
+
+jobs:
+  convert_via_pandoc:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build docker container
+        run: |
+          cd docs
+          docker build -t pandoc-latex-plantuml . 
+
+      - name: compile report
+        run: |
+          cd docs
+          docker run -v ${{ github.workspace }}/docs:/output pandoc-latex-plantuml --output=/output/report.pdf report.md
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: report.pdf
+          path: docs/report.pdf

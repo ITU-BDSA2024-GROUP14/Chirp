@@ -22,19 +22,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 
 builder.Services.AddDefaultIdentity<Author>(options =>
-        options.SignIn.RequireConfirmedAccount = true)
+        options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
-builder.Services.AddAuthentication()
-    .AddDiscord(options =>
-    {
-        options.ClientId = builder.Configuration["authentication:discord:clientId"]
-                           ?? Environment.GetEnvironmentVariable("authentication__discord__clientId")
-                           ?? throw new InvalidOperationException("discord:clientId secret not found");
-        options.ClientSecret = builder.Configuration["authentication:discord:clientSecret"]
-                               ?? Environment.GetEnvironmentVariable("authentication__discord__clientSecret")
-                               ?? throw new InvalidOperationException("discord:clientSecret secret not found");;
-    });
 builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
     {
         o.Scope.Add("user:email");

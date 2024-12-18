@@ -1,4 +1,6 @@
 using System.Data;
+using Chirp.Core.DataModel;
+using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data.DataTransferObjects;
 using Chirp.Infrastructure.Repositories;
 
@@ -116,9 +118,22 @@ public class ChirpService : IChirpService
         _authorRepository.UnFollowUser(user, toUnFollow);
     }
 
-    public List<string> GetFollowing(string loggedInBeak)
+    public List<string> GetFollowing(string loggedInDisplayName)
     {
-        return _authorRepository.GetFollowing(loggedInBeak);
+        return _authorRepository.GetFollowing(loggedInDisplayName);
+    }
+
+    public void ReCheep(string authorName, int cheepId)
+    {
+        var author = _authorRepository.GetAuthorByName(authorName);
+        if (author is null)
+        {
+            throw new AuthorMissingException(authorName);
+        }
+
+        var originalPost = _cheepRepository.GetOriginalCheepById(cheepId);
+        
+        _cheepRepository.CreateReCheep(author, originalPost, DateTime.Now);
     }
 
 
@@ -131,6 +146,6 @@ public class ChirpService : IChirpService
             throw new NullReferenceException("User does not exist.");
         }
 
-        return following.Contains(author.Beak);
+        return following.Contains(author.DisplayName);
     }
 }

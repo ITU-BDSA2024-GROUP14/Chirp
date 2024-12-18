@@ -97,11 +97,11 @@ public class RegisterModel : PageModel
         [Required]
         [RegularExpression("^[a-zA-Z0-9æøåÆØÅ](?:[a-zA-Z0-9 _\\-æøåÆØÅ]*[a-zA-Z0-9æøåÆØÅ])?$",
             ErrorMessage =
-                "Your beak cannot start or end with special characters, and cannot contain any other special characters except \"-\" and \"_\".")]
+                "Your displayname cannot start or end with special characters, and cannot contain any other special characters except \"-\" and \"_\".")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = 1)]
-        [Display(Name = "Beak")]
-        public string Beak { get; set; }
+        [Display(Name = "DisplayName")]
+        public string DisplayName { get; set; }
     }
 
 
@@ -117,7 +117,7 @@ public class RegisterModel : PageModel
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         if (ModelState.IsValid)
         {
-            var user = CreateUser(Input.Beak, Input.Email);
+            var user = CreateUser(Input.DisplayName, Input.Email);
 
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -164,7 +164,7 @@ public class RegisterModel : PageModel
     {
         try
         {
-            return new Author { Beak = name, Email = email };
+            return new Author { DisplayName = name, Email = email };
         }
         catch
         {

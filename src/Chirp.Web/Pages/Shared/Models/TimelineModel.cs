@@ -11,6 +11,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
 {
 
     protected readonly IChirpService _service = service;
+    public int PageNumber = 1;
 
     public List<CheepDTO> Cheeps { get; set; } = [];
 
@@ -20,15 +21,20 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     [Display(Name = "Cheep Text")]
     public string Message { get; set; } = "";
 
-    public string GetLoggedInBeak()
+    public string GetLoggedInDisplayName()
     {
-        var userBeak = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
-        if (userBeak == null)
+        var userDisplayName = User.Claims.FirstOrDefault(claim => claim.Type == "DisplayName")?.Value;
+        if (userDisplayName == null)
         {
             throw new NullReferenceException("Can't get logged in user name, since there is no user logged in");
         }
 
-        return userBeak;
+        return userDisplayName;
+    }
+
+    public void SetPageNumber(int page)
+    {
+        PageNumber = page;
     }
 
     public IActionResult OnPostFlipFollow(string authorName)
@@ -44,22 +50,30 @@ public abstract class TimelineModel(IChirpService service) : PageModel
         }
         return RedirectToPage();
     }
+    
+    public IActionResult OnPostReCheep(int originalCheepId)
+    {
+        _service.ReCheep(GetLoggedInDisplayName(), originalCheepId);
+        
+        string authorName = GetLoggedInDisplayName();
+        return RedirectToPage("./UserTimeline", new { authorName });
+    }
 
     private void FollowUser(string toFollowAuthorName)
     {
-        var authorName = GetLoggedInBeak();
+        var authorName = GetLoggedInDisplayName();
         _service.FollowUser(authorName, toFollowAuthorName);
     }
 
     private void UnFollowUser(string toUnFollowAuthorName)
     {
-        var authorName = GetLoggedInBeak();
+        var authorName = GetLoggedInDisplayName();
         _service.UnFollowUser(authorName, toUnFollowAuthorName);
     }
 
     public bool CheckIfFollowing(string followingAuthorName)
     {
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "DisplayName")?.Value;
         if (authorName == null)
         {
             throw new NullReferenceException("Can't follow user since the logged in user does not exist.");

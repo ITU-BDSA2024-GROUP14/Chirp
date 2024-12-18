@@ -17,6 +17,7 @@ public class PublicModel : TimelineModel
 
     public ActionResult OnGet([FromQuery] int page = 1)
     {
+        base.SetPageNumber(page);
         Cheeps = _service.GetCheeps(page);
         return Page();
     }
@@ -28,7 +29,7 @@ public class PublicModel : TimelineModel
             return Page();
         }
 
-        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "Beak")?.Value;
+        var authorName = User.Claims.FirstOrDefault(claim => claim.Type == "DisplayName")?.Value;
 
         if (authorName == null)
         {

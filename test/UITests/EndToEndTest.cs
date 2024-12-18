@@ -1,6 +1,10 @@
+using System.Data.Common;
+using Chirp.Core.DataModel;
+using Chirp.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 using TestHelpers;
-using Microsoft.Playwright.NUnit;
 
 namespace UITests;
 
@@ -46,14 +50,6 @@ public class EndToEndTest : SelfHostedPageTest
         await Page.GetByPlaceholder("JohnDoe").ClickAsync();
         await Page.GetByPlaceholder("JohnDoe").FillAsync("Test user");
         await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Click here to confirm your" })
-            .ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("Test@example.dk");
-        await Page.GetByPlaceholder("name@example.com").PressAsync("Tab");
-        await Page.GetByPlaceholder("password").FillAsync("Test1234!");
-        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("This is a test cheep");
         await Expect(Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Share" })).ToBeVisibleAsync();
@@ -61,7 +57,7 @@ public class EndToEndTest : SelfHostedPageTest
         await Expect(Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Test user's Timeline" }))
             .ToBeVisibleAsync();
         await Expect(Page.GetByText("Test user This is a test")).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Paragraph)).ToContainTextAsync("Test user This is a test cheep —");
+        await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Test user This is a test cheep —");
         await Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "public timeline" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
@@ -120,5 +116,72 @@ public class EndToEndTest : SelfHostedPageTest
         await Page.GetByPlaceholder("password").FillAsync("Test");
         await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Invalid login attempt.");
+    }
+
+    [Test]
+    public async Task TestNextAndPreviosPageButtons()
+    {
+        await Page.GotoAsync(serverAddress);
+        await Expect(Page.GetByText("1", new() { Exact = true })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        await Expect(Page.Locator("li")
+                .Filter(new() { HasText = "Jacqualine Gilcoine I sat down at the moor-gate where he was." }))
+            .ToBeVisibleAsync();
+        await Expect(Page.GetByText("2", new() { Exact = true })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        await Expect(Page.GetByText("3", new() { Exact = true })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
+        await Expect(Page.GetByText("2", new() { Exact = true })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Sometimes" })).ToBeVisibleAsync();
+        await Expect(Page.GetByText("1", new() { Exact = true })).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task ForgetMe_DeletesAllUserData()
+    {
+        // Arrange
+        // create a new user
+        var email = "throwaway@user.com";
+        var name = "ThrowawayUser";
+        var password = "W3are!";
+
+        await Page.GotoAsync(serverAddress + "Identity/Account/Register");
+        await Page.GetByPlaceholder("name@example.com").FillAsync(email);
+        await Page.GetByLabel("Password", new PageGetByLabelOptions { Exact = true }).FillAsync(password);
+        await Page.GetByLabel("Confirm Password").FillAsync(password);
+        await Page.GetByPlaceholder("JohnDoe").FillAsync(name);
+        await Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Register" }).ClickAsync();
+        
+        // post 2 cheeps
+        await Page.Locator("#Message").FillAsync("MY CPR NUMBER IS 220253-6379");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Page.Locator("#Message").FillAsync("OOPS wrong place");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Expect(Page.GetByText("MY CPR NUMBER IS 220253-6379")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("OOPS wrong place")).ToBeVisibleAsync();
+        
+        // Act
+        await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget me!" }).ClickAsync();
+        
+        // Assert
+        //  that the user cannot be used
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("throwaway@user.com");
+        await Page.GetByPlaceholder("password").FillAsync("W3are!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Expect(Page.GetByText("Invalid login attempt.")).ToBeVisibleAsync();
+        
+        // that the user is logged out
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "login" })).ToBeVisibleAsync();
+
+        // that the cheeps are gone
+        await Page.GotoAsync(serverAddress + "ThrowawayUser");
+        await Expect(Page.GetByText("There are no cheeps so far.")).ToBeVisibleAsync();
+        
     }
 }
