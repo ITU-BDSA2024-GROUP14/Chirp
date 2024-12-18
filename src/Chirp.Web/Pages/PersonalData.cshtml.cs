@@ -47,7 +47,7 @@ public class PersonalDataModel : PageModel
     /// Sets the logged in user
     /// Sets the cheeps, follow list and name of the logged in author
     /// </summary>
-    /// <returns>Task to be waited on, returns NotFound object if the logged in user cant be found</returns>
+    /// <returns>Task to be waited on, returns NotFound object if the logged in user cannot be found</returns>
     /// <exception cref="NullReferenceException"></exception>
     public async Task<IActionResult> OnGet()
     {
