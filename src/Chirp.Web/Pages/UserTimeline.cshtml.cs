@@ -45,7 +45,7 @@ public class UserTimelineModel(IChirpService service) : TimelineModel(service)
 
     /// <summary>
     /// Cheeps input in the cheepbox, form the logged in users name
-    /// Redirects to the public timeline if the no one is logged in, or if the logged in user cant be found in the database
+    /// Redirects to the public timeline if the no one is logged in, or if the logged in user cannot be found in the database
     /// If everything goes perfectly redirects to the users private timeline
     /// </summary>
     /// <returns>Actionresult</returns>
