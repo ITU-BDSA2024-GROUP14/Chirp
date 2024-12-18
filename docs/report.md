@@ -123,14 +123,14 @@ node "Client" {
 The _Chirp!_ application is hosted on Azure as an App Service. The Chirp.Web package exposes access to the application through Razor Pages.
 Whenever a client wants to access the app, they connect through HTTPS to Chirp.Web.
 When the client opens the app, the Chirp.Web makes a call to Chirp.Infrastructure which acceses the SQLite database.
-If the client chooses to, they can register and account with OAuth through GitHub in which case GitHub handles this request.
+If the client chooses to, they can register an account with GitHub through OAuth in which case GitHub handles this request.
 
 ## User activities
 
-Unregistered users start on the public timeline and can either register or login to become a authorized user. 
-They can also view the cheeps on the public timeline, change page, and view other users private timeline, by clicking on their names.
-Once authorized you can do the same as an unauthorized user, but in a addition they can write new cheeps, follow other users, or recheep their cheeps. 
-They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about the user.
+Unregistered users start on the public timeline and can either register or login to become an authorized user. 
+They can also view the cheeps on the public timeline, change page, and view other users' private timeline, by clicking on their names.
+Once authorized you can do the same as an unauthorized user, but in a addition they can post new cheeps, follow other users, or recheep their cheeps. 
+They can also view their information under "about me", and in there they can also use the "Forget me!" feature to delete all personal information about themselves.
 
 
 Below are two activity diagrams, about authorized and unauthorized users. The internal pages are orange boxes, actions are green boxes, and external pages are blue boxes.
@@ -188,7 +188,7 @@ end
 
 @enduml
 ```
-User using the "Forget me!" feature to delet all data about them: 
+User using the "Forget me!" feature to delete all data about them: 
 ```plantuml
 @startuml
 
@@ -320,8 +320,8 @@ Web --> User:               Redirect to user timeline
 
 ### Self-contained releases
 During the development of Chirp, a decision was made to make releases self-contained. 
-It was not a requirement to have self-contained releases, because it was assumed that all interested users can use the application with dotnet 7.0. 
-This is not the case for this project, since it uses dotnet 8.0. 
+It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with .NET 7.0. 
+This is not the case for this project, since it uses .NET 8.0. 
 Therefore, it is important for the releases to be self-contained.
 
 In general, it has been decided that emails are unique which means two users with different usernames still cannot have the same email.
@@ -330,8 +330,8 @@ We have made the decision to delete the user with the username "Helge" from the 
 ### Onion Architecture
 
 In session 7 of the course, requirement 1.f describes an implementation of an Onion Architecture.
-We have chosen not to follow the described structure, because we believe it violates the Onion Architecture.
-We have chosen have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
+We have chosen not to follow the described interpretation rigorously, because we believe it violates the principles of the Onion Architecture pattern.
+In contrary, we have chosen to have our *Core* contain the Data Model for our project. This was done, so our *Core* does not depend on any of the other projects.
 Ideally, the *Core* would have no dependencies, and represent only the idea of our data structure. Our *Author* class needs to depend on *Identity*, to implement authorization, though.
 
 In our *Infrastructure* layer, we have defined DTOs, repositories and repository interfaces. These are defined here, because they are not directly related to the data model, but to how the data is stored in a database.
