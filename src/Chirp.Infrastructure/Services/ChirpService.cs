@@ -77,7 +77,7 @@ public class ChirpService : IChirpService
     /// This method is used to get an AuthorDTO object from the database by the authors name.
     /// </summary>
     /// <param name="authorName">The name of the author</param>
-    /// <returns>A list of AuthorDTO</returns>
+    /// <returns>A data transfer object of the requested author</returns>
     public AuthorDTO? GetAuthorByName(string authorName)
     {
         var author = _authorRepository.GetAuthorByName(authorName);
@@ -93,7 +93,7 @@ public class ChirpService : IChirpService
     /// This method is used to get an AuthorDTO object from the database by the authors email.
     /// </summary>
     /// <param name="authorEmail">The authors email</param>
-    /// <returns>A list of AuthorDTO</returns>
+    /// <returns>A data transfer object of the requested author</returns>
     public AuthorDTO? GetAuthorByEmail(string authorEmail)
     {
         var author = _authorRepository.GetAuthorByEmail(authorEmail);
@@ -170,7 +170,7 @@ public class ChirpService : IChirpService
         return _authorRepository.GetFollowing(loggedInDisplayName);
     }
     /// <summary>
-    /// This method is used to get ReCheep a cheep in the database.
+    /// This method is used to create a ReCheep in the database.
     /// </summary>
     /// <param name="authorName">The author that is recheeping a cheep</param>
     /// <param name="cheepId">The id of the cheep that is to be recheeped</param>
