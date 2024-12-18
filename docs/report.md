@@ -1,9 +1,14 @@
-# _Chirp!_ report (Techical documentation)
-- August Bugge (aubu)
-- Daniel Haubølle (dtha)
-- Jonas Esser (jones)
-- Jonathan Villeret (jonv)
-- Oliver Starup (osta)
+---
+title: _Chirp!_ Project Report (Techical documentation)
+subtitle: ITU BDSA 2024 Group `14`
+author:
+- August Bugge <aubu@itu.dk>
+- Daniel Trebbien Haugbølle <dtha@itu.dk>
+- Jonas Boll Esser <jones@itu.dk>
+- Jonathan Antoine Villeret <jonv@itu.dk>
+- Oliver Starup <osta@itu.dk>
+numbersections: true
+---
 
 ## Table of Contents
 - Design and architecture
