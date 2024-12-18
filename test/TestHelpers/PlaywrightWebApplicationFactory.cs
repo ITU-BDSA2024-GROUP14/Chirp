@@ -13,8 +13,10 @@ using Microsoft.Extensions.Hosting;
 namespace TestHelpers;
 
 /// <summary>
-/// This class is based on code from .NET docs: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
-/// and the following blog post: https://danieldonbavand.com/2022/06/13/using-playwright-with-the-webapplicationfactory-to-test-a-blazor-application/
+///     This class is based on code from .NET docs:
+///     https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+///     and the following blog post:
+///     https://danieldonbavand.com/2022/06/13/using-playwright-with-the-webapplicationfactory-to-test-a-blazor-application/
 /// </summary>
 /// <typeparam name="TProgram">The startup class of the ASP.NET application to host</typeparam>
 public class PlaywrightWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
@@ -103,17 +105,15 @@ public class PlaywrightWebApplicationFactory<TProgram> : WebApplicationFactory<T
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
-            
+
             services.RemoveAll<IDbInitializer>();
             services.AddScoped<IDbInitializer, TestDbInitializer>();
-            
         });
-        
-        
+
 
         builder.UseEnvironment("Development");
     }
-    
+
     protected override void Dispose(bool disposing)
     {
         _host?.Dispose();

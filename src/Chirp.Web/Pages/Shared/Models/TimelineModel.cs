@@ -9,7 +9,6 @@ namespace Chirp.Web.Pages.Shared.Models;
 
 public abstract class TimelineModel(IChirpService service) : PageModel
 {
-
     protected readonly IChirpService _service = service;
     public int PageNumber = 1;
 
@@ -22,7 +21,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     public string Message { get; set; } = "";
 
     /// <summary>
-    /// Get the logged in users display name
+    ///     Get the logged in users display name
     /// </summary>
     /// <returns>The logged in users display name</returns>
     /// <exception cref="NullReferenceException">Throws NullReferenceException if no logged in user can be found</exception>
@@ -38,7 +37,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     }
 
     /// <summary>
-    /// Sets the current page number
+    ///     Sets the current page number
     /// </summary>
     /// <param name="page">Current page number</param>
     public void SetPageNumber(int page)
@@ -47,7 +46,8 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     }
 
     /// <summary>
-    /// Flips the following status of the given author. So if they are followed, it unfollows them, and if they are not following them, it follows them.
+    ///     Flips the following status of the given author. So if they are followed, it unfollows them, and if they are not
+    ///     following them, it follows them.
     /// </summary>
     /// <param name="authorName">The author where the follow status should be flipped</param>
     /// <returns>IActionResult</returns>
@@ -62,24 +62,25 @@ public abstract class TimelineModel(IChirpService service) : PageModel
         {
             UnFollowUser(authorName);
         }
+
         return RedirectToPage();
     }
 
     /// <summary>
-    /// Recheeps given cheepid
+    ///     Recheeps given cheepid
     /// </summary>
     /// <param name="originalCheepId">The cheep id to be recheeped</param>
     /// <returns>IActonResult</returns>
     public IActionResult OnPostReCheep(int originalCheepId)
     {
         _service.ReCheep(GetLoggedInDisplayName(), originalCheepId);
-        
-        string authorName = GetLoggedInDisplayName();
+
+        var authorName = GetLoggedInDisplayName();
         return RedirectToPage("./UserTimeline", new { authorName });
     }
 
     /// <summary>
-    /// Makes logged in user follow given author
+    ///     Makes logged in user follow given author
     /// </summary>
     /// <param name="toFollowAuthorName">Author to be followed by logged in user</param>
     private void FollowUser(string toFollowAuthorName)
@@ -89,7 +90,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     }
 
     /// <summary>
-    /// Makes logged in user unfollow given author name
+    ///     Makes logged in user unfollow given author name
     /// </summary>
     /// <param name="toUnFollowAuthorName">Author to unfollow</param>
     private void UnFollowUser(string toUnFollowAuthorName)
@@ -99,7 +100,7 @@ public abstract class TimelineModel(IChirpService service) : PageModel
     }
 
     /// <summary>
-    /// The following method checks if the logged in user is following the giving authorname
+    ///     The following method checks if the logged in user is following the giving authorname
     /// </summary>
     /// <param name="followingAuthorName">The author that might be followed</param>
     /// <returns>True if the logged in user follows the given author, returns false otherwise</returns>

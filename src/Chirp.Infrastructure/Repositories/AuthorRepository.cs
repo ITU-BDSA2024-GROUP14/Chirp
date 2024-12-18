@@ -1,4 +1,3 @@
-using Chirp.Core;
 using Chirp.Core.DataModel;
 using Chirp.Core.Exceptions;
 using Chirp.Infrastructure.Data;
@@ -7,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure.Repositories;
 
 /// <summary>
-/// Provides methods for interacting with the Author entities in the database.
-/// Implements the <c>IAuthorRepository</c> interface.
+///     Provides methods for interacting with the Author entities in the database.
+///     Implements the <c>IAuthorRepository</c> interface.
 /// </summary>
 public class AuthorRepository : IAuthorRepository
 {
-    private ChirpDBContext _dbcontext;
+    private readonly ChirpDBContext _dbcontext;
 
     public AuthorRepository(ChirpDBContext context)
     {
@@ -20,7 +19,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Get an author from the database by name
+    ///     Get an author from the database by name
     /// </summary>
     /// <param name="authorName">The name of the author</param>
     /// <returns>The requested author</returns>
@@ -30,7 +29,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Get an author from the database by email
+    ///     Get an author from the database by email
     /// </summary>
     /// <param name="authorEmail">The email of the author</param>
     /// <returns>The requested author</returns>
@@ -38,9 +37,9 @@ public class AuthorRepository : IAuthorRepository
     {
         return _dbcontext.Authors.FirstOrDefault(a => a.Email == authorEmail);
     }
-    
+
     /// <summary>
-    /// Instantiates an Author and adds it to the database.
+    ///     Instantiates an Author and adds it to the database.
     /// </summary>
     /// <param name="authorName">The name of the author</param>
     /// <param name="authorEmail">The email of the author</param>
@@ -53,7 +52,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Make an author follow another author.
+    ///     Make an author follow another author.
     /// </summary>
     /// <param name="user">The author who will follow another author.</param>
     /// <param name="toFollowAuthor">The author to be followed.</param>
@@ -69,7 +68,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new AuthorMissingException(user.DisplayName);
         }
-        
+
         if (IsFollowing(user, toFollowAuthor))
         {
             return;
@@ -81,7 +80,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Stops the specified user from following another user.
+    ///     Stops the specified user from following another user.
     /// </summary>
     /// <param name="user">The user attempting to unfollow another user.</param>
     /// <param name="toUnFollow">The user to be unfollowed by the original user.</param>
@@ -92,12 +91,12 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new AuthorMissingException(user.DisplayName);
         }
-        
+
         if (!Exists(toUnFollow))
         {
             throw new AuthorMissingException(user.DisplayName);
         }
-        
+
         if (!IsFollowing(user, toUnFollow))
         {
             return;
@@ -109,7 +108,19 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Determines if the given user is currently following the specified author.
+    ///     Retrieves a list of authors that a specified author is following.
+    /// </summary>
+    /// <param name="authorName">The display name of the author.</param>
+    /// <returns>A list of display names of the authors being followed by the specified author.</returns>
+    public List<string> GetFollowing(string authorName)
+    {
+        var author = _dbcontext.Authors.Include(author => author.Following)
+            .First(author => author.DisplayName == authorName);
+        return author.Following.Select(a => a.DisplayName).ToList();
+    }
+
+    /// <summary>
+    ///     Determines if the given user is currently following the specified author.
     /// </summary>
     /// <param name="user">The user checking their following status.</param>
     /// <param name="author">The author to check if they are being followed.</param>
@@ -120,23 +131,12 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Determines if the specified author exists in the database.
+    ///     Determines if the specified author exists in the database.
     /// </summary>
     /// <param name="author">The author to check.</param>
     /// <returns><c>true</c> if the author exists; otherwise, <c>false</c>.</returns>
     private bool Exists(Author author)
     {
         return _dbcontext.Authors.Any(a => a.DisplayName == author.DisplayName);
-    }
-
-    /// <summary>
-    /// Retrieves a list of authors that a specified author is following.
-    /// </summary>
-    /// <param name="authorName">The display name of the author.</param>
-    /// <returns>A list of display names of the authors being followed by the specified author.</returns>
-    public List<string> GetFollowing(string authorName)
-    {
-        var author = _dbcontext.Authors.Include(author => author.Following).First(author => author.DisplayName == authorName);
-        return author.Following.Select(a => a.DisplayName).ToList();
     }
 }

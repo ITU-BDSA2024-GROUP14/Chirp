@@ -1,12 +1,11 @@
 using Chirp.Core.DataModel;
-using Chirp.Infrastructure;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Chirp.Web;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,17 +26,17 @@ builder.Services.AddDefaultIdentity<Author>(options =>
 
 //Setup github authentication
 builder.Services.AddAuthentication().AddCookie().AddGitHub(o =>
-    {
-        o.Scope.Add("user:email");
-        o.Scope.Add("read:user");
-        o.ClientId = builder.Configuration["authentication:github:clientId"]
-                     ?? Environment.GetEnvironmentVariable("authentication__github__clientId")
-                     ?? throw new InvalidOperationException("github:clientId secret not found");
-        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
-                         ?? Environment.GetEnvironmentVariable("authentication__github__clientSecret")
-                         ?? throw new InvalidOperationException("github:clientSecret secret not found");
-        o.CallbackPath = "/signin-github";
-    });
+{
+    o.Scope.Add("user:email");
+    o.Scope.Add("read:user");
+    o.ClientId = builder.Configuration["authentication:github:clientId"]
+                 ?? Environment.GetEnvironmentVariable("authentication__github__clientId")
+                 ?? throw new InvalidOperationException("github:clientId secret not found");
+    o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
+                     ?? Environment.GetEnvironmentVariable("authentication__github__clientSecret")
+                     ?? throw new InvalidOperationException("github:clientSecret secret not found");
+    o.CallbackPath = "/signin-github";
+});
 
 //Validates scopes of services
 builder.Host.UseDefaultServiceProvider(o =>
@@ -65,7 +64,7 @@ using (var scope = app.Services.CreateScope())
 
     // Execute the migration from code.
     context.Database.Migrate();
-    
+
     // Get the UserManager instance from the DI container
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Author>>();
 
