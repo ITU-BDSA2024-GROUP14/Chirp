@@ -20,7 +20,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     [Theory]
     [InlineData(1, "Starbuck now is what we hear the worst.")]
     [InlineData(2, "In the morning of the wind, some few splintered planks, of what present avail to him.")]
-    public void GetCheepFromPage(int page, string expectedCheepText)
+    public void GetCheeps_AtPage_ReturnsExpectedCheeps(int page, string expectedCheepText)
     {
         _fixture.SeedDatabase();
         using var context = _fixture.CreateContext();
@@ -33,7 +33,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetCheepCorrectPageSize()
+    public void GetCheeps_ReturnsExpectedPageSize()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -51,7 +51,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     [Theory]
     [InlineData("Jacqualine Gilcoine")]
     [InlineData("æøå432srdf325tsdghakdhdasi hy9543ht")]
-    public void GetCheepByAuthor(string expectedAuthor)
+    public void GetCheepsFromAuthor_ReturnsCheeps(string expectedAuthor)
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -67,7 +67,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
     
     [Fact]
-    public void GetCheepsFromMultipleAuthors()
+    public void GetCheeps_MultipleAuthors_ReturnsCheeps()
     {
         //Arrange
         List<String> expectedAuthors = ["Jacqualine Gilcoine", "Mellie Yost"];
@@ -92,7 +92,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     
 
     [Fact]
-    public void GetAuthorByNameNotNull()
+    public void GetAuthorByName_ValidName_ReturnsAuthor()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -110,23 +110,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByNameExpectsNull()
-    {
-        //Arrange
-        _fixture.SeedDatabase();
-        using var context = _fixture.CreateContext();
-        context.Database.EnsureCreated();
-        var cheeprepo = new CheepRepository(context);
-        var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheeprepo, authorrepo);
-        //Act
-        var actual = service.GetAuthorByName("Belge");
-        //Assert
-        Assert.Null(actual);
-    }
-
-    [Fact]
-    public void GetAuthorByEmailNotNull()
+    public void GetAuthorByEmail_ValidEmail_ReturnsAuthor()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -144,24 +128,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByEmailExpectsNull()
-    {
-        //Arrange
-        _fixture.SeedDatabase();
-        using var context = _fixture.CreateContext();
-        context.Database.EnsureCreated();
-        var cheeprepo = new CheepRepository(context);
-        var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheeprepo, authorrepo);
-        //Act
-        var actual = service.GetAuthorByEmail("Belge");
-        //Assert
-        Assert.Null(actual);
-    }
-
-
-    [Fact]
-    public void CreateAuthor()
+    public void CreateAuthor_ValidName_Succeeds()
     {
         //Arrange
         using var context = _fixture.CreateContext();
@@ -178,7 +145,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void CreateCheepAuthorExists()
+    public void CreateCheep_ValidAuthor_ReturnsNewCheep()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -196,7 +163,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void CreateCheepAuthorDosentExist()
+    public void CreateCheep_NonExistentAuthor_CreatesAuthorAndReturnsNewCheep()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -220,7 +187,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     [InlineData("Helge", 1)]
     [InlineData("4567698097657", 0)]
     [InlineData("Jacqualine Gilcoine", 32)]
-    public void GetCorrectAmountOfCheeps(string author, int amount)
+    public void GetCheeps_FromAuthor_ReturnsCorrectAmount(string author, int amount)
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -238,7 +205,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     [Theory]
     [InlineData("Jacqualine Gilcoine", 32)]
     [InlineData("Helge", 0)]
-    public void GetCorrectAmountOfCheepsPage2(string author, int amount)
+    public void GetCheeps_FromAuthorAtPage_ReturnsCorrectAmount(string author, int amount)
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -254,7 +221,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void NoDupilicateCheepsOnDifferentPages()
+    public void GetCheeps_AtPage_ReturnsDistinctCheeps()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -272,7 +239,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByNameThatDosentExistExpectsNull()
+    public void GetAuthorByName_NonExistentName_ReturnsNull()
     {
          //Arrange
          _fixture.SeedDatabase();
@@ -290,7 +257,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
 
 
     [Fact]
-    public void GetAuthorByEmailThatDosentExistExpectsNull()
+    public void GetAuthorByEmail_NonExistentEmail_ReturnsNull()
     {
          //Arrange
          _fixture.SeedDatabase();
@@ -307,7 +274,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void FollowUser()
+    public void FollowUser_AddsToFollowingList()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -330,7 +297,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
     
     [Fact]
-    public void FollowUserCannotFollowSelf()
+    public void FollowUser_FollowSelf_ThrowsException()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -352,7 +319,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
     
     [Fact]
-    public void UnFollowUser()
+    public void UnfollowUser_RemovesUserFromFollowingList()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -376,7 +343,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void CheckIfFollowingReturnsTrue()
+    public void CheckIfFollowing_UserFollowingUser_ReturnsTrue()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -401,7 +368,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
     
     [Fact]
-    public void GetFollowingReturnsFollower()
+    public void GetFollowing_ReturnsFollowingList()
     {
         //Arrange
         _fixture.SeedDatabase();
@@ -427,7 +394,7 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
     
     [Fact]
-    public void GetFollowingReturnsEmpty()
+    public void GetFollowing_None_ReturnsEmptyList()
     {
         //Arrange
         _fixture.SeedDatabase();

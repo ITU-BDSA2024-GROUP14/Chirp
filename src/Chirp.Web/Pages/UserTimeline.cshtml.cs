@@ -8,9 +8,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
+/// <summary>
+/// The model instance to be used for the private timeline
+/// </summary>
 public class UserTimelineModel(IChirpService service) : TimelineModel(service)
 {
-
+    /// <summary>
+    /// Sets the cheeps to be displayed on the page
+    /// Sets the current page number
+    /// Sets the logged in display name if the user is logged in
+    /// Sets the follow list
+    /// </summary>
+    /// <param name="authorName">The name of the owner of the timeline</param>
+    /// <param name="page">The current page number, defaults to 1</param>
+    /// <returns></returns>
     public ActionResult OnGet(string authorName, [FromQuery] int page = 1)
     {
         if (User.Identity is not { IsAuthenticated: true })
@@ -32,6 +43,12 @@ public class UserTimelineModel(IChirpService service) : TimelineModel(service)
         return Page();
     }
 
+    /// <summary>
+    /// Cheeps input in the cheepbox, form the logged in users name
+    /// Redirects to the public timeline if the no one is logged in, or if the logged in user cannot be found in the database
+    /// If everything goes perfectly redirects to the users private timeline
+    /// </summary>
+    /// <returns>Actionresult</returns>
     public ActionResult OnPost()
     {
         if (!ModelState.IsValid)

@@ -16,7 +16,11 @@ public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {
     }
-
+    /// <summary>
+    /// This method is called by EFCore to configure the database.
+    /// This is where we define the relationships between the entities and the constraints on the database.
+    /// </summary>
+    /// <param name="modelBuilder">ModelBuilder from EFCore used to configure the database</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>().HasIndex(a => a.DisplayName).IsUnique();
