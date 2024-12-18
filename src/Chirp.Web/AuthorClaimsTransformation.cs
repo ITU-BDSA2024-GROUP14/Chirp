@@ -13,7 +13,7 @@ public class AuthorClaimsTransformation : IClaimsTransformation
     /// <summary>
     /// Sets the _userManager of the authorClaimsTransformation
     /// </summary>
-    /// <param name="_userManager">To user manager of the program</param>
+    /// <param name="_userManager">The user manager of the program</param>
     public AuthorClaimsTransformation(UserManager<Author> _userManager)
     {
         this._userManager = _userManager;
