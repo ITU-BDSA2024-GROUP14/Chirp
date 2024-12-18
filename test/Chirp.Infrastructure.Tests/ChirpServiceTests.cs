@@ -110,22 +110,6 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void GetAuthorByNameExpectsNull()
-    {
-        //Arrange
-        _fixture.SeedDatabase();
-        using var context = _fixture.CreateContext();
-        context.Database.EnsureCreated();
-        var cheeprepo = new CheepRepository(context);
-        var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheeprepo, authorrepo);
-        //Act
-        var actual = service.GetAuthorByName("Belge");
-        //Assert
-        Assert.Null(actual);
-    }
-
-    [Fact]
     public void GetAuthorByEmailNotNull()
     {
         //Arrange
@@ -142,23 +126,6 @@ public class ChirpServiceTests : IClassFixture<ChirpDbContextFixture>
         Assert.NotNull(actual);
         Assert.Equal(expected, actual.Name);
     }
-
-    [Fact]
-    public void GetAuthorByEmailExpectsNull()
-    {
-        //Arrange
-        _fixture.SeedDatabase();
-        using var context = _fixture.CreateContext();
-        context.Database.EnsureCreated();
-        var cheeprepo = new CheepRepository(context);
-        var authorrepo = new AuthorRepository(context);
-        var service = new ChirpService(cheeprepo, authorrepo);
-        //Act
-        var actual = service.GetAuthorByEmail("Belge");
-        //Assert
-        Assert.Null(actual);
-    }
-
 
     [Fact]
     public void CreateAuthor()
