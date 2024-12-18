@@ -170,7 +170,7 @@ public class ChirpService : IChirpService
         return _authorRepository.GetFollowing(loggedInDisplayName);
     }
     /// <summary>
-    /// This method is used to get ReCheep a cheep in the database.
+    /// This method is used to create a ReCheep in the database.
     /// </summary>
     /// <param name="authorName">The author that is recheeping a cheep</param>
     /// <param name="cheepId">The id of the cheep that is to be recheeped</param>
