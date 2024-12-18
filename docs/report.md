@@ -32,6 +32,8 @@ header-includes:
 # Introduction <a name="Introduction"><a/>
 The following report was created for the course Analysis, Design and Software Architecture. The report will go into the architecture of the project, design decisions, development project, and specific ethics decisions.
 
+This documentation contains inline plantuml, that automacilly compiles using github actions and docker, it is therefore recommended to read the pdf document so see plantuml as pictures.
+
 # Design and architecture <a name="Design and architecture"><a/>
 
 ## Domain model <a name="Domain model"><a/>
