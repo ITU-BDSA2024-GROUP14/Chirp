@@ -85,11 +85,12 @@ A `Cheep` represents something an `Author` can post. `OriginalCheep` represents 
 
 ![Diagram over Onion Architecture](./diagrams/Onion.drawio.svg)
 
-Our solution's structure supersedes the Onion structure which means that
-some Onion layers contain more than one .NET project. Our *Core* .NET project correspond to
+Above is a diagram of the onion structure of the program. 
+It follows the onion structure, however some onion layers contains more than one .NET project.
+The *Core* .NET project correspond to
 the core onion layer while the *Infrastructure* .NET project is split across both
-the repository layer and service layer. Our DTOs exist in the service layer, since these are only
-used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
+the repository layer and service layer. The DTOs exist in the service layer, since these are only
+used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer contains the frontend
 Razor Pages and the UITests.
 
 ## Architecture of deployed application
@@ -442,6 +443,7 @@ end
 The screenshot above shows our project board at its final state. All required features have been implemented.
 In the final week, we have discussed the possibility of moving the repository interfaces into the Core layer, although this will not be implemented.
 
+Below is a flowchart illustrating our workflow after a new project description is published.
 When the project description comes out, we read it together individually and discuss it as a group, to get a rough idea of how we want to tackle the problems.
 Then the description is made into GitHub issues, with user stories and acceptance criteria, and added to the GitHub kanban board.
 
