@@ -93,7 +93,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact] //Tests that a 190 character long cheep text is handled correctly
-    public void LongCheepsDisallowed()
+    public void CreateCheep_TooLong_ThrowsException()
     {
         var author = new Author { DisplayName = "jones", AuthorId = 1234, Email = "jones@mail.com" };
         var date = new DateTime(2024, 03, 02);
@@ -119,7 +119,7 @@ public class CheepRepositoryTests : IClassFixture<ChirpDbContextFixture>
     }
 
     [Fact]
-    public void OrderedCheeps()
+    public void GetCheeps_OrderedByCreateDate()
     {
         // Arrange
         var author = new Author { DisplayName = "jones", AuthorId = 1234, Email = "jones@mail.com" };
