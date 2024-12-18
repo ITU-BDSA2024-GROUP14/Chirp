@@ -320,7 +320,7 @@ Web --> User:               Redirect to user timeline
 
 ### Self-contained releases
 During the development of Chirp, a decision was made to make releases self-contained. 
-It was not a requirement to have self-contained releases, because it is assumed that all interested users can use the application with .NET 7.0. 
+It was not a requirement to have self-contained releases, because it was assumed that all interested users can use the application with .NET 7.0. 
 This is not the case for this project, since it uses .NET 8.0. 
 Therefore, it is important for the releases to be self-contained.
 
