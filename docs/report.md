@@ -1,6 +1,6 @@
 # _Chirp!_ report (Techical documentation)
 - August Bugge (aubu)
-- Daniel Haubølle (dtha)
+- Daniel Haugbølle (dtha)
 - Jonas Esser (jones)
 - Jonathan Villeret (jonv)
 - Oliver Starup (osta)
@@ -74,12 +74,12 @@ A `Cheep` represents something an `Author` can post. `OriginalCheep` represents 
 
 ![SVG Image](./diagrams/Onion.drawio.svg)
 
-Our solution's structure supersedes the Onion structure which means that
-some Onion layers contain more than one .NET project. Our *Core* .NET project correspond to
-the core onion layer while the *Infrastructure* .NET project is split across both
-the repository layer and service layer. Our DTOs exist in the service layer, since these are only
-used in Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains the frontend
-Razor Pages and the UITests.
+The application's structure uses the Onion structure however some Onion layers contain 
+more than one .NET project. Our *Core* .NET project correspond to the core onion layer 
+while the *Infrastructure* .NET project is split across both the repository layer and 
+service layer. Our DTOs exist in the service layer, since these are only used in 
+Chirp.Infrastructure.Services and Chirp.Web. The outermost layer in our structure contains 
+the frontend Razor Pages and the UITests.
 
 ### Architecture of deployed application
 
