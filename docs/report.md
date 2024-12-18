@@ -188,7 +188,7 @@ end
 
 @enduml
 ```
-User using the "Forget me!" feature to delet all data about them: 
+User using the "Forget me!" feature to delete all data about them: 
 ```plantuml
 @startuml
 
