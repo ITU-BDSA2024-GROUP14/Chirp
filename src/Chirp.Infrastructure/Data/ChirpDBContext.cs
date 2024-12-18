@@ -17,11 +17,10 @@ public class ChirpDBContext : IdentityDbContext<Author, IdentityRole<int>, int>
     {
     }
     /// <summary>
-    /// This method is called when the model for a derived context has been initialized,
-    /// but before the model has been locked down and used to initialize the context.
-    /// It is used to configure how the data is stored in the database.
+    /// This method is called by EFCore to configure the database.
+    /// This is where we define the relationships between the entities and the constraints on the database.
     /// </summary>
-    /// <param name="modelBuilder">This is the ModelBuilder from EFCore used to configure the database</param>
+    /// <param name="modelBuilder">ModelBuilder from EFCore used to configure the database</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>().HasIndex(a => a.DisplayName).IsUnique();
