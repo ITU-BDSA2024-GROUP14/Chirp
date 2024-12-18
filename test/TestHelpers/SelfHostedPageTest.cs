@@ -5,16 +5,16 @@ namespace TestHelpers;
 
 public abstract class SelfHostedPageTest : PageTest
 {
-    private static PlaywrightWebApplicationFactory<Program>? s_webApplicationFactory;
-    protected static IServiceProvider ServiceProvider => s_webApplicationFactory!.Services;
+    private static PlaywrightWebApplicationFactory<Program>? _webApplicationFactory;
+    protected static IServiceProvider ServiceProvider => _webApplicationFactory!.Services;
 
     protected SelfHostedPageTest()
     {
-        s_webApplicationFactory ??= new PlaywrightWebApplicationFactory<Program>();
+        _webApplicationFactory ??= new PlaywrightWebApplicationFactory<Program>();
     }
 
     protected string GetServerAddress()
     {
-        return s_webApplicationFactory!.ServerAddress;
+        return _webApplicationFactory!.ServerAddress;
     }
 }
